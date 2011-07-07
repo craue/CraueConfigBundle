@@ -1,0 +1,5 @@
+{% if form.settings | length > 0 %}
+	{% include 'CraueConfigBundle:Settings:modify_form.html.twig' %}
+{% else %}
+	{% include 'CraueConfigBundle:Settings:modify_form_empty.html.twig' %}
+{% endif %}
