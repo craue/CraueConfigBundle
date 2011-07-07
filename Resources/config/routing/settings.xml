@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	Author: Christian Raue <christian.raue@gmail.com>
+	Copyright: 2011 Christian Raue
+	License: http://www.opensource.org/licenses/mit-license.php MIT License
+-->
+<routes xmlns="http://symfony.com/schema/routing"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+	<route id="craue_config_settings_modify" pattern="/modify">
+		<default key="_controller">CraueConfigBundle:Settings:modify</default>
+	</route>
+
+</routes>

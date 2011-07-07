@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ app.session.locale }}">
+	<head>
+		<meta charset="UTF-8" />
+		{% block stylesheets %}
+			<link type="text/css" rel="stylesheet" href="{{ asset('bundles/craueconfig/css/form.css') }}" />
+		{% endblock %}
+	</head>
+	<body>
+		{% for key, flash in app.session.getFlashes() %}
+			<div class="{{ key }}">
+				{{ flash }}
+			</div>
+		{% endfor %}
+
+		{% block craue_config_content %}
+		{% endblock %}
+	</body>
+</html>

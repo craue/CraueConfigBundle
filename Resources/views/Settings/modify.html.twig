@@ -1,0 +1,18 @@
+{% extends 'CraueConfigBundle::layout.html.twig' %}
+
+{% form_theme form 'CraueConfigBundle::form.html.twig' %}
+
+{% block craue_config_content %}
+	<form method="post" class="craue_config_settings_modify" {{ form_enctype(form) }}>
+		{{ form_errors(form) }}
+
+		{% for setting in form.settings %}
+			{{ form_row(setting.name) }}
+			{{ form_row(setting.value, {'label': setting.name.get('value')}) }}
+		{% endfor %}
+
+		{{ form_rest(form) }}
+
+		<input type="submit" value="{{ 'modify_settings' | trans({}, 'CraueConfigBundle') }}" />
+	</form>
+{% endblock %}

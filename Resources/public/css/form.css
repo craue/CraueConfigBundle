@@ -1,0 +1,7 @@
+.craue_config_settings_modify label:after {
+	content: ': ';
+}
+
+.craue_config_settings_modify input[type=text] {
+	width: 300px;
+}
