@@ -85,7 +85,7 @@ But you probably want to limit access to this form in your security configuratio
 
 The bundle provides a service called `craue_config`. Inside of a controller you can call
 
-	$this->get('craue_config')->getSetting('name-of-a-setting')
+	$this->get('craue_config')->get('name-of-a-setting')
 
 to retrieve the value of the setting `name-of-a-setting`.
 

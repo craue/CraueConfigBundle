@@ -18,7 +18,7 @@ class Config {
 		$this->em = $em;
 	}
 
-	public function getSetting($name) {
+	public function get($name) {
 		$repo = $this->em->getRepository(get_class(new Setting()));
 		$setting = $repo->findOneBy(array(
 			'name' => $name,
