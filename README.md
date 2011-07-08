@@ -1,7 +1,7 @@
 # Information
 
 CraueConfigBundle manages configuration settings stored in the database and makes them accessible via a service.
-These settings are similar to those defined in parameters.ini but can be modified at runtime, e.g. by an admin user.
+These settings are similar to those defined in `parameters.ini` but can be modified at runtime, e.g. by an admin user.
 
 This bundle should be used in conjunction with Symfony2.
 
@@ -43,7 +43,7 @@ or
 	php app/console doctrine:migrations:diff
 	php app/console doctrine:migrations:migrate
 
-or however you like it.
+or however you like.
 
 ## Add the route to manage settings (optional)
 
