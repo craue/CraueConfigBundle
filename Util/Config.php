@@ -14,13 +14,14 @@ class Config {
 
 	protected $em;
 
+	protected $repo;
+
 	public function setEntityManager(EntityManager $em) {
 		$this->em = $em;
 	}
 
 	public function get($name) {
-		$repo = $this->em->getRepository(get_class(new Setting()));
-		$setting = $repo->findOneBy(array(
+		$setting = $this->getRepo()->findOneBy(array(
 			'name' => $name,
 		));
 
@@ -29,6 +30,21 @@ class Config {
 		}
 
 		return $setting->getValue();
+	}
+
+	public function all() {
+		$settings = array();
+		foreach ($this->getRepo()->findAll() as $setting) {
+			$settings[$setting->getName()] = $setting->getValue();
+		}
+		return $settings;
+	}
+
+	protected function getRepo() {
+		if ($this->repo === null) {
+			$this->repo = $this->em->getRepository(get_class(new Setting()));
+		}
+		return $this->repo;
 	}
 
 }
