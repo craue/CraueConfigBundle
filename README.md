@@ -87,7 +87,11 @@ The bundle provides a service called `craue_config`. Inside of a controller you 
 
 	$this->get('craue_config')->get('name-of-a-setting')
 
-to retrieve the value of the setting `name-of-a-setting`.
+to retrieve the value of the setting `name-of-a-setting`. Furthermore, you can call
+
+	$this->get('craue_config')->all()
+
+to get an associative array of all defined settings and their values.
 
 # Customization
 
