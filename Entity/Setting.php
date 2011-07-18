@@ -19,7 +19,6 @@ class Setting {
 	 * @var string
 	 * @ORM\Id
 	 * @ORM\Column(name="name", type="string", nullable=false, unique=true)
-	 * @Assert\NotNull
 	 * @Assert\NotBlank
 	 */
 	protected $name;
