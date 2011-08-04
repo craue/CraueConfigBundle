@@ -62,11 +62,6 @@ You can either import the default routing configuration
 	  defaults:
 	    _controller: CraueConfigBundle:Settings:modify
 
-## Install the asset for the form (optional)
-
-	// in a shell
-	php app/console assets:install --symlink web
-
 # Usage
 
 ## Defining settings
