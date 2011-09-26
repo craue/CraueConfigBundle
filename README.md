@@ -9,7 +9,15 @@ This bundle should be used in conjunction with Symfony2.
 
 ## Add CraueConfigBundle to your vendor directory
 
+Either by using a Git submodule:
+
 	git submodule add https://github.com/craue/CraueConfigBundle.git vendor/bundles/Craue/ConfigBundle
+
+Or by using the `deps` file:
+
+	[CraueConfigBundle]
+	git=https://github.com/craue/CraueConfigBundle.git
+	target=bundles/Craue/ConfigBundle
 
 ## Add CraueConfigBundle to your application kernel
 
