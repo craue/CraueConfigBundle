@@ -29,6 +29,12 @@ class Setting {
 	 */
 	protected $value;
 
+	/**
+	 * @var string
+	 * @ORM\Column(name="section", type="string", nullable=true)
+	 */
+	protected $section;
+
 	public function setName($name) {
 		$this->name = $name;
 	}
@@ -43,6 +49,14 @@ class Setting {
 
 	public function getValue() {
 		return $this->value;
+	}
+
+	public function setSection($section) {
+		$this->section = $section;
+	}
+
+	public function getSection() {
+		return $this->section;
 	}
 
 }

@@ -3,9 +3,21 @@
 <form method="post" class="craue_config_settings_modify" {{ form_enctype(form) }}>
 	{{ form_errors(form) }}
 
-	{% for setting in form.settings %}
-		{{ form_row(setting.name) }}
-		{{ form_row(setting.value, {'label': setting.name.get('value')}) }}
+	{% for section in sections %}
+		{% if section is not empty %}
+			<fieldset>
+				<legend>{{ section | trans({}, 'CraueConfigBundle') }}</legend>
+		{% endif %}
+
+		{% for setting in form.settings if setting.section.get('value') == section %}
+			{{ form_row(setting.name) }}
+			{{ form_row(setting.section) }}
+			{{ form_row(setting.value, {'label': setting.name.get('value')}) }}
+		{% endfor %}
+
+		{% if section is not empty %}
+			</fieldset>
+		{% endif %}
 	{% endfor %}
 
 	{{ form_rest(form) }}

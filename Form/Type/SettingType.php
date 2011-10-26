@@ -17,6 +17,7 @@ class SettingType extends AbstractType {
 	 */
 	public function buildForm(FormBuilder $builder, array $options) {
 		$builder->add('name', 'hidden');
+		$builder->add('section', 'hidden');
 		$builder->add('value', null, array(
 			'required' => false,
 		));

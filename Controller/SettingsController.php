@@ -51,7 +51,23 @@ class SettingsController extends Controller {
 
 		return $this->render('CraueConfigBundle:Settings:modify.html.twig', array(
 			'form' => $form->createView(),
+			'sections' => $this->getSections($allStoredSettings),
 		));
+	}
+
+	protected function getSections(array $settings) {
+		$sections = array();
+
+		foreach ($settings as $setting) {
+			$section = $setting->getSection();
+			if (!in_array($section, $sections)) {
+				$sections[] = $section;
+			}
+		}
+
+		sort($sections);
+
+		return $sections;
 	}
 
 }
