@@ -50,6 +50,10 @@ class SettingsController extends Controller {
 		));
 	}
 
+	/**
+	 * @param array[Setting] $settings
+	 * @return array[string] (may also contain a null value)
+	 */
 	protected function getSections(array $settings) {
 		$sections = array();
 
