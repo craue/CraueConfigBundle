@@ -107,3 +107,15 @@ You can add translations for all settings to be shown in the form by adding them
 
 	# app/Resources/translations/CraueConfigBundle/CraueConfigBundle.de.yml
 	name-of-a-setting: Name der Einstellung
+
+## Rendering of settings in sections
+
+If you want to render settings in a group (called section here), you'll have to assign those settings a common section
+name (in the database). Optionally, you can influence the order of these sections:
+
+	; app/config/parameters.ini
+	craue_config.configTemplate.sectionOrder[]="section1"
+	craue_config.configTemplate.sectionOrder[]="section2"
+	craue_config.configTemplate.sectionOrder[]="section3"
+
+Settings without a section will be rendered at first. Sections without explicit ordering are rendered at last.
