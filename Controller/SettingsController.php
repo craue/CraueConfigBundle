@@ -28,15 +28,10 @@ class SettingsController extends Controller {
 			$form->bindRequest($request);
 
 			if ($form->isValid()) {
-				$formData = $form->getData();
-				$settings = $formData['settings'];
-
-				foreach ($settings as $setting) {
-					$storedSetting = $repo->findOneBy(array(
-						'name' => $setting->getName(),
-					));
+				foreach ($formData['settings'] as $formSetting) {
+					$storedSetting = $this->getSettingByName($allStoredSettings, $formSetting->getName());
 					if ($storedSetting !== null) {
-						$storedSetting->setValue($setting->getValue());
+						$storedSetting->setValue($formSetting->getValue());
 						$em->persist($storedSetting);
 					}
 				}
@@ -68,6 +63,21 @@ class SettingsController extends Controller {
 		sort($sections);
 
 		return $sections;
+	}
+
+	/**
+	 * @param array[Setting] $settings
+	 * @param string $name
+	 * @return Setting|null
+	 */
+	protected function getSettingByName(array $settings, $name) {
+		foreach ($settings as $setting) {
+			if ($setting->getName() === $name) {
+				return $setting;
+			}
+		}
+
+		return null;
 	}
 
 }
