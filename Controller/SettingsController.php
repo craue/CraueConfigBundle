@@ -51,8 +51,8 @@ class SettingsController extends Controller {
 	}
 
 	/**
-	 * @param array[Setting] $settings
-	 * @return array[string] (may also contain a null value)
+	 * @param Setting[] $settings
+	 * @return string[] (may also contain a null value)
 	 */
 	protected function getSections(array $settings) {
 		$sections = array();
@@ -70,7 +70,7 @@ class SettingsController extends Controller {
 	}
 
 	/**
-	 * @param array[Setting] $settings
+	 * @param Setting[] $settings
 	 * @param string $name
 	 * @return Setting|null
 	 */

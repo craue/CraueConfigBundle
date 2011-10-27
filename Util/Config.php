@@ -45,7 +45,7 @@ class Config {
 	}
 
 	/**
-	 * @return array[Setting]
+	 * @return string[] with key => value
 	 */
 	public function all() {
 		$settings = array();
