@@ -3,7 +3,7 @@
 <form method="post" class="craue_config_settings_modify" {{ form_enctype(form) }}>
 	{{ form_errors(form) }}
 
-	{% for section in sections %}
+	{% for section in sections | craue_sortSections %}
 		{% if section is not empty %}
 			<fieldset>
 				<legend>{{ section | trans({}, 'CraueConfigBundle') }}</legend>
