@@ -12,7 +12,7 @@ This bundle should be used in conjunction with Symfony2.
 
 Either by using a Git submodule:
 
-```
+```sh
 # in a shell
 git submodule add https://github.com/craue/CraueConfigBundle.git vendor/bundles/Craue/ConfigBundle
 ```
@@ -54,7 +54,7 @@ $loader->registerNamespaces(array(
 
 Preferably, you do this by calling
 
-```
+```sh
 # in a shell
 php app/console doctrine:migrations:diff
 php app/console doctrine:migrations:migrate
@@ -62,7 +62,7 @@ php app/console doctrine:migrations:migrate
 
 or
 
-```
+```sh
 # in a shell
 php app/console doctrine:schema:update
 ```
