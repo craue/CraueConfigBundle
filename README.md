@@ -8,6 +8,8 @@ This bundle should be used in conjunction with Symfony2.
 
 # Installation
 
+Please use tag 1.0.0 of this bundle if you need Symfony 2.0.x compatibility.
+
 ## Add CraueConfigBundle to your vendor directory
 
 Either by using a Git submodule:
