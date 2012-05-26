@@ -9,10 +9,10 @@
 				<legend>{{ section | trans({}, 'CraueConfigBundle') }}</legend>
 		{% endif %}
 
-		{% for setting in form.settings if setting.section.get('value') == section %}
+		{% for setting in form.settings if setting.section.getVar('value') == section %}
 			{{ form_row(setting.name) }}
 			{{ form_row(setting.section) }}
-			{{ form_row(setting.value, {'label': setting.name.get('value')}) }}
+			{{ form_row(setting.value, {'label': setting.name.getVar('value')}) }}
 		{% endfor %}
 
 		{% if section is not empty %}

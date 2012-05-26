@@ -4,7 +4,7 @@ namespace Craue\ConfigBundle\Form;
 
 use Craue\ConfigBundle\Form\Type\SettingType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -16,7 +16,7 @@ class ModifySettingsForm extends AbstractType {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function buildForm(FormBuilder $builder, array $options) {
+	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('settings', 'collection', array(
 			'type' => new SettingType(),
 		));
