@@ -44,6 +44,24 @@ class Config {
 		return $setting->getValue();
 	}
 
+    /**
+     * @param string $name Name of the setting.
+     * @param string|null $value Value of the setting.
+     * @throws \RuntimeException If setting is not defined.
+     */
+    public function set($name, $value) {
+        $setting = $this->getRepo()->findOneBy(array(
+            'name' => $name,
+        ));
+
+        if ($setting === null) {
+            throw new \RuntimeException(sprintf('Setting "%s" couldn\'t be found.', $name));
+        }
+
+        $setting->setValue($value);
+        $this->em->flush($setting);
+    }
+
 	/**
 	 * @return string[] with key => value
 	 */
