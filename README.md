@@ -117,6 +117,18 @@ $this->get('craue_config')->all()
 
 to get an associative array of all defined settings and their values.
 
+## Writing settings
+
+With the same service you can set new values of settings:
+
+```php
+<?php
+$this->get('craue_config')->set('name-of-a-settings', 'new value');
+$this->get('craue_config')->setMultiple(array('setting-1' => 'foo', 'setting-2' => 'bar'));
+```
+
+Keep in mind that the setting has to be present, or an exception will be thrown.
+
 # Customization
 
 ## Translation
