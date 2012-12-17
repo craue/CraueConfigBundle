@@ -45,9 +45,9 @@ class Config {
 	}
 
 	/**
-	 * @param string $name Name of the setting.
-	 * @param string|null $value Value of the setting.
-	 * @throws \RuntimeException If setting is not defined.
+	 * @param string $name Name of the setting to update.
+	 * @param string|null $value New value for the setting.
+	 * @throws \RuntimeException If the setting is not defined.
 	 */
 	public function set($name, $value) {
 		$setting = $this->getRepo()->findOneBy(array(
@@ -64,16 +64,16 @@ class Config {
 
 	/**
 	 * @param array $newSettings List of settings (as name => value) to update.
+	 * @throws \RuntimeException If a setting is not defined.
 	 */
-	public function setMultiple(array $newSettings)
-	{
+	public function setMultiple(array $newSettings) {
 		if (empty($newSettings)) {
 			return;
 		}
 
 		$settings = $this->em->createQueryBuilder()
 			->select('s')
-			->from('CraueConfigBundle:Setting', 's', 's.name')
+			->from(get_class(new Setting()), 's', 's.name')
 			->where('s.name IN (:names)')
 			->getQuery()
 			->execute(array('names' => array_keys($newSettings)))
@@ -91,7 +91,7 @@ class Config {
 	}
 
 	/**
-	 * @return string[] with key => value
+	 * @return array with name => value
 	 */
 	public function all() {
 		$settings = array();
@@ -116,10 +116,10 @@ class Config {
 
 	/**
 	 * @param string $name Name of the setting.
-	 * @return \RuntimeException 
+	 * @return \RuntimeException
 	 */
-	protected function createNotFoundException($name)
-	{
+	protected function createNotFoundException($name) {
 		return new \RuntimeException(sprintf('Setting "%s" couldn\'t be found.', $name));
 	}
+
 }
