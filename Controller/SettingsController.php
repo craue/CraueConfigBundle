@@ -40,7 +40,7 @@ class SettingsController extends Controller {
 
 				$this->get('session')->setFlash('notice',
 						$this->get('translator')->trans('settings_changed', array(), 'CraueConfigBundle'));
-				return $this->redirect($this->generateUrl('craue_config_settings_modify'));
+				return $this->redirect($this->generateUrl($this->container->getParameter('craue_config.redirectRouteAfterModify')));
 			}
 		}
 

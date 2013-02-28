@@ -10,6 +10,7 @@
 
 	<parameters>
 		<parameter key="craue_config.config.class">Craue\ConfigBundle\Util\Config</parameter>
+		<parameter key="craue_config.redirectRouteAfterModify">craue_config_settings_modify</parameter>
 	</parameters>
 
 	<services>

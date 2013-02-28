@@ -140,6 +140,25 @@ name-of-a-setting: name of the setting
 name-of-a-setting: Name der Einstellung
 ```
 
+## Redirect to a different page after submitting the built-in form
+
+If you've enabled the build-in form, you can define where to redirect on successfully saving the changes by setting the
+target route name:
+
+```ini
+; in app/config/parameters.ini
+[parameters]
+craue_config.redirectRouteAfterModify="craue_config_settings_modify"
+```
+
+or
+
+```yaml
+# in app/config/parameters.yml
+parameters:
+  craue_config.redirectRouteAfterModify: craue_config_settings_modify
+```
+
 ## Rendering of settings in sections
 
 If you want to render settings in a group (called section here), you'll have to assign those settings a common section

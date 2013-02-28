@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+* allow a custom route for redirection after handling form submission
+
 ## 1.1.0 (2013-02-28)
 
 * adjustments to changes in the Form component for Symfony 2.1.*
