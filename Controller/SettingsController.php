@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class SettingsController extends Controller {
 
 	public function modifyAction() {
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		$repo = $em->getRepository(get_class(new Setting()));
 		$allStoredSettings = $repo->findAll();
 
@@ -38,7 +38,7 @@ class SettingsController extends Controller {
 
 				$em->flush();
 
-				$this->get('session')->setFlash('notice',
+				$this->get('session')->getFlashBag()->set('notice',
 						$this->get('translator')->trans('settings_changed', array(), 'CraueConfigBundle'));
 				return $this->redirect($this->generateUrl($this->container->getParameter('craue_config.redirectRouteAfterModify')));
 			}
