@@ -17,7 +17,7 @@ Let Composer download and install the bundle by first adding it to your composer
 ```json
 {
 	"require": {
-		"craue/config-bundle": "dev-master"
+		"craue/config-bundle": "~1.1.0"
 	}
 }
 ```
