@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## 1.1.1 (2013-05-02)
 
 * allow a custom route for redirection after handling form submission
 
