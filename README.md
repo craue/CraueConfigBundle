@@ -145,14 +145,6 @@ name-of-a-setting: Name der Einstellung
 If you've enabled the build-in form, you can define where to redirect on successfully saving the changes by setting the
 target route name:
 
-```ini
-; in app/config/parameters.ini
-[parameters]
-craue_config.redirectRouteAfterModify="craue_config_settings_modify"
-```
-
-or
-
 ```yaml
 # in app/config/parameters.yml
 parameters:
@@ -163,16 +155,6 @@ parameters:
 
 If you want to render settings in a group (called section here), you'll have to assign those settings a common section
 name (in the database). Optionally, you can influence the order of these sections:
-
-```ini
-; in app/config/parameters.ini
-[parameters]
-craue_config.configTemplate.sectionOrder[]="section1"
-craue_config.configTemplate.sectionOrder[]="section2"
-craue_config.configTemplate.sectionOrder[]="section3"
-```
-
-or
 
 ```yaml
 # in app/config/parameters.yml
