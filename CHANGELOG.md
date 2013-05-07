@@ -7,7 +7,7 @@
 ## 1.1.0 (2013-02-28)
 
 * adjustments to changes in the Form component for Symfony 2.1.*
-* added setters to the Config class
+* added setters to the `Config` class
 
 ## 1.0.0 (2012-05-26)
 
