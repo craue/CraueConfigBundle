@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 (2013-09-25)
+
+- adjusted the Composer requirements to allow Symfony 2.4 and up
+
 ## 1.1.1 (2013-05-02)
 
 - allow a custom route for redirection after handling form submission

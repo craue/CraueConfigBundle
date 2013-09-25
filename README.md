@@ -1,9 +1,8 @@
 # Information
 
-CraueConfigBundle manages configuration settings stored in the database and makes them accessible via a service.
-These settings are similar to those defined in `parameters.yml` but can be modified at runtime, e.g. by an admin user.
-
-This bundle should be used in conjunction with Symfony2.
+CraueConfigBundle manages configuration settings stored in the database and makes them accessible via a service in your
+Symfony2 project. These settings are similar to those defined in `parameters.yml` but can be modified at runtime, e.g.
+by an admin user.
 
 # Installation
 
@@ -16,7 +15,7 @@ Let Composer download and install the bundle by first adding it to your composer
 ```json
 {
 	"require": {
-		"craue/config-bundle": "~1.1.0"
+		"craue/config-bundle": "~1.1"
 	}
 }
 ```
