@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3 (2013-11-21)
+
+- fixed the base template to be compatible with Symfony 2.3 as well (now 2.1 and up)
+
 ## 1.1.2 (2013-09-25)
 
 - adjusted the Composer requirements to allow Symfony 2.4 and up
