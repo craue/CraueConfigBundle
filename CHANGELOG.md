@@ -2,7 +2,9 @@
 
 ## 1.1.3 (2013-11-21)
 
-- fixed the base template to be compatible with Symfony 2.3 as well (now 2.1 and up)
+- [#7]: fixed the base template to be compatible with Symfony 2.3 as well (now 2.1 and up)
+
+[#7]: https://github.com/craue/CraueConfigBundle/issues/7
 
 ## 1.1.2 (2013-09-25)
 
@@ -15,7 +17,9 @@
 ## 1.1.0 (2013-02-28)
 
 - adjustments to changes in the Form component for Symfony 2.1.*
-- added setters to the `Config` class
+- [#2]: added setters to the `Config` class
+
+[#2]: https://github.com/craue/CraueConfigBundle/issues/2
 
 ## 1.0.0 (2012-05-26)
 
