@@ -9,7 +9,7 @@
 		{% endblock %}
 	</head>
 	<body>
-		{% for key, flash in app.session.getFlashes() %}
+		{% for key, flash in app.session.flashbag.all() %}
 			<div class="{{ key }}">
 				{{ flash }}
 			</div>
