@@ -10,20 +10,10 @@ Please use tag 1.0.0 of this bundle if you need Symfony 2.0.x compatibility.
 
 ## Get the bundle
 
-Let Composer download and install the bundle by first adding it to your composer.json
-
-```json
-{
-	"require": {
-		"craue/config-bundle": "~1.1"
-	}
-}
-```
-
-and then running
+Let Composer download and install the bundle by running
 
 ```sh
-php composer.phar update craue/config-bundle
+php composer.phar require craue/config-bundle:~1.1
 ```
 
 in a shell.
