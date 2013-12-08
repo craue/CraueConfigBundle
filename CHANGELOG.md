@@ -4,7 +4,7 @@
 
 - fixed handling flash messages in the base template
 - fixed translating setting names in the modification form
-- adjusted the Composer requirements to allow Symfony 2.1 and up
+- adjusted the Composer requirements to also allow Symfony 2.4 and up (now 2.1 and up)
 
 ## 1.1.3 (2013-11-21)
 
@@ -14,7 +14,7 @@
 
 ## 1.1.2 (2013-09-25)
 
-- adjusted the Composer requirements to allow Symfony 2.4 and up
+- adjusted the Composer requirements to also allow Symfony 2.3
 
 ## 1.1.1 (2013-05-02)
 
