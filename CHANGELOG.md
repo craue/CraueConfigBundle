@@ -3,6 +3,7 @@
 ## master
 
 - fixed handling flash messages in the base template
+- fixed translating setting names in the modification form
 
 ## 1.1.3 (2013-11-21)
 
