@@ -141,13 +141,13 @@ Settings without a section will be rendered at first. Sections without explicit 
 
 ## Translation
 
-You can add translations for all settings to be shown in the form by adding them to translation files with the
-`CraueConfigBundle` domain, e.g.
+You can add translations for all settings (and sections) to be shown in the form by adding them to translation files
+with the `CraueConfigBundle` domain, e.g.
 
 ```yaml
-# in app/Resources/translations/CraueConfigBundle/CraueConfigBundle.en.yml
+# in app/Resources/CraueConfigBundle/translations/CraueConfigBundle.en.yml
 name-of-a-setting: name of the setting
 
-# in app/Resources/translations/CraueConfigBundle/CraueConfigBundle.de.yml
+# in app/Resources/CraueConfigBundle/translations/CraueConfigBundle.de.yml
 name-of-a-setting: Name der Einstellung
 ```
