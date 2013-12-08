@@ -1,9 +1,10 @@
 # Changelog
 
-## master
+## 1.1.4 (2013-12-08)
 
 - fixed handling flash messages in the base template
 - fixed translating setting names in the modification form
+- adjusted the Composer requirements to allow Symfony 2.1 and up
 
 ## 1.1.3 (2013-11-21)
 
