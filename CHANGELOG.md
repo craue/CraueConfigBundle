@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+- fixed handling flash messages in the base template
+
 ## 1.1.3 (2013-11-21)
 
 - [#7]: fixed the base template to be compatible with Symfony 2.3 as well (now 2.1 and up)

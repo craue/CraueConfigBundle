@@ -9,10 +9,12 @@
 		{% endblock %}
 	</head>
 	<body>
-		{% for key, flash in app.session.flashbag.all() %}
-			<div class="{{ key }}">
-				{{ flash }}
-			</div>
+		{% for type, flashMessages in app.session.flashbag.all() %}
+			{% for flashMessage in flashMessages %}
+				<div class="{{ type }}">
+					{{ flashMessage }}
+				</div>
+			{% endfor %}
 		{% endfor %}
 
 		{% block craue_config_content %}
