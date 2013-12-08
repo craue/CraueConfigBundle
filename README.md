@@ -115,19 +115,6 @@ Keep in mind that the setting has to be present, or an exception will be thrown.
 
 # Customization
 
-## Translation
-
-You can add translations for all settings to be shown in the form by adding them to translation files with the
-`CraueConfigBundle` domain, e.g.
-
-```yaml
-# in app/Resources/translations/CraueConfigBundle/CraueConfigBundle.en.yml
-name-of-a-setting: name of the setting
-
-# in app/Resources/translations/CraueConfigBundle/CraueConfigBundle.de.yml
-name-of-a-setting: Name der Einstellung
-```
-
 ## Redirect to a different page after submitting the built-in form
 
 If you've enabled the build-in form, you can define where to redirect on successfully saving the changes by setting the
@@ -151,3 +138,16 @@ parameters:
 ```
 
 Settings without a section will be rendered at first. Sections without explicit ordering are rendered at last.
+
+## Translation
+
+You can add translations for all settings to be shown in the form by adding them to translation files with the
+`CraueConfigBundle` domain, e.g.
+
+```yaml
+# in app/Resources/translations/CraueConfigBundle/CraueConfigBundle.en.yml
+name-of-a-setting: name of the setting
+
+# in app/Resources/translations/CraueConfigBundle/CraueConfigBundle.de.yml
+name-of-a-setting: Name der Einstellung
+```
