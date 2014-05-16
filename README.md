@@ -33,7 +33,19 @@ public function registerBundles() {
 
 ## Create the table
 
-Preferably, you do this by calling
+In case you have a custom Doctrine configuration, the cli probably will not find any database changes. In that case, please add the CraueConfigBundle to the mappings:
+
+```yaml
+# Doctrine Configuration
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    CraueConfigBundle: ~
+```
+
+After that the cli can create the table, preferably you do this by calling
 
 ```sh
 # in a shell
