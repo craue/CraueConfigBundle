@@ -31,25 +31,7 @@ public function registerBundles() {
 }
 ```
 
-In case you are manually mapping your bundles in the Assetic configuration, add it to the registered bundles
-```yaml
-assetic:
-    bundles:        [ .... , "CraueConfigBundle"]
-```
-
 ## Create the table
-
-In case you are manually mapping your bundles in the Doctrine configuration (eg. you are not making use of `auto_mapping: true`, the cli command `doctrine:scheme:update` will not find any database changes. In that case, please add the CraueConfigBundle to the mappings:
-
-```yaml
-# Doctrine Configuration
-doctrine:
-    orm:
-        entity_managers:
-            default:
-                mappings:
-                    CraueConfigBundle: ~
-```
 
 After that the cli can create the table, preferably you do this by calling
 
@@ -130,6 +112,14 @@ $this->get('craue_config')->setMultiple(array('setting-1' => 'foo', 'setting-2' 
 ```
 
 Keep in mind that the setting has to be present, or an exception will be thrown.
+
+## Usage in Twig templates
+
+The Twig extension in this bundle supports you to read settings directly in your template.
+
+```twig
+{{ craue_config('your-config-setting-name') }}
+```
 
 # Customization
 
