@@ -31,7 +31,7 @@ public function registerBundles() {
 }
 ```
 
-In case of a custom Assetic configuration, add it to the registered bundles
+In case you are manually mapping your bundles in the Assetic configuration, add it to the registered bundles
 ```yaml
 assetic:
     bundles:        [ .... , "CraueConfigBundle"]
@@ -39,7 +39,7 @@ assetic:
 
 ## Create the table
 
-In case you have a custom Doctrine configuration, the cli probably will not find any database changes. In that case, please add the CraueConfigBundle to the mappings:
+In case you are manually mapping your bundles in the Doctrine configuration, `doctrine:scheme:update` will not find any database changes. In that case, please add the CraueConfigBundle to the mappings:
 
 ```yaml
 # Doctrine Configuration
