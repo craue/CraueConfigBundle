@@ -22,15 +22,13 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	protected $config;
 
 	/**
-	 * Sets the order in which sections will be rendered.
-	 * @param string[] $sectionOrder
+	 * @param string[] $sectionOrder The order in which sections will be rendered.
 	 */
 	public function setSectionOrder(array $sectionOrder = array()) {
 		$this->sectionOrder = $sectionOrder;
 	}
 
 	/**
-	 * Setter for Config class
 	 * @param Config $config
 	 */
 	public function setConfig(Config $config) {
@@ -92,7 +90,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	/**
 	 * @param string $name Name of the setting.
 	 * @return string|null Value of the setting.
-	 * @throws \RuntimeException If setting is not defined.
+	 * @throws \RuntimeException If the setting is not defined.
 	 */
 	public function getSetting($name) {
 		return $this->config->get($name);

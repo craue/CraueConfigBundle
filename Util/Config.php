@@ -30,7 +30,7 @@ class Config {
 	/**
 	 * @param string $name Name of the setting.
 	 * @return string|null Value of the setting.
-	 * @throws \RuntimeException If setting is not defined.
+	 * @throws \RuntimeException If the setting is not defined.
 	 */
 	public function get($name) {
 		$setting = $this->getRepo()->findOneBy(array(
@@ -64,7 +64,7 @@ class Config {
 
 	/**
 	 * @param array $newSettings List of settings (as name => value) to update.
-	 * @throws \RuntimeException If a setting is not defined.
+	 * @throws \RuntimeException If at least one of the settings is not defined.
 	 */
 	public function setMultiple(array $newSettings) {
 		if (empty($newSettings)) {
