@@ -39,7 +39,7 @@ assetic:
 
 ## Create the table
 
-In case you are manually mapping your bundles in the Doctrine configuration, `doctrine:scheme:update` will not find any database changes. In that case, please add the CraueConfigBundle to the mappings:
+In case you are manually mapping your bundles in the Doctrine configuration (eg. you are not making use of `auto_mapping: true`, the cli command `doctrine:scheme:update` will not find any database changes. In that case, please add the CraueConfigBundle to the mappings:
 
 ```yaml
 # Doctrine Configuration
