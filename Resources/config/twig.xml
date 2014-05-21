@@ -19,6 +19,9 @@
 			<call method="setSectionOrder">
 				<argument>%craue_config.configTemplate.sectionOrder%</argument>
 			</call>
+			<call method="setConfig">
+				<argument type="service" id="craue_config" />
+			</call>
 		</service>
 	</services>
 
