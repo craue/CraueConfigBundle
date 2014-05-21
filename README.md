@@ -118,7 +118,7 @@ Keep in mind that the setting has to be present, or an exception will be thrown.
 The Twig extension in this bundle supports reading settings directly in your template.
 
 ```twig
-{{ craue_config('your-config-setting-name') }}
+{{ craue_setting('your-config-setting-name') }}
 ```
 
 # Customization
