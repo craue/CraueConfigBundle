@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Twig\Extension;
 
 use Craue\ConfigBundle\Util\Config;
+
 /**
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2014 Christian Raue
@@ -32,7 +33,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 * Setter for Config class
 	 * @param Config $config
 	 */
-	public function setConfig($config) {
+	public function setConfig(Config $config) {
 		$this->config = $config;
 	}
 
@@ -90,10 +91,9 @@ class ConfigTemplateExtension extends \Twig_Extension {
 
 	/**
 	 * Get the corresponding value belonging with the key, or throw RuntimeException when there is no value.
-	 * 
-	 * @param unknown $name
-	 * @return Ambigous <string, NULL>
-	 * @throws \RuntimeException
+	 * @param string $name Name of the setting.
+	 * @return string|null Value of the setting.
+	 * @throws \RuntimeException If setting is not defined.
 	 */
 	public function getSetting($name) {
 		return $this->config->get($name);

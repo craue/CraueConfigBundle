@@ -33,7 +33,7 @@ public function registerBundles() {
 
 ## Create the table
 
-After that the cli can create the table, preferably you do this by calling
+Preferably you do this by calling
 
 ```sh
 # in a shell
@@ -115,7 +115,7 @@ Keep in mind that the setting has to be present, or an exception will be thrown.
 
 ## Usage in Twig templates
 
-The Twig extension in this bundle supports you to read settings directly in your template.
+The Twig extension in this bundle supports reading settings directly in your template.
 
 ```twig
 {{ craue_config('your-config-setting-name') }}
