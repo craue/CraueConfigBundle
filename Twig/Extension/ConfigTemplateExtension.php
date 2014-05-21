@@ -15,7 +15,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 * @var string[]
 	 */
 	protected $sectionOrder;
-	
+
 	/**
 	 * @var Config $config
 	 */
@@ -52,13 +52,13 @@ class ConfigTemplateExtension extends \Twig_Extension {
 			'craue_sortSections' => new \Twig_Filter_Method($this, 'sortSections'),
 		);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public function getFunctions() {
 		return array(
-			'craue_setting' => new \Twig_Function_Function(array($this, 'getSetting')),
+			'craue_setting' => new \Twig_Function_Method($this, 'getSetting'),
 		);
 	}
 
@@ -90,7 +90,6 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	}
 
 	/**
-	 * Get the corresponding value belonging with the key
 	 * @param string $name Name of the setting.
 	 * @return string|null Value of the setting.
 	 * @throws \RuntimeException If setting is not defined.
