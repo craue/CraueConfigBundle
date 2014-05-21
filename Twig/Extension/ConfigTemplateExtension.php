@@ -90,7 +90,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	}
 
 	/**
-	 * Get the corresponding value belonging with the key, or throw RuntimeException when there is no value.
+	 * Get the corresponding value belonging with the key
 	 * @param string $name Name of the setting.
 	 * @return string|null Value of the setting.
 	 * @throws \RuntimeException If setting is not defined.
