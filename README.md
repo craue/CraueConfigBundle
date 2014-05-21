@@ -33,7 +33,7 @@ public function registerBundles() {
 
 ## Create the table
 
-Preferably, you do this by calling
+Preferably you do this by calling
 
 ```sh
 # in a shell
@@ -112,6 +112,14 @@ $this->get('craue_config')->setMultiple(array('setting-1' => 'foo', 'setting-2' 
 ```
 
 Keep in mind that the setting has to be present, or an exception will be thrown.
+
+## Usage in Twig templates
+
+The Twig extension in this bundle supports reading settings directly in your template.
+
+```twig
+{{ craue_setting('your-config-setting-name') }}
+```
 
 # Customization
 
