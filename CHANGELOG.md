@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 (2014-05-22)
+
+- [#10]: added Twig function `craue_setting`
+- [#12]: added Dutch translation
+
+[#10]: https://github.com/craue/CraueConfigBundle/issues/10
+[#12]: https://github.com/craue/CraueConfigBundle/issues/12
+
 ## 1.1.4 (2013-12-08)
 
 - fixed handling flash messages in the base template
