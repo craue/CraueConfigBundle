@@ -1,0 +1,8 @@
+craue_config_settings:
+  resource: "@CraueConfigBundle/Resources/config/routing/settings.xml"
+  prefix: /settings
+
+admin_settings_start:
+  pattern: /settings-start/modify
+  defaults:
+    _controller: CraueConfigBundle:Settings:modify

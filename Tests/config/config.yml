@@ -1,0 +1,36 @@
+assetic:
+  debug: "%kernel.debug%"
+  use_controller: false
+  bundles:
+    - CraueConfigBundle
+
+doctrine:
+  dbal:
+    charset: UTF8
+    driver: pdo_mysql
+    host: 127.0.0.1
+    port: ~
+    dbname: test
+    user: travis
+    password: ~
+  orm:
+    auto_generate_proxy_classes: "%kernel.debug%"
+    auto_mapping: true
+
+framework:
+  csrf_protection: false
+  form: ~
+  router:
+    resource: "%kernel.root_dir%/config/routing.yml"
+  secret: whatever
+  session:
+    storage_id: session.storage.mock_file
+  templating:
+    engines: ['twig']
+  test: ~
+  translator:
+    fallback: en
+
+twig:
+  debug: "%kernel.debug%"
+  strict_variables: "%kernel.debug%"

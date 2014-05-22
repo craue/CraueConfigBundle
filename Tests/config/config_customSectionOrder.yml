@@ -1,0 +1,5 @@
+imports:
+  - { resource: config.yml }
+
+parameters:
+  craue_config.configTemplate.sectionOrder: [section3, section2, section1]
