@@ -47,7 +47,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 */
 	public function getFilters() {
 		return array(
-			'craue_sortSections' => new \Twig_Filter_Method($this, 'sortSections'),
+			new \Twig_SimpleFilter('craue_sortSections', array($this, 'sortSections')),
 		);
 	}
 
@@ -56,7 +56,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 */
 	public function getFunctions() {
 		return array(
-			'craue_setting' => new \Twig_Function_Method($this, 'getSetting'),
+			new \Twig_SimpleFunction('craue_setting', array($this, 'getSetting')),
 		);
 	}
 
