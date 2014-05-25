@@ -31,14 +31,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 */
 	protected function setUp() {
 		static::createClient();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function tearDown() {
 		$this->removeAllSettings();
-		parent::tearDown();
 	}
 
 	/**
