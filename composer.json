@@ -30,7 +30,7 @@
 	"prefer-stable": true,
 	"autoload": {
 		"psr-0": {
-			"Craue\\ConfigBundle": ""
+			"Craue\\ConfigBundle\\": ""
 		}
 	},
 	"target-dir": "Craue/ConfigBundle"
