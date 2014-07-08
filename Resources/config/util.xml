@@ -15,9 +15,7 @@
 
 	<services>
 		<service id="craue_config" class="%craue_config.config.class%">
-			<call method="setEntityManager">
-				<argument type="service" id="doctrine.orm.default_entity_manager" />
-			</call>
+			<argument type="service" id="doctrine.orm.default_entity_manager" />
 		</service>
 	</services>
 </container>
