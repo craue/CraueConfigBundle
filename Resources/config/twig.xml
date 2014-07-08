@@ -16,12 +16,8 @@
 	<services>
 		<service id="twig.extension.craue_config_template" class="%craue_config.configTemplate.class%">
 			<tag name="twig.extension" />
-			<call method="setSectionOrder">
-				<argument>%craue_config.configTemplate.sectionOrder%</argument>
-			</call>
-			<call method="setConfig">
-				<argument type="service" id="craue_config" />
-			</call>
+			<argument type="service" id="craue_config" />
+			<argument>%craue_config.configTemplate.sectionOrder%</argument>
 		</service>
 	</services>
 </container>
