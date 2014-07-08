@@ -23,7 +23,7 @@ class Config {
 	 */
 	protected $repo;
 
-	public function setEntityManager(EntityManager $em) {
+	public function __construct(EntityManager $em) {
 		$this->em = $em;
 	}
 
