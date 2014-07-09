@@ -28,7 +28,7 @@ class ConfigTemplateExtensionTest extends IntegrationTestCase {
 	}
 
 	public function testSortSections() {
-		$ext = $this->getConfigTemplateExtension();
+		$ext = new ConfigTemplateExtension();
 		$ext->setSectionOrder(array('section1', 'section2'));
 		$this->assertEquals(array(null, 'section1', 'section2'), $ext->sortSections(array('section2', null, 'section1')));
 	}
