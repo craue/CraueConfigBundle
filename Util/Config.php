@@ -25,6 +25,7 @@ class Config {
 
 	public function setEntityManager(EntityManager $em) {
 		$this->em = $em;
+		$this->repo = null;
 	}
 
 	/**

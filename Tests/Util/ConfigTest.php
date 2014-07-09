@@ -2,7 +2,9 @@
 
 namespace Craue\ConfigBundle\Tests\Util;
 
+use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
+use Craue\ConfigBundle\Util\Config;
 
 /**
  * @group unit
@@ -88,6 +90,54 @@ class ConfigTest extends IntegrationTestCase {
 
 	public function testAll_noSettings() {
 		$this->assertEquals(array(), $this->getConfig()->all());
+	}
+
+	/**
+	 * Ensure that the repository is fetched only once from the EntityManager, but again if it's changed at runtime.
+	 */
+	public function testGetRepo() {
+		$config = new Config();
+		$method = new \ReflectionMethod($config, 'getRepo');
+		$method->setAccessible(true);
+
+		// 1st call to `getRepo` using a mocked EntityManager
+		$config->setEntityManager($this->getMockedEntityManager());
+
+		// invoke twice to ensure the cached instance is used
+		$method->invoke($config);
+		$method->invoke($config);
+
+		// 2nd call to `getRepo` using a different mocked EntityManager
+		$config->setEntityManager($this->getMockedEntityManager());
+
+		// invoke twice to ensure the cached instance is used
+		$method->invoke($config);
+		$method->invoke($config);
+	}
+
+	/**
+	 * @return PHPUnit_Framework_MockObject_MockObject|\Doctrine\ORM\EntityManager
+	 */
+	protected function getMockedEntityManager() {
+		$repo = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
+			->disableOriginalConstructor()
+			->getMock()
+		;
+		$repo->expects($this->any())
+			->method('find')
+			->will($this->returnValue(new Setting()))
+		;
+
+		$em = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
+			->disableOriginalConstructor()
+			->getMock()
+		;
+		$em->expects($this->once())
+			->method('getRepository')
+			->will($this->returnValue($repo))
+		;
+
+		return $em;
 	}
 
 }
