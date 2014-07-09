@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Tests\Twig\Extension;
 
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
+use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
 
 /**
  * @group unit
@@ -30,7 +31,17 @@ class ConfigTemplateExtensionTest extends IntegrationTestCase {
 	public function testSortSections() {
 		$ext = new ConfigTemplateExtension();
 		$ext->setSectionOrder(array('section1', 'section2'));
+
 		$this->assertEquals(array(null, 'section1', 'section2'), $ext->sortSections(array('section2', null, 'section1')));
+	}
+
+	/**
+	 * Ensure that setting a section order is optional.
+	 */
+	public function testSortSections_sectionOrderNotSet() {
+		$ext = new ConfigTemplateExtension();
+
+		$this->assertEquals(array(null, 'section2', 'section1'), $ext->sortSections(array('section2', null, 'section1')));
 	}
 
 }
