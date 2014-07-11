@@ -27,6 +27,9 @@ class Config {
 		$this->em = $em;
 	}
 
+ -	public function setEntityManager(EntityManager $em) {
+  		$this->em = $em;
+  	}
 	/**
 	 * @param string $name Name of the setting.
 	 * @return string|null Value of the setting.
