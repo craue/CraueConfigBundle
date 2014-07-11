@@ -29,6 +29,21 @@ class ConfigTemplateExtension extends \Twig_Extension {
 		$this->config = $config;
 		$this->sectionOrder = $sectionOrder;
 	}
+ -
+ -	/**
+ -	 * @param string[] $sectionOrder The order in which sections will be rendered.
+ -	 */
+ -	public function setSectionOrder(array $sectionOrder = array()) {
+ -		$this->sectionOrder = $sectionOrder;
+ -	}
+ -
+ +	
+  	/**
+  	 * @param Config $config
+  	 */
+ -	public function setConfig(Config $config) {
+  		$this->config = $config;
+  	}
 
 	/**
 	 * {@inheritDoc}
