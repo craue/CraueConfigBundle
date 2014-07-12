@@ -27,7 +27,7 @@ class Config {
 		$this->em = $em;
 	}
 
- -	public function setEntityManager(EntityManager $em) {
+ 	public function setEntityManager(EntityManager $em) {
   		$this->em = $em;
   	}
 	/**
