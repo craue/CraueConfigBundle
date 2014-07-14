@@ -80,8 +80,6 @@ class SettingsController extends Controller {
 				return $setting;
 			}
 		}
-
-		return null;
 	}
 
 }
