@@ -25,7 +25,7 @@ class Setting {
 
 	/**
 	 * @var string
-	 * @ORM\Column(name="value", type="string", nullable=true)
+	 * @ORM\Column(name="value", type="text", nullable=true)
 	 */
 	protected $value;
 
