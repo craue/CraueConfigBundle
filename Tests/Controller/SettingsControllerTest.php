@@ -21,9 +21,6 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$content = $client->getResponse()->getContent();
 		$this->assertContains('<div class="craue_config_settings_modify">', $content);
 		$this->assertContains('There are no settings defined yet.', $content);
-
-// var_dump($client->getResponse()->getContent());
-// die;
 	}
 
 	public function testModifyAction_noChanges() {
@@ -47,9 +44,6 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$content = $client->getResponse()->getContent();
 		$this->assertContains('<div class="notice">The settings were changed.</div>', $content);
 		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
-
-// var_dump($client->getResponse()->getContent());
-// die;
 	}
 
 	public function testModifyAction_changeValue() {
@@ -65,9 +59,6 @@ class SettingsControllerTest extends IntegrationTestCase {
 		));
 		$content = $client->getResponse()->getContent();
 		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="new-value" />', $content);
-
-// var_dump($client->getResponse()->getContent());
-// die;
 	}
 
 	public function testModifyAction_sectionOrder_defaultOrder() {
@@ -85,9 +76,6 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_1_value">name2</label>');
 		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_2_value">name3</label>');
 		$this->assertTrue($strPosField2 < $strPosField1 && $strPosField1 < $strPosField3, 'The sections are rendered in wrong order.');
-
-// var_dump($client->getResponse()->getContent());
-// die;
 	}
 
 	public function testModifyAction_sectionOrder_customOrder() {
@@ -105,9 +93,6 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_1_value">name2</label>');
 		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_2_value">name3</label>');
 		$this->assertTrue($strPosField2 < $strPosField3 && $strPosField3 < $strPosField1, 'The sections are rendered in wrong order.');
-
-// var_dump($client->getResponse()->getContent());
-// die;
 	}
 
 	public function testModifyAction_redirectRouteAfterModify() {
@@ -120,9 +105,6 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$form = $crawler->selectButton('apply')->form();
 		$client->submit($form);
 		$this->assertRedirect($client, $this->url($client, 'admin_settings_start'));
-
-// var_dump($client->getResponse()->getContent());
-// die;
 	}
 
 }
