@@ -95,13 +95,7 @@ class Config {
 	 * @return array with name => value
 	 */
 	public function all() {
-		$settings = array();
-
-		foreach ($this->getRepo()->findAll() as $setting) {
-			$settings[$setting->getName()] = $setting->getValue();
-		}
-
-		return $settings;
+		return $this->getAsNamesAndValues($this->getRepo()->findAll());
 	}
 
 	/**
@@ -109,13 +103,21 @@ class Config {
 	 * @return array with name => value
 	 */
 	public function getBySection($section) {
-		$settings = array();
+		return $this->getAsNamesAndValues($this->getRepo()->findBy(array('section' => $section)));
+	}
 
-		foreach ($this->getRepo()->findBy(array('section' => $section)) as $setting) {
-			$settings[$setting->getName()] = $setting->getValue();
+	/**
+	 * @param Setting[] $entities
+	 * @return array with name => value
+	 */
+	protected function getAsNamesAndValues(array $settings) {
+		$result = array();
+
+		foreach ($settings as $setting) {
+			$result[$setting->getName()] = $setting->getValue();
 		}
 
-		return $settings;
+		return $result;
 	}
 
 	/**
