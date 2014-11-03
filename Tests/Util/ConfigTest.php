@@ -92,6 +92,34 @@ class ConfigTest extends IntegrationTestCase {
 		$this->assertEquals(array(), $this->getConfig()->all());
 	}
 
+	public function testGetBySection() {
+		$this->persistSetting('name1', 'value1');
+		$this->persistSetting('name2', 'value2', 'section1');
+		$this->persistSetting('name3', 'value3', 'section2');
+		$this->persistSetting('name4', 'value4', 'section1');
+
+		$this->assertEquals(array(
+			'name2' => 'value2',
+			'name4' => 'value4',
+		), $this->getConfig()->getBySection('section1'));
+	}
+
+	public function testGetBySection_null() {
+		$this->persistSetting('name1', 'value1');
+		$this->persistSetting('name2', 'value2', 'section1');
+
+		$this->assertEquals(array(
+			'name1' => 'value1',
+		), $this->getConfig()->getBySection(null));
+	}
+
+	public function testGetBySection_nonexistentSection() {
+		$this->persistSetting('name1', 'value1');
+		$this->persistSetting('name2', 'value2', 'section1');
+
+		$this->assertEquals(array(), $this->getConfig()->getBySection('some-other-section'));
+	}
+
 	/**
 	 * Ensure that the repository is fetched only once from the EntityManager, but again if it's changed at runtime.
 	 */

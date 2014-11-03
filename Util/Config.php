@@ -105,6 +105,20 @@ class Config {
 	}
 
 	/**
+	 * @param string|null $section Name of the section to fetch settings for.
+	 * @return array with name => value
+	 */
+	public function getBySection($section) {
+		$settings = array();
+
+		foreach ($this->getRepo()->findBy(array('section' => $section)) as $setting) {
+			$settings[$setting->getName()] = $setting->getValue();
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * @return EntityRepository
 	 */
 	protected function getRepo() {
