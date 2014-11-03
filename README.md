@@ -102,6 +102,12 @@ $this->get('craue_config')->all()
 
 to get an associative array of all defined settings and their values.
 
+```php
+$this->get('craue_config')->getBySection('name-of-a-section')
+```
+
+will fetch all settings with the specified section (or those without a section if explicitly passing `null` as name).
+
 ## Writing settings
 
 With the same service you can set new values of settings:
