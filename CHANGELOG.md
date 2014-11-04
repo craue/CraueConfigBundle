@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 (2014-11-04)
+
+- [#16]: added method `getBySection` to get settings with a given section
+
+[#16]: https://github.com/craue/CraueConfigBundle/issues/16
+
 ## 1.2.0 (2014-05-22)
 
 - [#10]: added Twig function `craue_setting`

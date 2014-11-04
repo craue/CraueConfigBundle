@@ -106,7 +106,7 @@ to get an associative array of all defined settings and their values.
 $this->get('craue_config')->getBySection('name-of-a-section')
 ```
 
-will fetch all settings with the specified section (or those without a section if explicitly passing `null` as name).
+will fetch only settings with the specified section (or those without a section if explicitly passing `null` for the name).
 
 ## Writing settings
 
