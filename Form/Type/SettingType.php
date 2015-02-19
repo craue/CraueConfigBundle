@@ -5,7 +5,7 @@ namespace Craue\ConfigBundle\Form\Type;
 use Craue\ConfigBundle\Entity\Setting;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -28,7 +28,7 @@ class SettingType extends AbstractType {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setDefaultOptions(OptionsResolverInterface $resolver) {
+	public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
 			'data_class' => get_class(new Setting()),
 		));

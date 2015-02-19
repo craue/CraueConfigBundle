@@ -5,6 +5,8 @@ namespace Craue\ConfigBundle\Controller;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Form\ModifySettingsForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -23,9 +25,13 @@ class SettingsController extends Controller {
 		);
 
 		$form = $this->createForm(new ModifySettingsForm(), $formData);
-		$request = $this->get('request');
+		$request = $this->getCurrentRequest();
 		if ($request->getMethod() === 'POST') {
-			$form->bind($request);
+			if (Kernel::VERSION_ID < 20300) {
+				$form->bind($request);
+			} else {
+				$form->handleRequest($request);
+			}
 
 			if ($form->isValid()) {
 				foreach ($formData['settings'] as $formSetting) {
@@ -79,6 +85,20 @@ class SettingsController extends Controller {
 			if ($setting->getName() === $name) {
 				return $setting;
 			}
+		}
+	}
+
+	/**
+	 * @return Request
+	 */
+	protected function getCurrentRequest() {
+		if ($this->has('request_stack')) {
+			return $this->get('request_stack')->getCurrentRequest();
+		}
+
+		// TODO remove as soon as Symfony >= 2.4 is required
+		if ($this->has('request')) {
+			return $this->get('request');
 		}
 	}
 
