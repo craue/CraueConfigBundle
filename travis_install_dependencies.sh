@@ -1,5 +1,6 @@
 #!/bin/sh
 
+export COMPOSER_NO_INTERACTION=1
 composer self-update
 composer config -g preferred-install source
 
@@ -7,6 +8,14 @@ if [ -n "${MIN_STABILITY:-}" ]; then
 	sed -i -e "s/\"minimum-stability\": \"stable\"/\"minimum-stability\": \"${MIN_STABILITY}\"/" composer.json
 fi
 
-composer --no-interaction remove --no-update symfony/framework-bundle
-composer --no-interaction require --no-update --dev symfony/symfony:${SYMFONY_VERSION}
-composer --no-interaction update
+composer remove --no-update symfony/framework-bundle
+
+if [ -n "${SYMFONY_VERSION:-}" ]; then
+	composer require --no-update --dev symfony/symfony:${SYMFONY_VERSION}
+fi
+
+if [ "${USE_DEPS:-}" = "lowest" ]; then
+	COMPOSER_UPDATE_ARGS="--prefer-lowest"
+fi
+
+composer update ${COMPOSER_UPDATE_ARGS:-}
