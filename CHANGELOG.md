@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1 (2015-02-27)
+
+- [#17]: added Russian translation
+- added conditional code updates to avoid deprecation notices
+
+[#17]: https://github.com/craue/CraueConfigBundle/issues/17
+
 ## 1.3.0 (2014-11-04)
 
 - [#16]: added method `getBySection` to get settings with a given section
