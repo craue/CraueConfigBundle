@@ -66,10 +66,12 @@ craue_config_settings:
 ```yaml
 # in app/config/routing.yml
 craue_config_settings_modify:
-  pattern: /settings/modify
+  path: /settings/modify
   defaults:
     _controller: CraueConfigBundle:Settings:modify
 ```
+
+(If you're still using Symfony 2.1, replace `path` by `pattern`.)
 
 # Usage
 
