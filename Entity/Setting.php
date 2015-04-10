@@ -13,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="craue_config_setting")
  */
-class Setting {
+class Setting 
+{
 
 	/**
 	 * @var string
@@ -25,7 +26,7 @@ class Setting {
 
 	/**
 	 * @var string
-	 * @ORM\Column(name="value", type="string", nullable=true)
+	 * @ORM\Column(name="value", type="text", nullable=true)
 	 */
 	protected $value;
 
@@ -35,27 +36,33 @@ class Setting {
 	 */
 	protected $section;
 
-	public function setName($name) {
+	public function setName($name) 
+	{
 		$this->name = $name;
 	}
 
-	public function getName() {
+	public function getName() 
+	{
 		return $this->name;
 	}
 
-	public function setValue($value) {
+	public function setValue($value) 
+	{
 		$this->value = $value;
 	}
 
-	public function getValue() {
+	public function getValue() 
+	{
 		return $this->value;
 	}
 
-	public function setSection($section) {
+	public function setSection($section) 
+	{
 		$this->section = $section;
 	}
 
-	public function getSection() {
+	public function getSection() 
+	{
 		return $this->section;
 	}
 
