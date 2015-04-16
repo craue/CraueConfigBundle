@@ -1,5 +1,9 @@
 # Upgrade from 1.x to 2.0
 
+## Database
+
+After upgrading the bundle, you should migrate your database to remove the useless `UNIQUE` index for field `name` from table `craue_config_setting`. The `PRIMARY` index for field `name` will remain.
+
 ## Built-in form/template
 
 - If you're overriding the template `modify_form.html.twig` in your project, you probably need to adapt it to changes in the built-in form type. Before, two hidden form fields `name` and `section` were added only to read their `value` variable in the template. They have been removed now. But you can still access the properties of settings in the template via the `value` variable of each `setting` form field:

@@ -2,6 +2,7 @@
 
 namespace Craue\ConfigBundle\Tests\Twig\Extension;
 
+use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 
 /**
@@ -18,7 +19,7 @@ class ConfigTemplateExtensionIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testSettingFunction($platform, $config, $requiredExtension, $name, $value) {
 		$this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
-		$this->persistSetting($name, $value);
+		$this->persistSetting(Setting::create($name, $value));
 
 		$this->assertSame($value, $this->getTwig()->render('@IntegrationTest/Settings/setting.html.twig', array(
 			'name' => $name,

@@ -1,0 +1,10 @@
+imports:
+  - { resource: config.yml }
+
+craue_config:
+  entity_name: Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting
+
+services:
+  craue_config:
+    class: Craue\ConfigBundle\Tests\IntegrationTestBundle\Util\CustomConfig
+    parent: craue_config_default

@@ -18,11 +18,16 @@
 			<argument type="service" id="craue_config_cache_provider" on-invalid="ignore" />
 		</service>
 
-		<service id="craue_config" class="Craue\ConfigBundle\Util\Config">
+		<service id="craue_config_default" class="Craue\ConfigBundle\Util\Config">
 			<argument type="service" id="craue_config_cache_adapter" />
 			<call method="setEntityManager">
 				<argument type="service" id="doctrine.orm.default_entity_manager" />
 			</call>
+			<call method="setEntityName">
+				<argument>%craue_config.entity_name%</argument>
+			</call>
 		</service>
+
+		<service id="craue_config" alias="craue_config_default" />
 	</services>
 </container>

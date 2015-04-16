@@ -2,6 +2,7 @@
 
 namespace Craue\ConfigBundle\Form\Type;
 
+use Craue\ConfigBundle\Entity\SettingInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -17,12 +18,19 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class SettingType extends AbstractType {
 
 	/**
+	 * @var string
+	 */
+	protected $entityName;
+
+	public function __construct($entityName) {
+		$this->entityName = $entityName;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$useFqcn = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
-
-		$builder->add('value', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\TextType' : 'text', array(
+		$builder->add('value', null, array(
 			'required' => false,
 			'translation_domain' => 'CraueConfigBundle',
 		));
@@ -32,7 +40,7 @@ class SettingType extends AbstractType {
 	 * {@inheritdoc}
 	 */
 	public function finishView(FormView $view, FormInterface $form, array $options) {
-		/* @var $setting Setting */
+		/* @var $setting SettingInterface */
 		$setting = $form->getData();
 
 		$view->children['value']->vars['label'] = $setting->getName();
@@ -43,7 +51,7 @@ class SettingType extends AbstractType {
 	 */
 	public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
-			'data_class' => 'Craue\ConfigBundle\Entity\Setting',
+			'data_class' => $this->entityName,
 		));
 	}
 
