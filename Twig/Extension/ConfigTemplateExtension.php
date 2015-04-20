@@ -17,7 +17,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	protected $sectionOrder = array();
 
 	/**
-	 * @var Config $config
+	 * @var Config
 	 */
 	protected $config;
 
