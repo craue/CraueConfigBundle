@@ -7,10 +7,9 @@ use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
 use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -20,17 +19,26 @@ use Symfony\Component\Console\Input\ArrayInput;
 abstract class IntegrationTestCase extends WebTestCase {
 
 	/**
-	 * {@inheritDoc}
+	 * @var Client
 	 */
-	public static function setUpBeforeClass() {
-		self::rebuildDatabase();
-	}
+	protected $client;
+
+	/**
+	 * @var boolean
+	 */
+	private static $databaseInitialized = false;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function setUp() {
-		static::createClient();
+		$this->client = static::createClient();
+
+		if (!self::$databaseInitialized) {
+			$this->rebuildDatabase();
+			self::$databaseInitialized = true;
+		}
+
 		$this->removeAllSettings();
 	}
 
@@ -48,25 +56,13 @@ abstract class IntegrationTestCase extends WebTestCase {
 		return new AppKernel($environment, $configFile);
 	}
 
-	protected static function rebuildDatabase() {
-		self::createClient();
-		$application = new Application(static::$kernel);
-		$application->setAutoExit(false);
+	protected function rebuildDatabase() {
+		$em = $this->getEntityManager();
+		$metadata = $em->getMetadataFactory()->getAllMetadata();
+		$schemaTool = new SchemaTool($em);
 
-		self::executeCommand($application, 'doctrine:schema:drop', array('--force' => true, '--full-database' => true));
-		self::executeCommand($application, 'doctrine:schema:update', array('--force' => true));
-	}
-
-	private static function executeCommand(Application $application, $command, array $options = array()) {
-		$options = array_merge($options, array(
-			'--env' => 'test',
-			'--no-debug' => null,
-			'--no-interaction' => null,
-			'--quiet' => null,
-			'command' => $command,
-		));
-
-		return $application->run(new ArrayInput($options));
+		$schemaTool->dropSchema($metadata);
+		$schemaTool->createSchema($metadata);
 	}
 
 	/**
