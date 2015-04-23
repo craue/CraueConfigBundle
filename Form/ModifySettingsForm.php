@@ -2,11 +2,8 @@
 
 namespace Craue\ConfigBundle\Form;
 
-use Craue\ConfigBundle\Form\Type\LegacySettingType;
-use Craue\ConfigBundle\Form\Type\SettingType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -20,7 +17,7 @@ class ModifySettingsForm extends AbstractType {
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('settings', 'collection', array(
-			'type' => Kernel::VERSION_ID < 20700 ? new LegacySettingType() : new SettingType(),
+			'type' => 'craue_config_setting',
 		));
 	}
 
