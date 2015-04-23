@@ -1,6 +1,6 @@
 <?php
 
-namespace Craue\ConfigBundle\Tests;
+namespace Craue\ConfigBundle\Tests\Controller;
 
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 

@@ -24,13 +24,13 @@ class Setting {
 	protected $name;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * @ORM\Column(name="value", type="string", nullable=true)
 	 */
 	protected $value;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * @ORM\Column(name="section", type="string", nullable=true)
 	 */
 	protected $section;
