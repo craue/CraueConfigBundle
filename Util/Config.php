@@ -11,7 +11,8 @@ use Doctrine\ORM\EntityRepository;
  * @copyright 2011-2015 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class Config {
+class Config 
+{
 
 	/**
 	 * @var EntityManager
@@ -23,22 +24,29 @@ class Config {
 	 */
 	protected $repo;
 
-	public function setEntityManager(EntityManager $em) {
+	public function setEntityManager(EntityManager $em) 
+	{
 		$this->em = $em;
 		$this->repo = null;
 	}
 
 	/**
 	 * @param string $name Name of the setting.
+	 * @param string $default Default value of the setting
+	 * 
 	 * @return string|null Value of the setting.
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
-	public function get($name) {
+	public function get($name, $default = null) 
+	{
 		$setting = $this->getRepo()->findOneBy(array(
 			'name' => $name,
 		));
 
 		if ($setting === null) {
+			if ($default !== null) {
+				return $default;
+			}
 			throw $this->createNotFoundException($name);
 		}
 
@@ -50,7 +58,8 @@ class Config {
 	 * @param string|null $value New value for the setting.
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
-	public function set($name, $value) {
+	public function set($name, $value) 
+	{
 		$setting = $this->getRepo()->findOneBy(array(
 			'name' => $name,
 		));
@@ -67,7 +76,8 @@ class Config {
 	 * @param array $newSettings List of settings (as name => value) to update.
 	 * @throws \RuntimeException If at least one of the settings is not defined.
 	 */
-	public function setMultiple(array $newSettings) {
+	public function setMultiple(array $newSettings) 
+	{
 		if (empty($newSettings)) {
 			return;
 		}
@@ -94,7 +104,8 @@ class Config {
 	/**
 	 * @return array with name => value
 	 */
-	public function all() {
+	public function all() 
+	{
 		return $this->getAsNamesAndValues($this->getRepo()->findAll());
 	}
 
@@ -102,7 +113,8 @@ class Config {
 	 * @param string|null $section Name of the section to fetch settings for.
 	 * @return array with name => value
 	 */
-	public function getBySection($section) {
+	public function getBySection($section) 
+	{
 		return $this->getAsNamesAndValues($this->getRepo()->findBy(array('section' => $section)));
 	}
 
@@ -110,7 +122,8 @@ class Config {
 	 * @param Setting[] $entities
 	 * @return array with name => value
 	 */
-	protected function getAsNamesAndValues(array $settings) {
+	protected function getAsNamesAndValues(array $settings) 
+	{
 		$result = array();
 
 		foreach ($settings as $setting) {
@@ -123,7 +136,8 @@ class Config {
 	/**
 	 * @return EntityRepository
 	 */
-	protected function getRepo() {
+	protected function getRepo() 
+	{
 		if ($this->repo === null) {
 			$this->repo = $this->em->getRepository(get_class(new Setting()));
 		}
@@ -135,7 +149,8 @@ class Config {
 	 * @param string $name Name of the setting.
 	 * @return \RuntimeException
 	 */
-	protected function createNotFoundException($name) {
+	protected function createNotFoundException($name) 
+	{
 		return new \RuntimeException(sprintf('Setting "%s" couldn\'t be found.', $name));
 	}
 
