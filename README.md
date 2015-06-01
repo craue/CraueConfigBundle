@@ -123,7 +123,7 @@ Keep in mind that the setting has to be present, or an exception will be thrown.
 
 The Twig extension in this bundle supports reading settings directly in your template.
 
-```html+jinja
+```twig
 {{ craue_setting('name-of-a-setting') }}
 ```
 
