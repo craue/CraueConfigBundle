@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class SettingsController extends Controller {
 
-	public function modifyAction() {
+	public function modifyAction(Request $request) {
 		$em = $this->getDoctrine()->getManager();
 		$repo = $em->getRepository(get_class(new Setting()));
 		$allStoredSettings = $repo->findAll();
@@ -25,7 +25,6 @@ class SettingsController extends Controller {
 		);
 
 		$form = $this->createForm(new ModifySettingsForm(), $formData);
-		$request = $this->getCurrentRequest();
 		if ($request->getMethod() === 'POST') {
 			if (Kernel::VERSION_ID < 20300) {
 				$form->bind($request);
@@ -85,20 +84,6 @@ class SettingsController extends Controller {
 			if ($setting->getName() === $name) {
 				return $setting;
 			}
-		}
-	}
-
-	/**
-	 * @return Request
-	 */
-	protected function getCurrentRequest() {
-		if ($this->has('request_stack')) {
-			return $this->get('request_stack')->getCurrentRequest();
-		}
-
-		// TODO remove as soon as Symfony >= 2.4 is required
-		if ($this->has('request')) {
-			return $this->get('request');
 		}
 	}
 
