@@ -2,43 +2,12 @@
 
 namespace Craue\ConfigBundle\Form\Type;
 
-use Craue\ConfigBundle\Entity\Setting;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 /**
+ * for Symfony >= 2.8
+ *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2015 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class SettingType extends AbstractType {
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('name', 'hidden');
-		$builder->add('section', 'hidden');
-		$builder->add('value', null, array(
-			'required' => false,
-		));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function configureOptions(OptionsResolver $resolver) {
-		$resolver->setDefaults(array(
-			'data_class' => get_class(new Setting()),
-		));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getName() {
-		return 'craue_config_setting';
-	}
-
+class SettingType extends AbstractSettingType {
 }
