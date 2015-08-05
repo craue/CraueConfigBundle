@@ -9,7 +9,7 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
-		<service id="craue_config.form_type.setting" class="Craue\ConfigBundle\Form\Type\SettingType">
+		<service id="craue_config.form_type.setting" class="Craue\ConfigBundle\Form\Type\LegacyLegacySettingType">
 			<tag name="form.type" alias="craue_config_setting" />
 		</service>
 	</services>

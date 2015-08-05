@@ -22,7 +22,13 @@ class CraueConfigExtension extends Extension {
 	 */
 	public function load(array $config, ContainerBuilder $container) {
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-		$loader->load(Kernel::VERSION_ID < 20700 ? 'form_legacy.xml' : 'form.xml');
+
+		if (Kernel::VERSION_ID < 20700) {
+			$loader->load('form_legacy_legacy.xml');
+		} elseif (Kernel::VERSION_ID < 20800) {
+			$loader->load('form_legacy.xml');
+		}
+
 		$loader->load('twig.xml');
 		$loader->load('util.xml');
 	}

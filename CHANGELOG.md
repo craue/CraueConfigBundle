@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+- added conditional code updates to avoid deprecation notices with Symfony 2.8
+
 ## 1.3.1 (2015-02-27)
 
 - [#17]: added Russian translation

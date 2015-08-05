@@ -3,7 +3,7 @@
 namespace Craue\ConfigBundle\Controller;
 
 use Craue\ConfigBundle\Entity\Setting;
-use Craue\ConfigBundle\Form\ModifySettingsForm;
+use Craue\ConfigBundle\Form\LegacyModifySettingsForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
@@ -24,7 +24,10 @@ class SettingsController extends Controller {
 			'settings' => $allStoredSettings,
 		);
 
-		$form = $this->createForm(new ModifySettingsForm(), $formData);
+		$form = Kernel::VERSION_ID < 20800
+			? $this->createForm(new LegacyModifySettingsForm(), $formData)
+			: $this->get('form.factory')->createNamed('craue_config_modifySettings', 'Craue\ConfigBundle\Form\ModifySettingsForm', $formData);
+
 		if ($request->getMethod() === 'POST') {
 			if (Kernel::VERSION_ID < 20300) {
 				$form->bind($request);
