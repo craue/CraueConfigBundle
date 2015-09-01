@@ -25,9 +25,9 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$this->persistSetting('name', 'value');
 
 		$crawler = $this->client->request('GET', $this->url($this->client, 'craue_config_settings_modify'));
-		$this->assertSame(200, $this->client->getResponse()->getStatusCode());
 		$content = $this->client->getResponse()->getContent();
-		$this->assertContains('<form method="post" class="craue_config_settings_modify" >', $content);
+		$this->assertSame(200, $this->client->getResponse()->getStatusCode(), $content);
+		$this->assertRegExp('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
 		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_name" name="craue_config_modifySettings[settings][0][name]" value="name" />', $content);
 		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_section" name="craue_config_modifySettings[settings][0][section]" />', $content);
 		$this->assertContains('<label for="craue_config_modifySettings_settings_0_value">name</label>', $content);
