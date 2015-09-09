@@ -1,4 +1,3 @@
-{% set symfonyPriorTo2dot3 = constant('\\Symfony\\Component\\HttpKernel\\Kernel::VERSION_ID') < 20300 %}
 {% include 'CraueConfigBundle:Settings:' ~ (symfonyPriorTo2dot3 ? 'modify_form_start_legacy.html.twig' : 'modify_form_start.html.twig') with {'form': form} only %}
 	{{ form_errors(form) }}
 

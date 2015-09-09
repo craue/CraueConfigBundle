@@ -4,7 +4,6 @@ namespace Craue\ConfigBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -18,9 +17,11 @@ abstract class AbstractSettingType extends AbstractType {
 	 * {@inheritDoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('name', Kernel::VERSION_ID < 20800 ? 'hidden' : 'Symfony\Component\Form\Extension\Core\Type\HiddenType');
-		$builder->add('section', Kernel::VERSION_ID < 20800 ? 'hidden' : 'Symfony\Component\Form\Extension\Core\Type\HiddenType');
-		$builder->add('value', Kernel::VERSION_ID < 20800 ? 'text' : 'Symfony\Component\Form\Extension\Core\Type\TextType', array(
+		$useFqcn = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+
+		$builder->add('name', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType' : 'hidden');
+		$builder->add('section', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType' : 'hidden');
+		$builder->add('value', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\TextType' : 'text', array(
 			'required' => false,
 		));
 	}

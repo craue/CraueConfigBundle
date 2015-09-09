@@ -4,7 +4,6 @@ namespace Craue\ConfigBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -17,8 +16,10 @@ abstract class AbstractModifySettingsForm extends AbstractType {
 	 * {@inheritDoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('settings', Kernel::VERSION_ID < 20800 ? 'collection' : 'Symfony\Component\Form\Extension\Core\Type\CollectionType', array(
-			'type' => Kernel::VERSION_ID < 20800 ? 'craue_config_setting' : 'Craue\ConfigBundle\Form\Type\SettingType',
+		$useFqcn = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+
+		$builder->add('settings', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\CollectionType' : 'collection', array(
+			'type' => $useFqcn ? 'Craue\ConfigBundle\Form\Type\SettingType' : 'craue_config_setting',
 		));
 	}
 

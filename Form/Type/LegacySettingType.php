@@ -3,7 +3,7 @@
 namespace Craue\ConfigBundle\Form\Type;
 
 /**
- * for Symfony 2.7
+ * for symfony/form 2.7
  *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2015 Christian Raue
