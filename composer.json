@@ -29,9 +29,8 @@
 	"minimum-stability": "stable",
 	"prefer-stable": true,
 	"autoload": {
-		"psr-0": {
+		"psr-4": {
 			"Craue\\ConfigBundle\\": ""
 		}
-	},
-	"target-dir": "Craue/ConfigBundle"
+	}
 }
