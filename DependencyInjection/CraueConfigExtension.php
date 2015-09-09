@@ -22,10 +22,8 @@ class CraueConfigExtension extends Extension {
 	public function load(array $config, ContainerBuilder $container) {
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-		if (!method_exists('Symfony\Component\Form\AbstractType', 'configureOptions')) {
-			$loader->load('form_legacy_legacy.xml'); // for symfony/form < 2.7
-		} elseif (!method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-			$loader->load('form_legacy.xml'); // for symfony/form 2.7
+		if (!method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+			$loader->load('form_legacy.xml'); // for symfony/form < 2.8
 		}
 
 		$loader->load('twig.xml');
