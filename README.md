@@ -69,8 +69,6 @@ craue_config_settings_modify:
     _controller: CraueConfigBundle:Settings:modify
 ```
 
-(If you're still using Symfony 2.1, replace `path` by `pattern`.)
-
 # Usage
 
 ## Defining settings

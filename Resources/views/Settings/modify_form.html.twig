@@ -1,4 +1,4 @@
-{% include 'CraueConfigBundle:Settings:' ~ (symfonyPriorTo2dot3 ? 'modify_form_start_legacy.html.twig' : 'modify_form_start.html.twig') with {'form': form} only %}
+{{ form_start(form, {'attr': {'class': 'craue_config_settings_modify'}}) }}
 	{{ form_errors(form) }}
 
 	{% for section in sections | craue_sortSections %}
@@ -23,4 +23,4 @@
 	{{ form_rest(form) }}
 
 	<button type="submit">{{ 'modify_settings' | trans({}, 'CraueConfigBundle') }}</button>
-{% include 'CraueConfigBundle:Settings:' ~ (symfonyPriorTo2dot3 ? 'modify_form_end_legacy.html.twig' : 'modify_form_end.html.twig') with {'form': form} only %}
+{{ form_end(form) }}

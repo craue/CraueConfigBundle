@@ -24,7 +24,7 @@ doctrine:
 framework:
   form: ~
   router:
-    resource: "%kernel.root_dir%/config/routing.php"
+    resource: "%kernel.root_dir%/config/routing.yml"
   secret: whatever
   session:
     storage_id: session.storage.mock_file

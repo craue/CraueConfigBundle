@@ -26,11 +26,7 @@ class SettingsController extends Controller {
 		$form = $this->createForm($useFqcn ? 'Craue\ConfigBundle\Form\ModifySettingsForm' : 'craue_config_modifySettings', $formData);
 
 		if ($request->getMethod() === 'POST') {
-			if (method_exists($form, 'handleRequest')) {
-				$form->handleRequest($request);
-			} else {
-				$form->bind($request); // for symfony/form < 2.3
-			}
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				foreach ($formData['settings'] as $formSetting) {

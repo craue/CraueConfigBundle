@@ -8,5 +8,7 @@
 		xmlns="http://symfony.com/schema/routing"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-	<import resource="@CraueConfigBundle/Resources/config/routing/settings.php" />
+	<route id="craue_config_settings_modify" path="/modify">
+		<default key="_controller">CraueConfigBundle:Settings:modify</default>
+	</route>
 </routes>
