@@ -2,7 +2,6 @@
 
 namespace Craue\ConfigBundle\Form\Type;
 
-use Craue\ConfigBundle\Entity\Setting;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -31,7 +30,7 @@ abstract class AbstractSettingType extends AbstractType {
 	 */
 	public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
-			'data_class' => get_class(new Setting()),
+			'data_class' => 'Craue\ConfigBundle\Entity\Setting',
 		));
 	}
 

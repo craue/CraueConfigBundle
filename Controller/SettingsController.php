@@ -17,7 +17,7 @@ class SettingsController extends Controller {
 
 	public function modifyAction(Request $request) {
 		$em = $this->getDoctrine()->getManager();
-		$repo = $em->getRepository(get_class(new Setting()));
+		$repo = $em->getRepository('Craue\ConfigBundle\Entity\Setting');
 		$allStoredSettings = $repo->findAll();
 
 		$formData = array(
