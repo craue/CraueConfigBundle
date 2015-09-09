@@ -8,8 +8,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * for Symfony >= 2.8
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2015 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
@@ -43,6 +41,20 @@ class SettingType extends AbstractType {
 	 */
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {
 		$this->configureOptions($resolver);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getName() {
+		return $this->getBlockPrefix();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getBlockPrefix() {
+		return 'craue_config_setting';
 	}
 
 }
