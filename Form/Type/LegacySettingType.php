@@ -9,7 +9,7 @@ namespace Craue\ConfigBundle\Form\Type;
  * @copyright 2011-2015 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class LegacySettingType extends AbstractSettingType {
+class LegacySettingType extends SettingType {
 
 	/**
 	 * {@inheritDoc}

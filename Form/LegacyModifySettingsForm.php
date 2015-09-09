@@ -9,7 +9,7 @@ namespace Craue\ConfigBundle\Form;
  * @copyright 2011-2015 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class LegacyModifySettingsForm extends AbstractModifySettingsForm {
+class LegacyModifySettingsForm extends ModifySettingsForm {
 
 	/**
 	 * {@inheritDoc}
