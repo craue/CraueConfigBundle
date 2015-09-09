@@ -12,5 +12,9 @@
 		<service id="craue_config.form_type.setting" class="Craue\ConfigBundle\Form\Type\LegacySettingType">
 			<tag name="form.type" alias="craue_config_setting" />
 		</service>
+
+		<service id="craue_config.form.modifySettings" class="Craue\ConfigBundle\Form\ModifySettingsForm">
+			<tag name="form.type" alias="craue_config_modifySettings" />
+		</service>
 	</services>
 </container>
