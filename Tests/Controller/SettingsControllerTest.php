@@ -14,19 +14,22 @@ use Craue\ConfigBundle\Tests\IntegrationTestCase;
 class SettingsControllerTest extends IntegrationTestCase {
 
 	public function testModifyAction_noSettings() {
-		$this->client->request('GET', $this->url($this->client, 'craue_config_settings_modify'));
-		$this->assertSame(200, $this->client->getResponse()->getStatusCode());
-		$content = $this->client->getResponse()->getContent();
+		$client = $this->initClient();
+
+		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
+		$content = $client->getResponse()->getContent();
+		$this->assertSame(200, $client->getResponse()->getStatusCode(), $content);
 		$this->assertContains('<div class="craue_config_settings_modify">', $content);
 		$this->assertContains('There are no settings defined yet.', $content);
 	}
 
 	public function testModifyAction_noChanges() {
+		$client = $this->initClient();
 		$this->persistSetting('name', 'value');
 
-		$crawler = $this->client->request('GET', $this->url($this->client, 'craue_config_settings_modify'));
-		$content = $this->client->getResponse()->getContent();
-		$this->assertSame(200, $this->client->getResponse()->getStatusCode(), $content);
+		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
+		$content = $client->getResponse()->getContent();
+		$this->assertSame(200, $client->getResponse()->getStatusCode(), $content);
 		$this->assertRegExp('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
 		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_name" name="craue_config_modifySettings[settings][0][name]" value="name" />', $content);
 		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_section" name="craue_config_modifySettings[settings][0][section]" />', $content);
@@ -35,33 +38,35 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$this->assertContains('<button type="submit">apply</button>', $content);
 
 		$form = $crawler->selectButton('apply')->form();
-		$this->client->followRedirects();
-		$this->client->submit($form);
-		$content = $this->client->getResponse()->getContent();
+		$client->followRedirects();
+		$client->submit($form);
+		$content = $client->getResponse()->getContent();
 		$this->assertContains('<div class="notice">The settings were changed.</div>', $content);
 		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
 	}
 
 	public function testModifyAction_changeValue() {
+		$client = $this->initClient();
 		$this->persistSetting('name', 'value');
 
-		$crawler = $this->client->request('GET', $this->url($this->client, 'craue_config_settings_modify'));
+		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
-		$this->client->followRedirects();
-		$this->client->submit($form, array(
+		$client->followRedirects();
+		$client->submit($form, array(
 			'craue_config_modifySettings[settings][0][value]' => 'new-value',
 		));
-		$content = $this->client->getResponse()->getContent();
+		$content = $client->getResponse()->getContent();
 		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="new-value" />', $content);
 	}
 
 	public function testModifyAction_sectionOrder_defaultOrder() {
+		$client = $this->initClient();
 		$this->persistSetting('name1', 'value1', 'section1');
 		$this->persistSetting('name2', 'value2');
 		$this->persistSetting('name3', 'value3', 'section2');
 
-		$this->client->request('GET', $this->url($this->client, 'craue_config_settings_modify'));
-		$content = $this->client->getResponse()->getContent();
+		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
+		$content = $client->getResponse()->getContent();
 		$this->assertContains('<legend>section1</legend>', $content);
 		$this->assertContains('<legend>section2</legend>', $content);
 		$strPosField1 = strpos($content, '<label for="craue_config_modifySettings_settings_0_value">name1</label>');
@@ -71,11 +76,10 @@ class SettingsControllerTest extends IntegrationTestCase {
 	}
 
 	public function testModifyAction_sectionOrder_customOrder() {
+		$client = $this->initClient(array('environment' => 'customSectionOrder', 'config' => 'config_customSectionOrder.yml'));
 		$this->persistSetting('name1', 'value1', 'section1');
 		$this->persistSetting('name2', 'value2');
 		$this->persistSetting('name3', 'value3', 'section2');
-
-		$client = static::createClient(array('environment' => 'customSectionOrder', 'config' => 'config_customSectionOrder.yml'));
 
 		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$content = $client->getResponse()->getContent();
@@ -88,9 +92,9 @@ class SettingsControllerTest extends IntegrationTestCase {
 	}
 
 	public function testModifyAction_redirectRouteAfterModify() {
+		$client = $this->initClient(array('environment' => 'redirectRouteAfterModify', 'config' => 'config_redirectRouteAfterModify.yml'));
 		$this->persistSetting('name', 'value');
 
-		$client = static::createClient(array('environment' => 'redirectRouteAfterModify', 'config' => 'config_redirectRouteAfterModify.yml'));
 		$this->assertSame('admin_settings_start', $client->getContainer()->getParameter('craue_config.redirectRouteAfterModify'));
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));

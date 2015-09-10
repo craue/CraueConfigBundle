@@ -1,3 +1,6 @@
+imports:
+  - { resource: parameters.php }
+  
 assetic:
   debug: "%kernel.debug%"
   use_controller: false
@@ -7,12 +10,13 @@ assetic:
 doctrine:
   dbal:
     charset: UTF8
-    driver: pdo_mysql
-    host: 127.0.0.1
-    port: ~
-    dbname: test
-    user: travis
-    password: ~
+    driver: "%db.driver%"
+    host: "%db.host%"
+    port: "%db.port%"
+    dbname: "%db.name%"
+    user: "%db.user%"
+    password: "%db.password%"
+    path: "%db.path%"
   orm:
     auto_generate_proxy_classes: "%kernel.debug%"
     auto_mapping: true
