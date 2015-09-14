@@ -14,6 +14,13 @@ use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
  */
 class ConfigTemplateExtensionTest extends IntegrationTestCase {
 
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function setUp() {
+		$this->initClient();
+	}
+
 	public function testGetSetting() {
 		$this->persistSetting('name', 'value');
 

@@ -15,6 +15,13 @@ use Craue\ConfigBundle\Util\Config;
  */
 class ConfigTest extends IntegrationTestCase {
 
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function setUp() {
+		$this->initClient();
+	}
+
 	public function testGet() {
 		$this->persistSetting('name', 'value');
 

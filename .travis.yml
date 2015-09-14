@@ -28,6 +28,8 @@ matrix:
     - php: 5.5
       env: SYMFONY_VERSION="2.6.*"
     - php: 5.5
+      env: SYMFONY_VERSION="2.7.*" PHPUNIT_BRIDGE=true SYMFONY__DB__DRIVER="pdo_mysql"
+    - php: 5.5
       env: SYMFONY_VERSION="2.8.*" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
     - php: 5.5
       env: SYMFONY_VERSION="dev-master" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
@@ -44,7 +46,7 @@ install:
   - sh travis_install_dependencies.sh
 
 before_script:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - if [ "${SYMFONY__DB__DRIVER:-}" = "pdo_mysql" ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS test;'; fi;
 
 notifications:
   email:

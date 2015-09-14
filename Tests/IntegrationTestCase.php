@@ -19,28 +19,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 abstract class IntegrationTestCase extends WebTestCase {
 
 	/**
-	 * @var Client
+	 * @var boolean[]
 	 */
-	protected $client;
-
-	/**
-	 * @var boolean
-	 */
-	private static $databaseInitialized = false;
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function setUp() {
-		$this->client = static::createClient();
-
-		if (!self::$databaseInitialized) {
-			$this->rebuildDatabase();
-			self::$databaseInitialized = true;
-		}
-
-		$this->removeAllSettings();
-	}
+	private static $databaseInitialized = array();
 
 	/**
 	 * {@inheritDoc}
@@ -49,11 +30,27 @@ abstract class IntegrationTestCase extends WebTestCase {
 		$environment = isset($options['environment']) ? $options['environment'] : 'test';
 		$configFile = isset($options['config']) ? $options['config'] : 'config.yml';
 
-		if (class_exists('Craue\ConfigBundle\Tests\LocalAppKernel')) {
-			return new LocalAppKernel($environment, $configFile);
+		return new AppKernel($environment, $configFile);
+	}
+
+	/**
+	 * Initializes a client and prepares the database.
+	 * @param array $options options for creating the client
+	 * @return Client
+	 */
+	protected function initClient(array $options = array()) {
+		$client = static::createClient($options);
+		$environment = static::$kernel->getEnvironment();
+
+		// Avoid completely rebuilding the database for each test. Create it only once per environment. After that, cleaning it is enough.
+		if (!array_key_exists($environment, self::$databaseInitialized) || !self::$databaseInitialized[$environment]) {
+			$this->rebuildDatabase();
+			self::$databaseInitialized[$environment] = true;
+		} else {
+			$this->removeAllSettings();
 		}
 
-		return new AppKernel($environment, $configFile);
+		return $client;
 	}
 
 	protected function rebuildDatabase() {

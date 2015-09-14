@@ -14,6 +14,13 @@ use Craue\ConfigBundle\Tests\IntegrationTestCase;
 class ConfigTemplateExtensionIntegrationTest extends IntegrationTestCase {
 
 	/**
+	 * {@inheritDoc}
+	 */
+	protected function setUp() {
+		$this->initClient();
+	}
+
+	/**
 	 * @dataProvider dataSettingFunction
 	 */
 	public function testSettingFunction($name, $value) {
