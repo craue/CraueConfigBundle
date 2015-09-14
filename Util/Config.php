@@ -74,7 +74,7 @@ class Config {
 
 		$settings = $this->em->createQueryBuilder()
 			->select('s')
-			->from(get_class(new Setting()), 's', 's.name')
+			->from('Craue\ConfigBundle\Entity\Setting', 's', 's.name')
 			->where('s.name IN (:names)')
 			->getQuery()
 			->execute(array('names' => array_keys($newSettings)))
@@ -125,7 +125,7 @@ class Config {
 	 */
 	protected function getRepo() {
 		if ($this->repo === null) {
-			$this->repo = $this->em->getRepository(get_class(new Setting()));
+			$this->repo = $this->em->getRepository('Craue\ConfigBundle\Entity\Setting');
 		}
 
 		return $this->repo;

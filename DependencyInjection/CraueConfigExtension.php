@@ -6,7 +6,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Registration of the extension via DI.
@@ -23,10 +22,8 @@ class CraueConfigExtension extends Extension {
 	public function load(array $config, ContainerBuilder $container) {
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-		if (Kernel::VERSION_ID < 20700) {
-			$loader->load('form_legacy_legacy.xml');
-		} elseif (Kernel::VERSION_ID < 20800) {
-			$loader->load('form_legacy.xml');
+		if (!method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+			$loader->load('form_legacy.xml'); // for symfony/form < 2.8
 		}
 
 		$loader->load('twig.xml');

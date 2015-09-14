@@ -3,10 +3,8 @@
 namespace Craue\ConfigBundle\Controller;
 
 use Craue\ConfigBundle\Entity\Setting;
-use Craue\ConfigBundle\Form\LegacyModifySettingsForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -17,22 +15,22 @@ class SettingsController extends Controller {
 
 	public function modifyAction(Request $request) {
 		$em = $this->getDoctrine()->getManager();
-		$repo = $em->getRepository(get_class(new Setting()));
+		$repo = $em->getRepository('Craue\ConfigBundle\Entity\Setting');
 		$allStoredSettings = $repo->findAll();
 
 		$formData = array(
 			'settings' => $allStoredSettings,
 		);
 
-		$form = Kernel::VERSION_ID < 20800
-			? $this->createForm(new LegacyModifySettingsForm(), $formData)
-			: $this->get('form.factory')->createNamed('craue_config_modifySettings', 'Craue\ConfigBundle\Form\ModifySettingsForm', $formData);
+		$form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+			? $this->get('form.factory')->createNamed('craue_config_modifySettings', 'Craue\ConfigBundle\Form\ModifySettingsForm', $formData)
+			: $this->createForm('craue_config_modifySettings', $formData); // for symfony/form < 2.8
 
 		if ($request->getMethod() === 'POST') {
-			if (Kernel::VERSION_ID < 20300) {
-				$form->bind($request);
-			} else {
+			if (method_exists($form, 'handleRequest')) {
 				$form->handleRequest($request);
+			} else {
+				$form->bind($request); // for symfony/form < 2.3
 			}
 
 			if ($form->isValid()) {
@@ -55,6 +53,7 @@ class SettingsController extends Controller {
 		return $this->render('CraueConfigBundle:Settings:modify.html.twig', array(
 			'form' => $form->createView(),
 			'sections' => $this->getSections($allStoredSettings),
+			'symfonyPriorTo2dot3' => !method_exists($form, 'handleRequest'),
 		));
 	}
 

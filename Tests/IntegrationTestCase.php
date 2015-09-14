@@ -123,7 +123,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @return EntityRepository
 	 */
 	protected function getSettingsRepo() {
-		return $this->getEntityManager()->getRepository(get_class(new Setting()));
+		return $this->getEntityManager()->getRepository('Craue\ConfigBundle\Entity\Setting');
 	}
 
 	/**
