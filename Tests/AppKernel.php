@@ -2,8 +2,6 @@
 
 namespace Craue\ConfigBundle\Tests;
 
-require_once __DIR__.'/bootstrap.php';
-
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
