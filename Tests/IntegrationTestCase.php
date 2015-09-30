@@ -63,7 +63,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * Persists a setting.
+	 * Persists a {@code Setting}.
 	 * @param string $name
 	 * @param string|null $value
 	 * @param string|null $section
@@ -83,7 +83,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * Removes all settings.
+	 * Removes all {@code Setting}s.
 	 */
 	protected function removeAllSettings() {
 		$em = $this->getEntityManager();
