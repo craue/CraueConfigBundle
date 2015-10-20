@@ -22,7 +22,6 @@ doctrine:
     auto_mapping: true
 
 framework:
-  csrf_protection: false
   form: ~
   router:
     resource: "%kernel.root_dir%/config/routing.php"
