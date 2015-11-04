@@ -1,6 +1,6 @@
 imports:
   - { resource: parameters.php }
-  
+
 assetic:
   debug: "%kernel.debug%"
   use_controller: false
