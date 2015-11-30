@@ -22,9 +22,8 @@ class SettingsController extends Controller {
 			'settings' => $allStoredSettings,
 		);
 
-		$form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-			? $this->get('form.factory')->createNamed('craue_config_modifySettings', 'Craue\ConfigBundle\Form\ModifySettingsForm', $formData)
-			: $this->createForm('craue_config_modifySettings', $formData); // for symfony/form < 2.8
+		$useFqcn = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
+		$form = $this->createForm($useFqcn ? 'Craue\ConfigBundle\Form\ModifySettingsForm' : 'craue_config_modifySettings', $formData);
 
 		if ($request->getMethod() === 'POST') {
 			if (method_exists($form, 'handleRequest')) {
