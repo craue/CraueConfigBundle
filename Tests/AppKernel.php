@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Tests;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -38,6 +39,15 @@ class AppKernel extends Kernel {
 
 	public function registerContainerConfiguration(LoaderInterface $loader) {
 		$loader->load($this->config);
+
+		if (Kernel::VERSION_ID >= 30000) {
+			// enable assets to avoid fatal error: "Call to a member function needsEnvironment() on a non-object in vendor/twig/twig/lib/Twig/Node/Expression/Function.php on line 25"
+			$loader->load(function(ContainerBuilder $container) {
+				$container->loadFromExtension('framework', array(
+					'assets' => null,
+				));
+			});
+		}
 	}
 
 	public function getCacheDir() {
