@@ -11,7 +11,7 @@ by an admin user.
 Let Composer download and install the bundle by running
 
 ```sh
-php composer.phar require craue/config-bundle:~1.3
+php composer.phar require craue/config-bundle:~1.4
 ```
 
 in a shell.

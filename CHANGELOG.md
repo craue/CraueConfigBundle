@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0 (2015-11-30)
+
+- added support for Symfony 3.*
+- dropped support for Symfony 2.1 and 2.2
+
 ## 1.3.2 (2015-11-30)
 
 - [#22]+[#23]+[#28]: added conditional code updates to avoid deprecation notices with Symfony 2.8
