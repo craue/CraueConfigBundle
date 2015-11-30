@@ -30,14 +30,15 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION="2.7.*" PHPUNIT_BRIDGE=true SYMFONY__DB__DRIVER="pdo_mysql"
     - php: 5.6
-      env: SYMFONY_VERSION="2.8.*@dev" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
+      env: SYMFONY_VERSION="2.8.*" PHPUNIT_BRIDGE=true
     - php: 5.6
-      env: SYMFONY_VERSION="3.0.*@dev" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
+      env: SYMFONY_VERSION="3.0.*" PHPUNIT_BRIDGE=true
+    - php: 5.6
+      env: SYMFONY_VERSION="3.1.*@dev" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
   allow_failures:
     - php: 7.0
     - php: hhvm
-    - env: SYMFONY_VERSION="2.8.*@dev" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
-    - env: SYMFONY_VERSION="3.0.*@dev" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
+    - env: SYMFONY_VERSION="3.1.*@dev" PHPUNIT_BRIDGE=true MIN_STABILITY="dev"
   fast_finish: true
 
 install:
