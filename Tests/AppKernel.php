@@ -40,8 +40,8 @@ class AppKernel extends Kernel {
 	public function registerContainerConfiguration(LoaderInterface $loader) {
 		$loader->load($this->config);
 
-		if (Kernel::VERSION_ID >= 30000) {
-			// enable assets to avoid fatal error: "Call to a member function needsEnvironment() on a non-object in vendor/twig/twig/lib/Twig/Node/Expression/Function.php on line 25"
+		if (class_exists('Symfony\Component\Asset\Package')) {
+			// enable assets to avoid fatal error "Call to a member function needsEnvironment() on a non-object in vendor/twig/twig/lib/Twig/Node/Expression/Function.php on line 25" with Symfony 3.0
 			$loader->load(function(ContainerBuilder $container) {
 				$container->loadFromExtension('framework', array(
 					'assets' => null,
