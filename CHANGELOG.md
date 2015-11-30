@@ -1,8 +1,13 @@
 # Changelog
 
-## master
+## 1.3.2 (2015-11-30)
 
-- added conditional code updates to avoid deprecation notices with Symfony 2.8
+- [#22]+[#23]+[#28]: added conditional code updates to avoid deprecation notices with Symfony 2.8
+- simplified controller code by injecting the `Request` into the action
+
+[#22]: https://github.com/craue/CraueConfigBundle/issues/22
+[#23]: https://github.com/craue/CraueConfigBundle/issues/23
+[#28]: https://github.com/craue/CraueConfigBundle/issues/28
 
 ## 1.3.1 (2015-02-27)
 
