@@ -24,6 +24,7 @@
 		"doctrine/doctrine-bundle": "~1.0",
 		"phpunit/phpunit": "~4.1",
 		"symfony/assetic-bundle": "~2.3",
+		"symfony/phpunit-bridge": "~2.7|~3.0",
 		"symfony/symfony": "~2.3|~3.0"
 	},
 	"minimum-stability": "stable",
