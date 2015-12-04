@@ -20,8 +20,8 @@
 		"symfony/framework-bundle": "~2.3|~3.0"
 	},
 	"require-dev": {
-		"doctrine/orm": "~2.3",
 		"doctrine/doctrine-bundle": "~1.0",
+		"doctrine/orm": "~2.3",
 		"phpunit/phpunit": "~4.1|~5.0",
 		"symfony/assetic-bundle": "~2.3",
 		"symfony/phpunit-bridge": "~2.7|~3.0",
