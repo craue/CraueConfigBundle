@@ -43,7 +43,7 @@ install:
 before_script:
   - if [ "${SYMFONY__DB__DRIVER:-}" = "pdo_mysql" ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS test;'; fi;
 
-script: phpunit -v
+script: vendor/bin/phpunit -v
 
 notifications:
   email:
