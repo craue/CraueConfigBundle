@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1 (2015-12-29)
+
+- added support for PHP 7.0 and HHVM
+
 ## 1.4.0 (2015-11-30)
 
 - added support for Symfony 3.*
