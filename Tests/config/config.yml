@@ -2,7 +2,7 @@ imports:
   - { resource: parameters.php }
 
 assetic:
-  debug: "%kernel.debug%"
+  debug: '%kernel.debug%'
   use_controller: false
   bundles:
     - CraueConfigBundle
@@ -10,30 +10,31 @@ assetic:
 doctrine:
   dbal:
     charset: UTF8
-    driver: "%db.driver%"
-    host: "%db.host%"
-    port: "%db.port%"
-    dbname: "%db.name%"
-    user: "%db.user%"
-    password: "%db.password%"
-    path: "%db.path%"
+    driver: '%db.driver%'
+    host: '%db.host%'
+    port: '%db.port%'
+    dbname: '%db.name%'
+    user: '%db.user%'
+    password: '%db.password%'
+    path: '%db.path%'
   orm:
-    auto_generate_proxy_classes: "%kernel.debug%"
+    auto_generate_proxy_classes: '%kernel.debug%'
     auto_mapping: true
 
 framework:
   form: ~
   router:
-    resource: "%kernel.root_dir%/config/routing.yml"
+    resource: '%kernel.root_dir%/config/routing.yml'
   secret: whatever
   session:
     storage_id: session.storage.mock_file
   templating:
-    engines: ['twig']
+    engines:
+      - twig
   test: ~
   translator:
     fallback: en
 
 twig:
-  debug: "%kernel.debug%"
-  strict_variables: "%kernel.debug%"
+  debug: '%kernel.debug%'
+  strict_variables: '%kernel.debug%'

@@ -1,5 +1,5 @@
 craue_config_settings:
-  resource: "@CraueConfigBundle/Resources/config/routing/settings.xml"
+  resource: '@CraueConfigBundle/Resources/config/routing/settings.xml'
   prefix: /settings
 
 admin_settings_start:
