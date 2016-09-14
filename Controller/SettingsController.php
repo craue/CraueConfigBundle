@@ -33,7 +33,6 @@ class SettingsController extends Controller {
 					$storedSetting = $this->getSettingByName($allStoredSettings, $formSetting->getName());
 					if ($storedSetting !== null) {
 						$storedSetting->setValue($formSetting->getValue());
-						$em->persist($storedSetting);
 					}
 				}
 
