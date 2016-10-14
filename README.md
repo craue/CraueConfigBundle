@@ -34,7 +34,7 @@ public function registerBundles() {
 Preferably you do this by calling
 
 ```sh
-# in a shell
+# in a shell (run `bin/console` instead of `app/console` if your project is based on Symfony 3)
 php app/console doctrine:migrations:diff
 php app/console doctrine:migrations:migrate
 ```
@@ -42,7 +42,7 @@ php app/console doctrine:migrations:migrate
 or
 
 ```sh
-# in a shell
+# in a shell (run `bin/console` instead of `app/console` if your project is based on Symfony 3)
 php app/console doctrine:schema:update
 ```
 
