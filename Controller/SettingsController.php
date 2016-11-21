@@ -47,7 +47,6 @@ class SettingsController extends Controller {
 		return $this->render('CraueConfigBundle:Settings:modify.html.twig', array(
 			'form' => $form->createView(),
 			'sections' => $this->getSections($allStoredSettings),
-			'symfonyPriorTo2dot3' => !method_exists($form, 'handleRequest'),
 		));
 	}
 
