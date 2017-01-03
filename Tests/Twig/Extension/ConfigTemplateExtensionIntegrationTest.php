@@ -26,7 +26,7 @@ class ConfigTemplateExtensionIntegrationTest extends IntegrationTestCase {
 	public function testSettingFunction($name, $value) {
 		$this->persistSetting($name, $value);
 
-		$this->assertSame($value, $this->getTwig()->render('IntegrationTestBundle:Settings:setting.html.twig', array(
+		$this->assertSame($value, $this->getTwig()->render('@IntegrationTest/Settings/setting.html.twig', array(
 			'name' => $name,
 		)));
 	}
