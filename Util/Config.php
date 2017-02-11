@@ -23,11 +23,14 @@ class Config {
 	 */
 	protected $repo;
 
-	public function setEntityManager(EntityManager $em) {
+	public function __construct(EntityManager $em) {
 		$this->em = $em;
 		$this->repo = null;
 	}
 
+ 	public function setEntityManager(EntityManager $em) {
+  		$this->em = $em;
+  	}
 	/**
 	 * @param string $name Name of the setting.
 	 * @return string|null Value of the setting.
