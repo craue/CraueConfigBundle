@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 abstract class IntegrationTestCase extends WebTestCase {
 
 	/**
-	 * @var boolean[]
+	 * @var bool[]
 	 */
 	private static $databaseInitialized = array();
 
