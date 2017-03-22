@@ -21,7 +21,7 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION='2.3.*' SYMFONY_DEPRECATIONS_HELPER='666'
     - php: 5.6
-      env: SYMFONY_VERSION='2.7.*' SYMFONY__DB__DRIVER='pdo_mysql'
+      env: SYMFONY_VERSION='2.7.*' db.driver='pdo_mysql'
     - php: 5.6
       env: SYMFONY_VERSION='2.8.*'
     - php: 5.6
@@ -38,10 +38,10 @@ install:
   - if [ "${TRAVIS_PHP_VERSION}" != 'hhvm' ]; then phpenv config-rm xdebug.ini; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != 'hhvm' ]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi;
   - echo "memory_limit = -1" >> "${INI_FILE}"
-  - bash .travis_install_dependencies.sh
+  - travis_wait bash .travis_install_dependencies.sh
 
 before_script:
-  - if [ "${SYMFONY__DB__DRIVER:-}" = 'pdo_mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS test;'; fi;
+  - if [ "${db.driver:-}" = 'pdo_mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS test;'; fi;
 
 script: vendor/bin/phpunit -v
 
@@ -57,3 +57,4 @@ sudo: false
 cache:
   directories:
     - $HOME/.composer/cache/files
+    - vendor
