@@ -70,10 +70,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @return Setting
 	 */
 	protected function persistSetting($name, $value = null, $section = null) {
-		$setting = new Setting();
-		$setting->setName($name);
-		$setting->setValue($value);
-		$setting->setSection($section);
+		$setting = Setting::create($name, $value, $section);
 
 		$em = $this->getEntityManager();
 		$em->persist($setting);

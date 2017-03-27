@@ -59,4 +59,20 @@ class Setting {
 		return $this->section;
 	}
 
+	/**
+	 * Creates a {@code Setting}.
+	 * @param string $name
+	 * @param string|null $value
+	 * @param string|null $section
+	 * @return Setting
+	 */
+	public static function create($name, $value = null, $section = null) {
+		$setting = new static();
+		$setting->setName($name);
+		$setting->setValue($value);
+		$setting->setSection($section);
+
+		return $setting;
+	}
+
 }

@@ -2,7 +2,6 @@
 
 namespace Craue\ConfigBundle\Tests\Twig\Extension;
 
-use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
 
 /**
@@ -12,27 +11,20 @@ use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ConfigTemplateExtensionTest extends IntegrationTestCase {
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function setUp() {
-		$this->initClient();
-	}
+class ConfigTemplateExtensionTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGetSetting() {
-		$this->persistSetting('name', 'value');
+		$ext = new ConfigTemplateExtension();
+		$config = $this->getMockBuilder('Craue\ConfigBundle\Util\Config')->getMock();
 
-		$this->assertEquals('value', $this->getConfigTemplateExtension()->getSetting('name'));
-	}
+		$config->expects($this->once())
+			->method('get')
+			->with('name')
+		;
 
-	/**
-	 * @expectedException \RuntimeException
-	 * @expectedExceptionMessage Setting "oh-no" couldn't be found.
-	 */
-	public function testGetSetting_nonexistentSetting() {
-		$this->getConfigTemplateExtension()->getSetting('oh-no');
+		$ext->setConfig($config);
+
+		$ext->getSetting('name');
 	}
 
 	public function testSortSections() {

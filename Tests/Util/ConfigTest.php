@@ -4,8 +4,9 @@ namespace Craue\ConfigBundle\Tests\Util;
 
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Repository\SettingRepository;
-use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Craue\ConfigBundle\Util\Config;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * @group unit
@@ -14,19 +15,17 @@ use Craue\ConfigBundle\Util\Config;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ConfigTest extends IntegrationTestCase {
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function setUp() {
-		$this->initClient();
-	}
+class ConfigTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGet() {
-		$this->persistSetting('name', 'value');
+		$config = new Config();
+		$setting = Setting::create('name', 'value');
 
-		$this->assertEquals('value', $this->getConfig()->get('name'));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $this->returnValueMap(array(
+			array(array('name' => $setting->getName()), null, $setting),
+		))))));
+
+		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
 	}
 
 	/**
@@ -34,16 +33,26 @@ class ConfigTest extends IntegrationTestCase {
 	 * @expectedExceptionMessage Setting "oh-no" couldn't be found.
 	 */
 	public function testGet_nonexistentSetting() {
-		$this->getConfig()->get('oh-no');
+		$config = new Config();
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
+
+		$config->get('oh-no');
 	}
 
 	public function testSet() {
-		$this->persistSetting('name', 'old-value');
+		$config = new Config();
 
-		$this->getConfig()->set('name', 'new-value');
+		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->getMock();
+		$newValue = 'new-value';
 
-		$setting = $this->getSettingsRepo()->findOneBy(array('name' => 'name'));
-		$this->assertEquals('new-value', $setting->getValue());
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $setting))));
+
+		$setting->expects($this->once())
+			->method('setValue')
+			->with($newValue)
+		;
+
+		$config->set($setting->getName(), $newValue);
 	}
 
 	/**
@@ -51,36 +60,42 @@ class ConfigTest extends IntegrationTestCase {
 	 * @expectedExceptionMessage Setting "oh-no" couldn't be found.
 	 */
 	public function testSet_nonexistentSetting() {
-		$this->getConfig()->set('oh-no', 'new-value');
+		$config = new Config();
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
+
+		$config->set('oh-no', 'new-value');
 	}
 
 	public function testSetMultiple() {
-		$this->persistSetting('name1', 'old-value1');
-		$this->persistSetting('name2', 'old-value2');
-		$this->persistSetting('name3', 'old-value3');
+		$config = new Config();
 
-		$this->getConfig()->setMultiple(array(
-			'name1' => 'new-value1',
-			'name2' => 'new-value2',
-		));
+		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->setMethods(array('setValue'))->getMock();
+		$setting->setName('name');
+		$newValue = 'new-value';
 
-		$this->assertEquals(array(
-			'name1' => 'new-value1',
-			'name2' => 'new-value2',
-			'name3' => 'old-value3',
-		), $this->getConfig()->all());
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findByNames' => array($setting->getName() => $setting)))));
+
+		$settingsKeyValuePairs = array(
+			$setting->getName() => $newValue,
+		);
+
+		$setting->expects($this->once())
+			->method('setValue')
+			->with($newValue)
+		;
+
+		$config->setMultiple($settingsKeyValuePairs);
 	}
 
 	public function testSetMultiple_noChanges() {
-		$this->persistSetting('name1', 'old-value1');
-		$this->persistSetting('name2', 'old-value2');
+		$config = new Config();
+		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->getMock();
 
-		$this->getConfig()->setMultiple(array());
+		$setting->expects($this->never())
+			->method('setValue')
+		;
 
-		$this->assertEquals(array(
-			'name1' => 'old-value1',
-			'name2' => 'old-value2',
-		), $this->getConfig()->all());
+		$config->setMultiple(array());
 	}
 
 	/**
@@ -88,44 +103,43 @@ class ConfigTest extends IntegrationTestCase {
 	 * @expectedExceptionMessage Setting "oh-no" couldn't be found.
 	 */
 	public function testSetMultiple_nonexistentSetting() {
-		$this->persistSetting('name1', 'old-value1');
+		$config = new Config();
+		$setting = Setting::create('name1');
 
-		$this->getConfig()->setMultiple(array(
-			'name1' => 'new-value1',
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findByNames' => array($setting->getName() => $setting)))));
+
+		$config->setMultiple(array(
+			$setting->getName() => 'new-value1',
 			'oh-no' => 'new-value2',
 		));
 	}
 
 	public function testAll_noSettings() {
-		$this->assertEquals(array(), $this->getConfig()->all());
+		$config = new Config();
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findAll' => array()))));
+
+		$this->assertEquals(array(), $config->all());
 	}
 
-	public function testGetBySection() {
-		$this->persistSetting('name1', 'value1');
-		$this->persistSetting('name2', 'value2', 'section1');
-		$this->persistSetting('name3', 'value3', 'section2');
-		$this->persistSetting('name4', 'value4', 'section1');
+	/**
+	 * @dataProvider dataGetBySection
+	 */
+	public function testGetBySection($section, array $foundSettings, $expectedKeyValuePairs) {
+		$config = new Config();
 
-		$this->assertEquals(array(
-			'name2' => 'value2',
-			'name4' => 'value4',
-		), $this->getConfig()->getBySection('section1'));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findBy' => $this->returnValueMap(array(
+			array(array('section' => $section), null, null, null, $foundSettings),
+		))))));
+
+		$this->assertEquals($expectedKeyValuePairs, $config->getBySection($section));
 	}
 
-	public function testGetBySection_null() {
-		$this->persistSetting('name1', 'value1');
-		$this->persistSetting('name2', 'value2', 'section1');
-
-		$this->assertEquals(array(
-			'name1' => 'value1',
-		), $this->getConfig()->getBySection(null));
-	}
-
-	public function testGetBySection_nonexistentSection() {
-		$this->persistSetting('name1', 'value1');
-		$this->persistSetting('name2', 'value2', 'section1');
-
-		$this->assertEquals(array(), $this->getConfig()->getBySection('some-other-section'));
+	public function dataGetBySection() {
+		return array(
+			array('section',		array(Setting::create('name', 'value', 'section')),	array('name' => 'value')),
+			array(null,				array(Setting::create('name', 'value')),			array('name' => 'value')),
+			array('other-section',	array(),											array()),
+		);
 	}
 
 	/**
@@ -137,14 +151,14 @@ class ConfigTest extends IntegrationTestCase {
 		$method->setAccessible(true);
 
 		// 1st call to `getRepo` using a mocked EntityManager
-		$config->setEntityManager($this->getMockedEntityManager());
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
 
 		// invoke twice to ensure the cached instance is used
 		$method->invoke($config);
 		$method->invoke($config);
 
 		// 2nd call to `getRepo` using a different mocked EntityManager
-		$config->setEntityManager($this->getMockedEntityManager());
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
 
 		// invoke twice to ensure the cached instance is used
 		$method->invoke($config);
@@ -152,26 +166,46 @@ class ConfigTest extends IntegrationTestCase {
 	}
 
 	/**
-	 * @return PHPUnit_Framework_MockObject_MockObject|\Doctrine\ORM\EntityManager
+	 * @param array $methodsWithReturnValues Method call expectations (method name => return value).
+	 * @return PHPUnit_Framework_MockObject_MockObject|SettingRepository
 	 */
-	protected function getMockedEntityManager() {
+	protected function createEntityRepositoryMock(array $methodsWithReturnValues = array()) {
 		$repo = $this->getMockBuilder('Craue\ConfigBundle\Repository\SettingRepository')
 			->disableOriginalConstructor()
 			->getMock()
 		;
-		$repo->expects($this->any())
-			->method('find')
-			->will($this->returnValue(new Setting()))
-		;
 
+		foreach ($methodsWithReturnValues as $method => $returnValue) {
+			if (!($returnValue instanceof \PHPUnit_Framework_MockObject_Stub_Return)
+					&& !($returnValue instanceof \PHPUnit_Framework_MockObject_Stub_ReturnValueMap)) {
+						$returnValue = $this->returnValue($returnValue);
+					}
+
+					$repo->expects($this->once())
+						->method($method)
+						->will($returnValue)
+					;
+		}
+
+		return $repo;
+	}
+
+	/**
+	 * @param PHPUnit_Framework_MockObject_MockObject|EntityRepository|null $repo
+	 * @return PHPUnit_Framework_MockObject_MockObject|EntityManager
+	 */
+	protected function createEntityManagerMock(EntityRepository $repo = null) {
 		$em = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
 			->disableOriginalConstructor()
 			->getMock()
 		;
-		$em->expects($this->once())
-			->method('getRepository')
-			->will($this->returnValue($repo))
-		;
+
+		if ($repo !== null) {
+			$em->expects($this->once())
+				->method('getRepository')
+				->will($this->returnValue($repo))
+			;
+		}
 
 		return $em;
 	}
