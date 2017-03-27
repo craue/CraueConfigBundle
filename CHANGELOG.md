@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.2 (2017-03-27)
+
+- prevent changes to names and sections of settings via hidden fields in the built-in form
+- use namespaced template names (available since Twig 1.10)
+
 ## 1.4.1 (2015-12-29)
 
 - added support for PHP 7.0 and HHVM
