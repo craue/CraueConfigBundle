@@ -1,5 +1,8 @@
 # Information
 
+[![Build Status](https://travis-ci.org/craue/CraueConfigBundle.svg?branch=master)](https://travis-ci.org/craue/CraueConfigBundle)
+[![Coverage Status](https://coveralls.io/repos/craue/CraueConfigBundle/badge.svg?branch=master)](https://coveralls.io/r/craue/CraueConfigBundle?branch=master)
+
 CraueConfigBundle manages configuration settings stored in the database and makes them accessible via a service in your
 Symfony project. These settings are similar to those defined in `parameters.yml` but can be modified at runtime, e.g.
 by an admin user.
