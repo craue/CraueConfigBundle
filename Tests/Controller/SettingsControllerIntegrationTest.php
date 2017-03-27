@@ -11,7 +11,7 @@ use Craue\ConfigBundle\Tests\IntegrationTestCase;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class SettingsControllerTest extends IntegrationTestCase {
+class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	public function testModifyAction_noSettings() {
 		$client = $this->initClient();
@@ -75,6 +75,25 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$this->assertSame('name', $setting->getName());
 		$this->assertSame('new-value', $setting->getValue());
 		$this->assertSame('section', $setting->getSection());
+	}
+
+	/**
+	 * Ensure that an invalid form submission is handled properly.
+	 */
+	public function testModifyAction_formInvalid() {
+		$client = $this->initClient();
+		$this->persistSetting('name', 'value');
+
+		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
+		$form = $crawler->selectButton('apply')->form();
+		$form->remove('craue_config_modifySettings[settings][0][value]');
+		if ($form->has('craue_config_modifySettings[_token]')) {
+			$form->remove('craue_config_modifySettings[_token]'); // field only present in older Symfony versions, removal needed to make form submission invalid
+		}
+		$client->followRedirects();
+		$client->submit($form);
+		$content = $client->getResponse()->getContent();
+		$this->assertNotContains('<div class="notice">The settings were changed.</div>', $content);
 	}
 
 	public function testModifyAction_sectionOrder_defaultOrder() {
