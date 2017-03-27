@@ -20,8 +20,12 @@ class SettingType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$useFqcn = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
 
-		$builder->add('name', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType' : 'hidden');
-		$builder->add('section', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType' : 'hidden');
+		$builder->add('name', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType' : 'hidden', array(
+			'disabled' => true,
+		));
+		$builder->add('section', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType' : 'hidden', array(
+			'disabled' => true,
+		));
 		$builder->add('value', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\TextType' : 'text', array(
 			'required' => false,
 		));

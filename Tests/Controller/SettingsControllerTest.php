@@ -31,8 +31,6 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$content = $client->getResponse()->getContent();
 		$this->assertSame(200, $client->getResponse()->getStatusCode(), $content);
 		$this->assertRegExp('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
-		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_name" name="craue_config_modifySettings[settings][0][name]" value="name" />', $content);
-		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_section" name="craue_config_modifySettings[settings][0][section]" />', $content);
 		$this->assertContains('<label for="craue_config_modifySettings_settings_0_value">name</label>', $content);
 		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
 		$this->assertContains('<button type="submit">apply</button>', $content);
@@ -45,17 +43,24 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
 	}
 
+	/**
+	 * Ensure that only the value can be changed, but neither name nor section.
+	 */
 	public function testModifyAction_changeValue() {
 		$client = $this->initClient();
-		$this->persistSetting('name', 'value');
+		$this->persistSetting('name', 'value', 'section');
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
 		$client->followRedirects();
 		$client->submit($form, array(
+			'craue_config_modifySettings[settings][0][name]' => 'new-name',
+			'craue_config_modifySettings[settings][0][section]' => 'new-section',
 			'craue_config_modifySettings[settings][0][value]' => 'new-value',
 		));
 		$content = $client->getResponse()->getContent();
+		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_name" name="craue_config_modifySettings[settings][0][name]" disabled="disabled" value="name" />', $content);
+		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_section" name="craue_config_modifySettings[settings][0][section]" disabled="disabled" value="section" />', $content);
 		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="new-value" />', $content);
 	}
 
