@@ -1,5 +1,10 @@
 # Changelog
 
+## master
+
+- BC breaks (follow `UPGRADE-2.0.md` to upgrade):
+  - simplify the built-in form by replacing hidden fields with view variables
+
 ## 1.4.2 (2017-03-27)
 
 - prevent changes to names and sections of settings via hidden fields in the built-in form

@@ -40,7 +40,14 @@ class SettingsControllerTest extends IntegrationTestCase {
 		$client->submit($form);
 		$content = $client->getResponse()->getContent();
 		$this->assertContains('<div class="notice">The settings were changed.</div>', $content);
-		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
+
+		$settings = $this->getSettingsRepo()->findAll();
+		$this->assertCount(1, $settings);
+
+		$setting = $settings[0];
+		$this->assertSame('name', $setting->getName());
+		$this->assertSame('value', $setting->getValue());
+		$this->assertNull($setting->getSection());
 	}
 
 	/**
@@ -52,16 +59,22 @@ class SettingsControllerTest extends IntegrationTestCase {
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
+		$this->assertFalse($form->has('craue_config_modifySettings[settings][0][name]'));
+		$this->assertFalse($form->has('craue_config_modifySettings[settings][0][section]'));
 		$client->followRedirects();
 		$client->submit($form, array(
-			'craue_config_modifySettings[settings][0][name]' => 'new-name',
-			'craue_config_modifySettings[settings][0][section]' => 'new-section',
 			'craue_config_modifySettings[settings][0][value]' => 'new-value',
 		));
 		$content = $client->getResponse()->getContent();
-		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_name" name="craue_config_modifySettings[settings][0][name]" disabled="disabled" value="name" />', $content);
-		$this->assertContains('<input type="hidden" id="craue_config_modifySettings_settings_0_section" name="craue_config_modifySettings[settings][0][section]" disabled="disabled" value="section" />', $content);
-		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="new-value" />', $content);
+		$this->assertContains('<div class="notice">The settings were changed.</div>', $content);
+
+		$settings = $this->getSettingsRepo()->findAll();
+		$this->assertCount(1, $settings);
+
+		$setting = $settings[0];
+		$this->assertSame('name', $setting->getName());
+		$this->assertSame('new-value', $setting->getValue());
+		$this->assertSame('section', $setting->getSection());
 	}
 
 	public function testModifyAction_sectionOrder_defaultOrder() {
