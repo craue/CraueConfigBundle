@@ -96,6 +96,24 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertNotContains('<div class="notice">The settings were changed.</div>', $content);
 	}
 
+	/**
+	 * Ensure that dynamic values (sections, names) are properly translated (exactly once).
+	 */
+	public function testModifyAction_properTranslations() {
+		$client = $this->initClient(array('environment' => 'profilerEnabled', 'config' => 'config_profilerEnabled.yml'));
+		$this->persistSetting('setting-number-one', 'value', 'section-number-one');
+
+		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
+		$content = $client->getResponse()->getContent();
+		$this->assertContains('<legend>section no. 1</legend>', $content);
+		$this->assertContains('<label for="craue_config_modifySettings_settings_0_value">setting no. 1</label>', $content);
+
+		$profile = $client->getProfile();
+		if ($profile->hasCollector('translation')) { // TODO remove as soon as Symfony >= 2.7 is required
+			$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
+		}
+	}
+
 	public function testModifyAction_sectionOrder_defaultOrder() {
 		$client = $this->initClient();
 		$this->persistSetting('name1', 'value1', 'section1');
