@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Craue\ConfigBundle\Repository\SettingRepository")
  * @ORM\Table(name="craue_config_setting")
  */
 class Setting {

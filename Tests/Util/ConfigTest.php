@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Tests\Util;
 
 use Craue\ConfigBundle\Entity\Setting;
+use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Craue\ConfigBundle\Util\Config;
 
@@ -154,7 +155,7 @@ class ConfigTest extends IntegrationTestCase {
 	 * @return PHPUnit_Framework_MockObject_MockObject|\Doctrine\ORM\EntityManager
 	 */
 	protected function getMockedEntityManager() {
-		$repo = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
+		$repo = $this->getMockBuilder('Craue\ConfigBundle\Repository\SettingRepository')
 			->disableOriginalConstructor()
 			->getMock()
 		;

@@ -3,10 +3,10 @@
 namespace Craue\ConfigBundle\Tests;
 
 use Craue\ConfigBundle\Entity\Setting;
+use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
 use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -117,7 +117,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * @return EntityRepository
+	 * @return SettingRepository
 	 */
 	protected function getSettingsRepo() {
 		return $this->getEntityManager()->getRepository('Craue\ConfigBundle\Entity\Setting');
