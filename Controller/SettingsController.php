@@ -17,6 +17,7 @@ class SettingsController extends Controller {
 		$em = $this->getDoctrine()->getManager();
 		$repo = $em->getRepository('Craue\ConfigBundle\Entity\Setting');
 		$allStoredSettings = $repo->findAll();
+		$cache = $this->container->get('craue_config_cache_adapter');
 
 		$formData = array(
 			'settings' => $allStoredSettings,
@@ -33,6 +34,7 @@ class SettingsController extends Controller {
 					$storedSetting = $this->getSettingByName($allStoredSettings, $formSetting->getName());
 					if ($storedSetting !== null) {
 						$storedSetting->setValue($formSetting->getValue());
+						$cache->set($storedSetting->getName(), $storedSetting->getValue());
 					}
 				}
 

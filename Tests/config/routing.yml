@@ -6,3 +6,8 @@ admin_settings_start:
   path: /settings-start/modify
   defaults:
     _controller: CraueConfigBundle:Settings:modify
+
+debug_get:
+  path: /debug/get/{name}
+  defaults:
+    _controller: IntegrationTestBundle:Debug:get

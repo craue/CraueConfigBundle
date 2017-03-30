@@ -78,6 +78,47 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	}
 
 	/**
+	 * Ensure that the configured cache is actually used and that changing settings loads all settings (with updated values) into the cache.
+	 *
+	 * @dataProvider dataModifyAction_changeValue_cacheUsage
+	 */
+	public function testModifyAction_changeValue_cacheUsage($environment, $config) {
+		$client = $this->initClient(array('environment' => $environment, 'config' => $config));
+		$this->persistSetting('name1', 'value1');
+		$this->persistSetting('name2', 'value2');
+
+		$cache = $client->getContainer()->get('craue_config_cache_adapter');
+		$cache->clear();
+		$this->assertFalse($cache->has('name1'));
+		$this->assertFalse($cache->has('name2'));
+
+		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
+		$form = $crawler->selectButton('apply')->form();
+		$client->followRedirects();
+		$client->submit($form, array(
+			'craue_config_modifySettings[settings][0][value]' => 'new-value1',
+		));
+
+		$this->assertTrue($cache->has('name1'));
+		$this->assertTrue($cache->has('name2'));
+		$this->assertSame('new-value1', $cache->get('name1'));
+		$this->assertSame('value2', $cache->get('name2'));
+	}
+
+	public function dataModifyAction_changeValue_cacheUsage() {
+		$testData = array(
+			array('cache_DoctrineCacheBundle_file_system', 'config_cache_DoctrineCacheBundle_file_system.yml'),
+		);
+
+		// TODO remove check as soon as Symfony >= 3.1 is required
+		if (class_exists('\Symfony\Component\Cache\Adapter\ArrayAdapter')) {
+			$testData[] = array('cache_SymfonyCacheComponent_filesystem', 'config_cache_SymfonyCacheComponent_filesystem.yml');
+		}
+
+		return $testData;
+	}
+
+	/**
 	 * Ensure that an invalid form submission is handled properly.
 	 */
 	public function testModifyAction_formInvalid() {
@@ -100,9 +141,10 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 * Ensure that dynamic values (sections, names) are properly translated (exactly once).
 	 */
 	public function testModifyAction_properTranslations() {
-		$client = $this->initClient(array('environment' => 'profilerEnabled', 'config' => 'config_profilerEnabled.yml'));
+		$client = $this->initClient();
 		$this->persistSetting('setting-number-one', 'value', 'section-number-one');
 
+		$client->enableProfiler();
 		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$content = $client->getResponse()->getContent();
 		$this->assertContains('<legend>section no. 1</legend>', $content);

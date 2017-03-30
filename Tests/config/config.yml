@@ -23,6 +23,9 @@ doctrine:
 
 framework:
   form: ~
+  profiler:
+    enabled: true
+    collect: false
   router:
     resource: '%kernel.root_dir%/config/routing.yml'
   secret: whatever
