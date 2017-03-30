@@ -18,10 +18,51 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 abstract class IntegrationTestCase extends WebTestCase {
 
+	const PLATFORM_MYSQL = 'mysql';
+	const PLATFORM_SQLITE = 'sqlite';
+
+	public static function getValidPlatformsWithRequiredExtensions() {
+		return array(
+			self::PLATFORM_MYSQL => 'pdo_mysql',
+			self::PLATFORM_SQLITE => 'pdo_sqlite',
+		);
+	}
+
 	/**
 	 * @var bool[]
 	 */
 	private static $databaseInitialized = array();
+
+	/**
+	 * @param string $testName The name of the test, set by PHPUnit when called directly as a {@code dataProvider}.
+	 * @param string $baseConfig The base config filename.
+	 * @return string[]
+	 */
+	public static function getPlatformConfigs($testName, $baseConfig = 'config.yml') {
+		$testData = array();
+
+		foreach (self::getValidPlatformsWithRequiredExtensions() as $platform => $extension) {
+			$testData[] = array($platform, array($baseConfig, sprintf('config_flavor_%s.yml', $platform)), $extension);
+		}
+
+		return $testData;
+	}
+
+	/**
+	 * @param array $allTestData
+	 * @return array
+	 */
+	public static function duplicateTestDataForEachPlatform(array $allTestData, $baseConfig = 'config.yml') {
+		$testData = array();
+
+		foreach ($allTestData as $oneTestData) {
+			foreach (self::getPlatformConfigs('', $baseConfig) as $envConf) {
+				$testData[] = array_merge($envConf, $oneTestData);
+			}
+		}
+
+		return $testData;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -35,10 +76,16 @@ abstract class IntegrationTestCase extends WebTestCase {
 
 	/**
 	 * Initializes a client and prepares the database.
-	 * @param array $options options for creating the client
+	 * @param string|null $requiredExtension Required PHP extension.
+	 * @param array $options Options for creating the client.
 	 * @return Client
 	 */
-	protected function initClient(array $options = array()) {
+	protected function initClient($requiredExtension, array $options = array()) {
+		if ($requiredExtension !== null && !in_array($requiredExtension, get_loaded_extensions(), true)) {
+			// !extension_loaded($requiredExtension) doesn't seem to work with HHVM as it returns false even though the extension is loaded
+			$this->markTestSkipped(sprintf('Extension "%s" is not loaded.', $requiredExtension));
+		}
+
 		$client = static::createClient($options);
 		$environment = static::$kernel->getEnvironment();
 

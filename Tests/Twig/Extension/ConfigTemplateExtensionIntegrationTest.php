@@ -14,16 +14,10 @@ use Craue\ConfigBundle\Tests\IntegrationTestCase;
 class ConfigTemplateExtensionIntegrationTest extends IntegrationTestCase {
 
 	/**
-	 * {@inheritDoc}
-	 */
-	protected function setUp() {
-		$this->initClient();
-	}
-
-	/**
 	 * @dataProvider dataSettingFunction
 	 */
-	public function testSettingFunction($name, $value) {
+	public function testSettingFunction($platform, $config, $requiredExtension, $name, $value) {
+		$this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 		$this->persistSetting($name, $value);
 
 		$this->assertSame($value, $this->getTwig()->render('@IntegrationTest/Settings/setting.html.twig', array(
@@ -32,9 +26,9 @@ class ConfigTemplateExtensionIntegrationTest extends IntegrationTestCase {
 	}
 
 	public function dataSettingFunction() {
-		return array(
+		return self::duplicateTestDataForEachPlatform(array(
 			array('name', 'value'),
-		);
+		));
 	}
 
 }

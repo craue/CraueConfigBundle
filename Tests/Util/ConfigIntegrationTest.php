@@ -18,8 +18,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider dataCacheUsage
 	 */
-	public function testCacheUsage($environment, $config) {
-		$client = $this->initClient(array('environment' => $environment, 'config' => $config));
+	public function testCacheUsage($platform, $config, $requiredExtension, $environment) {
+		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
 		$container = $client->getContainer();
 
 		$this->persistSetting('name', 'value');
@@ -30,13 +30,16 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	}
 
 	public function dataCacheUsage() {
-		$testData = array(
-			array('cache_DoctrineCacheBundle_file_system', 'config_cache_DoctrineCacheBundle_file_system.yml'),
-		);
+		$testData = self::duplicateTestDataForEachPlatform(array(
+			array('cache_DoctrineCacheBundle_file_system'),
+		), 'config_cache_DoctrineCacheBundle_file_system.yml');
 
 		// TODO remove check as soon as Symfony >= 3.1 is required
 		if (class_exists('\Symfony\Component\Cache\Adapter\ArrayAdapter')) {
-			$testData[] = array('cache_SymfonyCacheComponent_filesystem', 'config_cache_SymfonyCacheComponent_filesystem.yml');
+			$testData = array_merge($testData,
+				self::duplicateTestDataForEachPlatform(array(
+					array('cache_SymfonyCacheComponent_filesystem'),
+				), 'config_cache_SymfonyCacheComponent_filesystem.yml'));
 		}
 
 		return $testData;

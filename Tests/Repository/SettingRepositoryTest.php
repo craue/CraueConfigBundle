@@ -13,8 +13,11 @@ use Craue\ConfigBundle\Tests\IntegrationTestCase;
  */
 class SettingRepositoryTest extends IntegrationTestCase {
 
-	public function testFindByNames() {
-		$this->initClient();
+	/**
+	 * @dataProvider getPlatformConfigs
+	 */
+	public function testFindByNames($platform, $config, $requiredExtension) {
+		$this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 
 		$setting1 = $this->persistSetting('name1');
 		$setting2 = $this->persistSetting('name2');

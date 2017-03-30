@@ -13,8 +13,11 @@ use Craue\ConfigBundle\Tests\IntegrationTestCase;
  */
 class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
-	public function testModifyAction_noSettings() {
-		$client = $this->initClient();
+	/**
+	 * @dataProvider getPlatformConfigs
+	 */
+	public function testModifyAction_noSettings($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 
 		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$content = $client->getResponse()->getContent();
@@ -23,8 +26,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertContains('There are no settings defined yet.', $content);
 	}
 
-	public function testModifyAction_noChanges() {
-		$client = $this->initClient();
+	/**
+	 * @dataProvider getPlatformConfigs
+	 */
+	public function testModifyAction_noChanges($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 		$this->persistSetting('name', 'value');
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
@@ -52,9 +58,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that only the value can be changed, but neither name nor section.
+	 *
+	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_changeValue() {
-		$client = $this->initClient();
+	public function testModifyAction_changeValue($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 		$this->persistSetting('name', 'value', 'section');
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
@@ -82,8 +90,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider dataModifyAction_changeValue_cacheUsage
 	 */
-	public function testModifyAction_changeValue_cacheUsage($environment, $config) {
-		$client = $this->initClient(array('environment' => $environment, 'config' => $config));
+	public function testModifyAction_changeValue_cacheUsage($platform, $config, $requiredExtension, $environment) {
+		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
 		$this->persistSetting('name1', 'value1');
 		$this->persistSetting('name2', 'value2');
 
@@ -106,13 +114,16 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	}
 
 	public function dataModifyAction_changeValue_cacheUsage() {
-		$testData = array(
-			array('cache_DoctrineCacheBundle_file_system', 'config_cache_DoctrineCacheBundle_file_system.yml'),
-		);
+		$testData = self::duplicateTestDataForEachPlatform(array(
+			array('cache_DoctrineCacheBundle_file_system'),
+		), 'config_cache_DoctrineCacheBundle_file_system.yml');
 
 		// TODO remove check as soon as Symfony >= 3.1 is required
 		if (class_exists('\Symfony\Component\Cache\Adapter\ArrayAdapter')) {
-			$testData[] = array('cache_SymfonyCacheComponent_filesystem', 'config_cache_SymfonyCacheComponent_filesystem.yml');
+			$testData = array_merge($testData,
+				self::duplicateTestDataForEachPlatform(array(
+					array('cache_SymfonyCacheComponent_filesystem'),
+				), 'config_cache_SymfonyCacheComponent_filesystem.yml'));
 		}
 
 		return $testData;
@@ -120,9 +131,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that an invalid form submission is handled properly.
+	 *
+	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_formInvalid() {
-		$client = $this->initClient();
+	public function testModifyAction_formInvalid($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 		$this->persistSetting('name', 'value');
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
@@ -139,9 +152,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that dynamic values (sections, names) are properly translated (exactly once).
+	 *
+	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_properTranslations() {
-		$client = $this->initClient();
+	public function testModifyAction_properTranslations($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 		$this->persistSetting('setting-number-one', 'value', 'section-number-one');
 
 		$client->enableProfiler();
@@ -156,8 +171,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		}
 	}
 
-	public function testModifyAction_sectionOrder_defaultOrder() {
-		$client = $this->initClient();
+	/**
+	 * @dataProvider getPlatformConfigs
+	 */
+	public function testModifyAction_sectionOrder_defaultOrder($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 		$this->persistSetting('name1', 'value1', 'section1');
 		$this->persistSetting('name2', 'value2');
 		$this->persistSetting('name3', 'value3', 'section2');
@@ -172,8 +190,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertTrue($strPosField2 < $strPosField1 && $strPosField1 < $strPosField3, 'The sections are rendered in wrong order.');
 	}
 
-	public function testModifyAction_sectionOrder_customOrder() {
-		$client = $this->initClient(array('environment' => 'customSectionOrder', 'config' => 'config_customSectionOrder.yml'));
+	/**
+	 * @dataProvider dataModifyAction_sectionOrder_customOrder
+	 */
+	public function testModifyAction_sectionOrder_customOrder($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => 'customSectionOrder_' . $platform, 'config' => $config));
 		$this->persistSetting('name1', 'value1', 'section1');
 		$this->persistSetting('name2', 'value2');
 		$this->persistSetting('name3', 'value3', 'section2');
@@ -188,8 +209,17 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertTrue($strPosField2 < $strPosField3 && $strPosField3 < $strPosField1, 'The sections are rendered in wrong order.');
 	}
 
-	public function testModifyAction_redirectRouteAfterModify() {
-		$client = $this->initClient(array('environment' => 'redirectRouteAfterModify', 'config' => 'config_redirectRouteAfterModify.yml'));
+	public function dataModifyAction_sectionOrder_customOrder() {
+		return self::duplicateTestDataForEachPlatform(array(
+			array(),
+		), 'config_customSectionOrder.yml');
+	}
+
+	/**
+	 * @dataProvider dataModifyAction_redirectRouteAfterModify
+	 */
+	public function testModifyAction_redirectRouteAfterModify($platform, $config, $requiredExtension) {
+		$client = $this->initClient($requiredExtension, array('environment' => 'redirectRouteAfterModify_' . $platform, 'config' => $config));
 		$this->persistSetting('name', 'value');
 
 		$this->assertSame('admin_settings_start', $client->getContainer()->getParameter('craue_config.redirectRouteAfterModify'));
@@ -198,6 +228,12 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$form = $crawler->selectButton('apply')->form();
 		$client->submit($form);
 		$this->assertRedirect($client, $this->url($client, 'admin_settings_start'));
+	}
+
+	public function dataModifyAction_redirectRouteAfterModify() {
+		return self::duplicateTestDataForEachPlatform(array(
+			array(),
+		), 'config_redirectRouteAfterModify.yml');
 	}
 
 }
