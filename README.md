@@ -128,6 +128,61 @@ The Twig extension in this bundle supports reading settings directly in your tem
 {{ craue_setting('name-of-a-setting') }}
 ```
 
+# Enable caching (optional)
+
+To reduce the number of database queries, you can set up a cache for settings. First, you have to choose which cache
+implementation you'd like to use. Currently, there are adapters available for:
+- [DoctrineCacheBundle](https://symfony.com/doc/current/bundles/DoctrineCacheBundle/index.html)
+- [Symfony Cache component](https://symfony.com/doc/current/components/cache.html)
+
+Refer to the documentation of each implementation for details and read on in the corresponding section below. When
+done, `CraueConfigBundle` will automatically cache settings (using the built-in `craue_config_cache_adapter` service).
+
+Keep in mind to clear the cache (if needed) after modifying settings outside of your app (e.g. by Doctrine migrations):
+
+```sh
+# in a shell (run `bin/console` instead of `app/console` if your project is based on Symfony 3)
+php app/console doctrine:cache:clear craue_config_cache
+```
+
+## Cache implementation: DoctrineCacheBundle
+
+Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache provider with the
+alias `craue_config_cache_provider`:
+
+```yaml
+# in app/config/config.yml
+parameters:
+  craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\DoctrineCacheBundleAdapter
+
+doctrine_cache:
+  providers:
+    craue_config_cache:
+      apc: ~
+      aliases:
+        - craue_config_cache_provider
+```
+
+## Cache implementation: Symfony Cache component
+
+Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache pool with the
+service id `craue_config_cache_provider`:
+
+```yaml
+# in app/config/config.yml
+parameters:
+  craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter
+
+services:
+  craue_config_cache_provider:
+    class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+    public: false
+    arguments:
+      - ''
+      - 0
+      - '%kernel.cache_dir%/craue_config'
+```
+
 # Customization
 
 ## Redirect to a different page after submitting the built-in form

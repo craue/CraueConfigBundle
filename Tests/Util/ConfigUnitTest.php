@@ -2,6 +2,7 @@
 
 namespace Craue\ConfigBundle\Tests\Util;
 
+use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Util\Config;
@@ -15,7 +16,7 @@ use Doctrine\ORM\EntityRepository;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase {
+class ConfigUnitTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGet() {
 		$config = new Config();
@@ -39,13 +40,70 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$config->get('oh-no');
 	}
 
+	public function testGet_cacheMiss() {
+		$config = new Config();
+		$setting = Setting::create('name', 'value');
+
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $this->returnValueMap(array(
+			array(array('name' => $setting->getName()), null, $setting),
+		))))));
+
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
+
+		$cache->expects($this->once())
+			->method('has')
+			->will($this->returnValue(false))
+		;
+		$cache->expects($this->never())
+			->method('get')
+		;
+		$cache->expects($this->once())
+			->method('set')
+			->with('name', $setting->getValue())
+		;
+
+		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
+	}
+
+	public function testGet_cacheHit() {
+		$config = new Config();
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
+
+		$cache->expects($this->once())
+			->method('has')
+			->will($this->returnValueMap(array(
+				array('name', true),
+			)))
+		;
+		$cache->expects($this->once())
+			->method('get')
+			->will($this->returnValueMap(array(
+				array('name', 'value'),
+			)))
+		;
+		$cache->expects($this->never())
+			->method('set')
+		;
+
+		$this->assertEquals('value', $config->get('name'));
+	}
+
 	public function testSet() {
 		$config = new Config();
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
 
 		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->getMock();
 		$newValue = 'new-value';
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $setting))));
+
+		$cache->expects($this->once())
+			->method('set')
+			->with($setting->getName(), $newValue)
+		;
 
 		$setting->expects($this->once())
 			->method('setValue')
@@ -68,6 +126,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 
 	public function testSetMultiple() {
 		$config = new Config();
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
 
 		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->setMethods(array('setValue'))->getMock();
 		$setting->setName('name');
@@ -78,6 +138,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$settingsKeyValuePairs = array(
 			$setting->getName() => $newValue,
 		);
+
+		$cache->expects($this->once())
+			->method('setMultiple')
+			->with($settingsKeyValuePairs)
+		;
 
 		$setting->expects($this->once())
 			->method('setValue')
@@ -122,14 +187,47 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Ensure that the cache gets filled while fetching all settings from the DB.
+	 */
+	public function testAll_cacheUpdate() {
+		$config = new Config();
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
+
+		$setting1 = Setting::create('name1', 'value1');
+		$setting2 = Setting::create('name2', 'value2');
+
+		$settingsKeyValuePairs = array(
+			$setting1->getName() => $setting1->getValue(),
+			$setting2->getName() => $setting2->getValue(),
+		);
+
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findAll' => array($setting1, $setting2)))));
+
+		$cache->expects($this->once())
+			->method('setMultiple')
+			->with($settingsKeyValuePairs)
+		;
+
+		$this->assertEquals($settingsKeyValuePairs, $config->all());
+	}
+
+	/**
 	 * @dataProvider dataGetBySection
 	 */
 	public function testGetBySection($section, array $foundSettings, $expectedKeyValuePairs) {
 		$config = new Config();
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findBy' => $this->returnValueMap(array(
 			array(array('section' => $section), null, null, null, $foundSettings),
 		))))));
+
+		$cache->expects($this->once())
+			->method('setMultiple')
+			->with($expectedKeyValuePairs)
+		;
 
 		$this->assertEquals($expectedKeyValuePairs, $config->getBySection($section));
 	}
@@ -163,6 +261,49 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		// invoke twice to ensure the cached instance is used
 		$method->invoke($config);
 		$method->invoke($config);
+	}
+
+	/**
+	 * Ensure that the cache is not cleared when setting a new EntityManager or when setting the same EntityManager again.
+	 */
+	public function testSetEntityManager_newOrSame() {
+		$config = new Config();
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
+
+		$cache->expects($this->never())
+			->method('clear')
+		;
+
+		$em = $this->createEntityManagerMock();
+
+		// 1st call to `setEntityManager` using a new EntityManager
+		$config->setEntityManager($em);
+
+		// 2nd call to `setEntityManager` using the same EntityManager
+		$config->setEntityManager($em);
+	}
+
+	/**
+	 * Ensure that the cache is cleared when setting a different EntityManager.
+	 */
+	public function testSetEntityManager_different() {
+		$config = new Config();
+		$cache = $this->createCacheMock();
+		$config->setCache($cache);
+
+		$cache->expects($this->once())
+			->method('clear')
+		;
+
+		$em1 = $this->createEntityManagerMock();
+		$em2 = $this->createEntityManagerMock();
+
+		// 1st call to `setEntityManager` using a new EntityManager
+		$config->setEntityManager($em1);
+
+		// 2nd call to `setEntityManager` using a different EntityManager
+		$config->setEntityManager($em2);
 	}
 
 	/**
@@ -208,6 +349,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		}
 
 		return $em;
+	}
+
+	/**
+	 * @return PHPUnit_Framework_MockObject_MockObject|CacheAdapterInterface
+	 */
+	protected function createCacheMock() {
+		return $this->getMockBuilder('\Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface')->getMock();
 	}
 
 }

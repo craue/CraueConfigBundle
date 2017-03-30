@@ -2,6 +2,8 @@
 
 namespace Craue\ConfigBundle\Util;
 
+use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
+use Craue\ConfigBundle\CacheAdapter\NullAdapter;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Doctrine\ORM\EntityManager;
@@ -14,6 +16,11 @@ use Doctrine\ORM\EntityManager;
 class Config {
 
 	/**
+	 * @var CacheAdapterInterface
+	 */
+	protected $cache;
+
+	/**
 	 * @var EntityManager
 	 */
 	protected $em;
@@ -23,9 +30,23 @@ class Config {
 	 */
 	protected $repo;
 
+	public function __construct(CacheAdapterInterface $cache = null) {
+		$this->setCache($cache !== null ? $cache : new NullAdapter());
+	}
+
+	public function setCache(CacheAdapterInterface $cache) {
+		$this->cache = $cache;
+	}
+
 	public function setEntityManager(EntityManager $em) {
-		$this->em = $em;
-		$this->repo = null;
+		if ($this->em !== $em) {
+			if ($this->em !== null) {
+				$this->cache->clear();
+			}
+
+			$this->em = $em;
+			$this->repo = null;
+		}
 	}
 
 	/**
@@ -34,6 +55,10 @@ class Config {
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
 	public function get($name) {
+		if ($this->cache->has($name)) {
+			return $this->cache->get($name);
+		}
+
 		$setting = $this->getRepo()->findOneBy(array(
 			'name' => $name,
 		));
@@ -41,6 +66,8 @@ class Config {
 		if ($setting === null) {
 			throw $this->createNotFoundException($name);
 		}
+
+		$this->cache->set($name, $setting->getValue());
 
 		return $setting->getValue();
 	}
@@ -61,6 +88,8 @@ class Config {
 
 		$setting->setValue($value);
 		$this->em->flush($setting);
+
+		$this->cache->set($name, $value);
 	}
 
 	/**
@@ -83,13 +112,19 @@ class Config {
 		}
 
 		$this->em->flush();
+
+		$this->cache->setMultiple($newSettings);
 	}
 
 	/**
 	 * @return array with name => value
 	 */
 	public function all() {
-		return $this->getAsNamesAndValues($this->getRepo()->findAll());
+		$settings = $this->getAsNamesAndValues($this->getRepo()->findAll());
+
+		$this->cache->setMultiple($settings);
+
+		return $settings;
 	}
 
 	/**
@@ -97,7 +132,11 @@ class Config {
 	 * @return array with name => value
 	 */
 	public function getBySection($section) {
-		return $this->getAsNamesAndValues($this->getRepo()->findBy(array('section' => $section)));
+		$settings = $this->getAsNamesAndValues($this->getRepo()->findBy(array('section' => $section)));
+
+		$this->cache->setMultiple($settings);
+
+		return $settings;
 	}
 
 	/**
