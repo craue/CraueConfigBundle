@@ -3,7 +3,7 @@
 ## master
 
 - BC breaks (follow `UPGRADE-2.0.md` to upgrade):
-  - simplify the built-in form by replacing hidden fields with view variables
+  - simplified the built-in form by removing hidden fields
 - [#35]: added a cache for settings
 
 [#35]: https://github.com/craue/CraueConfigBundle/issues/35
