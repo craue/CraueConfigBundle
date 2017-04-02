@@ -22,6 +22,7 @@ class SettingType extends AbstractType {
 
 		$builder->add('value', $useFqcn ? 'Symfony\Component\Form\Extension\Core\Type\TextType' : 'text', array(
 			'required' => false,
+			'translation_domain' => 'CraueConfigBundle',
 		));
 	}
 

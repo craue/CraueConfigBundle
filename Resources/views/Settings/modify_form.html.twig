@@ -9,7 +9,6 @@
 
 		{% for setting in form.settings if setting.vars.value.section == section %}
 			{{ form_row(setting.value, {
-					'translation_domain': 'CraueConfigBundle',
 					'label': setting.vars.value.name,
 				}) }}
 		{% endfor %}
