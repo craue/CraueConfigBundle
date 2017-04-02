@@ -6,6 +6,7 @@
   - removed some class parameters
   - simplified the built-in form by removing hidden fields
 - [#35]: added a cache for settings
+- avoid warnings about missing translations when rendering the built-in form
 
 [#35]: https://github.com/craue/CraueConfigBundle/issues/35
 
