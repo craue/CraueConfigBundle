@@ -3,6 +3,7 @@
 ## master
 
 - BC breaks (follow `UPGRADE-2.0.md` to upgrade):
+  - removed some class parameters
   - simplified the built-in form by removing hidden fields
 - [#35]: added a cache for settings
 

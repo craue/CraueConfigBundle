@@ -19,3 +19,8 @@
 		{{ setting.vars.value.name }}
 	{% endfor %}
 	```
+
+## Services
+
+- If you've used the DI parameter `craue_config.configTemplate.class`, you now need to override the Twig extension with service id `twig.extension.craue_config_template` instead.
+- If you've used the DI parameter `craue_config.config.class`, you now need to override the service with id `craue_config` instead.
