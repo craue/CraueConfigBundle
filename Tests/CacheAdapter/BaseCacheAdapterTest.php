@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Tests\CacheAdapter;
 
 use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
@@ -11,7 +12,7 @@ use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-abstract class BaseCacheAdapterTest extends \PHPUnit_Framework_TestCase {
+abstract class BaseCacheAdapterTest extends TestCase {
 
 	/**
 	 * @return CacheAdapterInterface

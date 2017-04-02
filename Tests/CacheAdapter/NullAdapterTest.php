@@ -4,6 +4,7 @@ namespace Craue\ConfigBundle\Tests\CacheAdapter;
 
 use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\CacheAdapter\NullAdapter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
@@ -12,7 +13,7 @@ use Craue\ConfigBundle\CacheAdapter\NullAdapter;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class NullAdapterTest extends \PHPUnit_Framework_TestCase {
+class NullAdapterTest extends TestCase {
 
 	/**
 	 * @return CacheAdapterInterface

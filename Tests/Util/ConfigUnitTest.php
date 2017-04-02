@@ -8,6 +8,7 @@ use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
@@ -16,7 +17,7 @@ use Doctrine\ORM\EntityRepository;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ConfigUnitTest extends \PHPUnit_Framework_TestCase {
+class ConfigUnitTest extends TestCase {
 
 	public function testGet() {
 		$config = new Config();

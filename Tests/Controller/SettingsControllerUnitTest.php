@@ -4,6 +4,7 @@ namespace Craue\ConfigBundle\Tests\Controller;
 
 use Craue\ConfigBundle\Controller\SettingsController;
 use Craue\ConfigBundle\Entity\Setting;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
@@ -12,7 +13,7 @@ use Craue\ConfigBundle\Entity\Setting;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class SettingsControllerUnitTest extends \PHPUnit_Framework_TestCase{
+class SettingsControllerUnitTest extends TestCase {
 
 	/**
 	 * @dataProvider dataGetSections

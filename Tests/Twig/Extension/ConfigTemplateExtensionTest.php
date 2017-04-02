@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Tests\Twig\Extension;
 
 use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
@@ -11,7 +12,7 @@ use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
  * @copyright 2011-2017 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ConfigTemplateExtensionTest extends \PHPUnit_Framework_TestCase {
+class ConfigTemplateExtensionTest extends TestCase {
 
 	public function testGetSetting() {
 		$ext = new ConfigTemplateExtension();
