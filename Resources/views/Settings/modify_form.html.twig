@@ -8,9 +8,7 @@
 		{% endif %}
 
 		{% for setting in form.settings if setting.vars.value.section == section %}
-			{{ form_row(setting.value, {
-					'label': setting.vars.value.name,
-				}) }}
+			{{ form_row(setting.value) }}
 		{% endfor %}
 
 		{% if section is not empty %}
