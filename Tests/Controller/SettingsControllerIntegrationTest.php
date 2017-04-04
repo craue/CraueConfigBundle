@@ -143,9 +143,6 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
 		$form->remove('craue_config_modifySettings[settings][0][value]');
-		if ($form->has('craue_config_modifySettings[_token]')) {
-			$form->remove('craue_config_modifySettings[_token]'); // field only present in older Symfony versions, removal needed to make form submission invalid
-		}
 		$client->followRedirects();
 		$client->submit($form);
 		$content = $client->getResponse()->getContent();
@@ -168,9 +165,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertContains('<label for="craue_config_modifySettings_settings_0_value">setting no. 1</label>', $content);
 
 		$profile = $client->getProfile();
-		if ($profile->hasCollector('translation')) { // TODO remove as soon as Symfony >= 2.7 is required
-			$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
-		}
+		$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
 	}
 
 	/**

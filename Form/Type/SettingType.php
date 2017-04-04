@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -53,13 +52,6 @@ class SettingType extends AbstractType {
 		$resolver->setDefaults(array(
 			'data_class' => $this->entityName,
 		));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setDefaultOptions(OptionsResolverInterface $resolver) {
-		$this->configureOptions($resolver);
 	}
 
 	/**
