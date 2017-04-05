@@ -159,6 +159,7 @@ doctrine_cache:
   providers:
     craue_config_cache:
       apc: ~
+      namespace: craue_config
       aliases:
         - craue_config_cache_provider
 ```
@@ -178,9 +179,9 @@ services:
     class: Symfony\Component\Cache\Adapter\FilesystemAdapter
     public: false
     arguments:
-      - ''
+      - 'craue_config'
       - 0
-      - '%kernel.cache_dir%/craue_config'
+      - '%kernel.cache_dir%'
 ```
 
 # Customization

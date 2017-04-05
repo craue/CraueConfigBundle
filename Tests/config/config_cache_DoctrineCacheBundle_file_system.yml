@@ -8,6 +8,7 @@ doctrine_cache:
   providers:
     craue_config_cache:
       file_system:
-        directory: "%kernel.cache_dir%/craue_config"
+        directory: '%kernel.cache_dir%/craue_config'
+      namespace: craue_config
       aliases:
         - craue_config_cache_provider
