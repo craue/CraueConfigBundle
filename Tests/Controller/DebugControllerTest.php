@@ -2,6 +2,7 @@
 
 namespace Craue\ConfigBundle\Tests\Controller;
 
+use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Doctrine\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -22,7 +23,7 @@ class DebugControllerTest extends IntegrationTestCase {
 	 */
 	public function testGetAction_severalRequests($platform, $config, $requiredExtension, $environment) {
 		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
-		$this->persistSetting('name1', 'value1');
+		$this->persistSetting(Setting::create('name1', 'value1'));
 
 		$cache = $client->getContainer()->get('craue_config_cache_adapter');
 		$cache->clear();

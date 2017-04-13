@@ -222,3 +222,53 @@ name-of-a-setting: name of the setting
 # in app/Resources/CraueConfigBundle/translations/CraueConfigBundle.de.yml
 name-of-a-setting: Name der Einstellung
 ```
+
+## Using a custom entity for settings
+
+The custom entity has to provide a mapping for the field `value`. The class `BaseSetting` defines this field, but no
+mapping for it. This allows easy overriding, including the data type. In the following example, the `value` field will
+be mapped to a `text` column, which will in turn render the built-in form fields as `textarea`.
+
+So create the entity and its appropriate mapping:
+
+```php
+// src/MyCompany/MyBundle/Entity/MySetting.php
+use Craue\ConfigBundle\Entity\BaseSetting;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass="Craue\ConfigBundle\Repository\SettingRepository")
+ * @ORM\Table(name="my_setting")
+ */
+class MySetting extends BaseSetting {
+
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="value", type="text", nullable=true)
+	 */
+	protected $value;
+
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="comment", type="string", nullable=true)
+	 */
+	protected $comment;
+
+	public function setComment($comment) {
+		$this->comment = $comment;
+	}
+
+	public function getComment() {
+		return $this->comment;
+	}
+
+}
+```
+
+And make the bundle aware of it:
+
+```yaml
+# in app/config/config.yml
+craue_config:
+  entity_name: MyCompany\MyBundle\Entity\MySetting
+```

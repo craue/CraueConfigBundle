@@ -2,6 +2,7 @@
 
 namespace Craue\ConfigBundle\Tests\Repository;
 
+use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 
 /**
@@ -19,8 +20,8 @@ class SettingRepositoryTest extends IntegrationTestCase {
 	public function testFindByNames($platform, $config, $requiredExtension) {
 		$this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 
-		$setting1 = $this->persistSetting('name1');
-		$setting2 = $this->persistSetting('name2');
+		$setting1 = $this->persistSetting(Setting::create('name1'));
+		$setting2 = $this->persistSetting(Setting::create('name2'));
 
 		$repo = $this->getSettingsRepo();
 

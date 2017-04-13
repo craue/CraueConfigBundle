@@ -4,7 +4,7 @@ namespace Craue\ConfigBundle\Util;
 
 use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\CacheAdapter\NullAdapter;
-use Craue\ConfigBundle\Entity\Setting;
+use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Doctrine\ORM\EntityManager;
 
@@ -30,6 +30,11 @@ class Config {
 	 */
 	protected $repo;
 
+	/**
+	 * @var string
+	 */
+	protected $entityName;
+
 	public function __construct(CacheAdapterInterface $cache = null) {
 		$this->setCache($cache !== null ? $cache : new NullAdapter());
 	}
@@ -47,6 +52,11 @@ class Config {
 			$this->em = $em;
 			$this->repo = null;
 		}
+	}
+
+	public function setEntityName($entityName) {
+		$this->entityName = $entityName;
+		$this->repo = null;
 	}
 
 	/**
@@ -140,7 +150,7 @@ class Config {
 	}
 
 	/**
-	 * @param Setting[] $entities
+	 * @param SettingInterface[] $entities
 	 * @return array with name => value
 	 */
 	protected function getAsNamesAndValues(array $settings) {
@@ -158,7 +168,7 @@ class Config {
 	 */
 	protected function getRepo() {
 		if ($this->repo === null) {
-			$this->repo = $this->em->getRepository('Craue\ConfigBundle\Entity\Setting');
+			$this->repo = $this->em->getRepository($this->entityName);
 		}
 
 		return $this->repo;

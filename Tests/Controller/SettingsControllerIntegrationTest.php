@@ -2,6 +2,8 @@
 
 namespace Craue\ConfigBundle\Tests\Controller;
 
+use Craue\ConfigBundle\Entity\Setting;
+use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 
 /**
@@ -31,7 +33,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_noChanges($platform, $config, $requiredExtension) {
 		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
-		$this->persistSetting('name', 'value');
+		$this->persistSetting(Setting::create('name', 'value'));
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$content = $client->getResponse()->getContent();
@@ -63,7 +65,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_changeValue($platform, $config, $requiredExtension) {
 		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
-		$this->persistSetting('name', 'value', 'section');
+		$this->persistSetting(Setting::create('name', 'value', 'section'));
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
@@ -92,8 +94,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_changeValue_cacheUsage($platform, $config, $requiredExtension, $environment) {
 		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
-		$this->persistSetting('name1', 'value1');
-		$this->persistSetting('name2', 'value2');
+		$this->persistSetting(Setting::create('name1', 'value1'));
+		$this->persistSetting(Setting::create('name2', 'value2'));
 
 		$cache = $client->getContainer()->get('craue_config_cache_adapter');
 		$cache->clear();
@@ -136,14 +138,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_formInvalid($platform, $config, $requiredExtension) {
 		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
-		$this->persistSetting('name', 'value');
+		$this->persistSetting(Setting::create('name', 'value'));
 
 		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
 		$form->remove('craue_config_modifySettings[settings][0][value]');
-		if ($form->has('craue_config_modifySettings[_token]')) {
-			$form->remove('craue_config_modifySettings[_token]'); // field only present in older Symfony versions, removal needed to make form submission invalid
-		}
 		$client->followRedirects();
 		$client->submit($form);
 		$content = $client->getResponse()->getContent();
@@ -157,7 +156,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_properTranslations($platform, $config, $requiredExtension) {
 		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
-		$this->persistSetting('setting-number-one', 'value', 'section-number-one');
+		$this->persistSetting(Setting::create('setting-number-one', 'value', 'section-number-one'));
 
 		$client->enableProfiler();
 		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
@@ -166,9 +165,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertContains('<label for="craue_config_modifySettings_settings_0_value">setting no. 1</label>', $content);
 
 		$profile = $client->getProfile();
-		if ($profile->hasCollector('translation')) { // TODO remove as soon as Symfony >= 2.7 is required
-			$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
-		}
+		$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
 	}
 
 	/**
@@ -176,9 +173,9 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_sectionOrder_defaultOrder($platform, $config, $requiredExtension) {
 		$client = $this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
-		$this->persistSetting('name1', 'value1', 'section1');
-		$this->persistSetting('name2', 'value2');
-		$this->persistSetting('name3', 'value3', 'section2');
+		$this->persistSetting(Setting::create('name1', 'value1', 'section1'));
+		$this->persistSetting(Setting::create('name2', 'value2'));
+		$this->persistSetting(Setting::create('name3', 'value3', 'section2'));
 
 		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$content = $client->getResponse()->getContent();
@@ -195,9 +192,9 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_sectionOrder_customOrder($platform, $config, $requiredExtension) {
 		$client = $this->initClient($requiredExtension, array('environment' => 'customSectionOrder_' . $platform, 'config' => $config));
-		$this->persistSetting('name1', 'value1', 'section1');
-		$this->persistSetting('name2', 'value2');
-		$this->persistSetting('name3', 'value3', 'section2');
+		$this->persistSetting(Setting::create('name1', 'value1', 'section1'));
+		$this->persistSetting(Setting::create('name2', 'value2'));
+		$this->persistSetting(Setting::create('name3', 'value3', 'section2'));
 
 		$client->request('GET', $this->url($client, 'craue_config_settings_modify'));
 		$content = $client->getResponse()->getContent();
@@ -220,7 +217,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 */
 	public function testModifyAction_redirectRouteAfterModify($platform, $config, $requiredExtension) {
 		$client = $this->initClient($requiredExtension, array('environment' => 'redirectRouteAfterModify_' . $platform, 'config' => $config));
-		$this->persistSetting('name', 'value');
+		$this->persistSetting(Setting::create('name', 'value'));
 
 		$this->assertSame('admin_settings_start', $client->getContainer()->getParameter('craue_config.redirectRouteAfterModify'));
 
@@ -234,6 +231,43 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		return self::duplicateTestDataForEachPlatform(array(
 			array(),
 		), 'config_redirectRouteAfterModify.yml');
+	}
+
+	/**
+	 * Ensure that a custom model class can actually be used.
+	 *
+	 * @dataProvider dataModifyAction_customEntity
+	 */
+	public function testModifyAction_customEntity($platform, $config, $requiredExtension, $environment) {
+		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
+		$this->persistSetting(CustomSetting::create('name', 'value', 'section', 'comment'));
+		$newValue = str_repeat('X', 200) . "\n" . str_repeat('Y', 99);
+
+		$crawler = $client->request('GET', $this->url($client, 'craue_config_settings_modify'));
+		$content = $client->getResponse()->getContent();
+		$this->assertContains('<textarea id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]">value</textarea>', $content);
+
+		$form = $crawler->selectButton('apply')->form();
+		$client->followRedirects();
+		$client->submit($form, array(
+			'craue_config_modifySettings[settings][0][value]' => $newValue,
+		));
+
+		$settings = $this->getSettingsRepo()->findAll();
+		$this->assertCount(1, $settings);
+
+		$setting = $settings[0];
+		$this->assertSame('name', $setting->getName());
+		$this->assertSame(strlen($newValue), strlen($setting->getValue()));
+		$this->assertSame($newValue, $setting->getValue());
+		$this->assertSame('section', $setting->getSection());
+		$this->assertSame('comment', $setting->getComment());
+	}
+
+	public function dataModifyAction_customEntity() {
+		return self::duplicateTestDataForEachPlatform(array(
+			array('customEntity'),
+		), 'config_customEntity.yml');
 	}
 
 }

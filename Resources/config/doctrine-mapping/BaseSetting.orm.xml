@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	Author: Christian Raue <christian.raue@gmail.com>
+	Copyright: 2011-2017 Christian Raue
+	License: http://opensource.org/licenses/mit-license.php MIT License
+-->
+<doctrine-mapping
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+	<mapped-superclass name="Craue\ConfigBundle\Entity\BaseSetting">
+		<id name="name" column="name" type="string" />
+		<!-- Define the mapping for field "value" only in child classes to allow easy overriding. -->
+		<field name="section" column="section" type="string" nullable="true" />
+	</mapped-superclass>
+</doctrine-mapping>

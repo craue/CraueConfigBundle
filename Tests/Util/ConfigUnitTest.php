@@ -244,7 +244,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * Ensure that the repository is fetched only once from the EntityManager, but again if it's changed at runtime.
 	 */
-	public function testGetRepo() {
+	public function testGetRepo_changedEntityManager() {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
 		$method->setAccessible(true);
@@ -258,6 +258,38 @@ class ConfigUnitTest extends TestCase {
 
 		// 2nd call to `getRepo` using a different mocked EntityManager
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
+
+		// invoke twice to ensure the cached instance is used
+		$method->invoke($config);
+		$method->invoke($config);
+	}
+
+	/**
+	 * Ensure that the repository is fetched only once with a given entity name, but again if it's changed at runtime.
+	 */
+	public function testGetRepo_changedEntityName() {
+		$config = new Config();
+		$method = new \ReflectionMethod($config, 'getRepo');
+		$method->setAccessible(true);
+
+		$em = $this->createEntityManagerMock();
+
+		$em->expects($this->exactly(2))
+			->method('getRepository')
+			->will($this->returnValue($this->createEntityRepositoryMock()))
+		;
+
+		$config->setEntityManager($em);
+
+		// 1st call to `getRepo` using the default entity name
+		$config->setEntityName('Craue\ConfigBundle\Entity\Setting');
+
+		// invoke twice to ensure the cached instance is used
+		$method->invoke($config);
+		$method->invoke($config);
+
+		// 2nd call to `getRepo` using a different entity name
+		$config->setEntityName('Craue\ConfigBundle\Entity\DoesNotExist');
 
 		// invoke twice to ensure the cached instance is used
 		$method->invoke($config);

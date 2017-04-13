@@ -3,12 +3,6 @@
 set -euv
 
 export COMPOSER_NO_INTERACTION=1
-
-if [ "${TRAVIS_PHP_VERSION}" = '5.3.3' ]; then
-	composer config -g disable-tls true
-	composer config -g secure-http false
-fi
-
 composer self-update
 
 case "${DEPS:-}" in

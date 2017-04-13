@@ -10,12 +10,8 @@
 		xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
 		<service id="craue_config.form_type.setting" class="Craue\ConfigBundle\Form\Type\SettingType">
-			<tag name="form.type" alias="craue_config_setting" />
+			<tag name="form.type" />
 			<argument>%craue_config.entity_name%</argument>
-		</service>
-
-		<service id="craue_config.form.modifySettings" class="Craue\ConfigBundle\Form\ModifySettingsForm">
-			<tag name="form.type" alias="craue_config_modifySettings" />
 		</service>
 	</services>
 </container>

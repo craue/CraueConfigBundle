@@ -2,7 +2,7 @@
 
 namespace Craue\ConfigBundle\Repository;
 
-use Craue\ConfigBundle\Entity\Setting;
+use Craue\ConfigBundle\Entity\SettingInterface;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -14,12 +14,12 @@ class SettingRepository extends EntityRepository {
 
 	/**
 	 * @param string[] $names
-	 * @return Setting[] Array of settings, indexed by name.
+	 * @return SettingInterface[] Array of settings, indexed by name.
 	 */
 	public function findByNames(array $names) {
 		return $this->getEntityManager()->createQueryBuilder()
 			->select('s')
-			->from('Craue\ConfigBundle\Entity\Setting', 's', 's.name')
+			->from($this->getEntityName(), 's', 's.name')
 			->where('s.name IN (:names)')
 			->getQuery()
 			->execute(array('names' => $names))

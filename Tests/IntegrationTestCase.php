@@ -2,7 +2,7 @@
 
 namespace Craue\ConfigBundle\Tests;
 
-use Craue\ConfigBundle\Entity\Setting;
+use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
 use Craue\ConfigBundle\Util\Config;
@@ -110,15 +110,10 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * Persists a {@code Setting}.
-	 * @param string $name
-	 * @param string|null $value
-	 * @param string|null $section
-	 * @return Setting
+	 * @param $setting SettingInterface The setting to persist.
+	 * @return SettingInterface The persisted setting.
 	 */
-	protected function persistSetting($name, $value = null, $section = null) {
-		$setting = Setting::create($name, $value, $section);
-
+	protected function persistSetting(SettingInterface $setting) {
 		$em = $this->getEntityManager();
 		$em->persist($setting);
 		$em->flush();
@@ -164,7 +159,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @return SettingRepository
 	 */
 	protected function getSettingsRepo() {
-		return $this->getEntityManager()->getRepository('Craue\ConfigBundle\Entity\Setting');
+		return $this->getEntityManager()->getRepository(static::$kernel->getContainer()->getParameter('craue_config.entity_name'));
 	}
 
 	/**
