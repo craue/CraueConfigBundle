@@ -32,6 +32,23 @@ public function registerBundles() {
 }
 ```
 
+## Add the mapping
+
+Add the CrauConfigBundle mappings so that Doctrine knows how to update the schema.
+
+```yaml
+doctrine:
+    orm:
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: default
+                mappings:
+                    FOSUserBundle: ~
+                    CraueConfigBundle: ~
+                    ...
+```
+
 ## Create the table
 
 Preferably you do this by calling
