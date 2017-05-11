@@ -1,13 +1,17 @@
 # Changelog
 
-## master
+## 2.0.0 (2017-05-11)
 
 - BC breaks (follow `UPGRADE-2.0.md` to upgrade):
-  - removed some class parameters
+  - [#20]:
+    - use XML instead of annotations for Doctrine mapping to allow overriding it
+    - bumped Symfony dependency to 2.7
   - simplified the built-in form by removing hidden fields
+  - removed some class parameters
 - [#35]: added a cache for settings
 - avoid warnings about missing translations when rendering the built-in form
 
+[#20]: https://github.com/craue/CraueConfigBundle/issues/20
 [#35]: https://github.com/craue/CraueConfigBundle/issues/35
 
 ## 1.4.2 (2017-03-27)
