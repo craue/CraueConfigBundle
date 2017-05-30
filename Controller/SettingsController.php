@@ -17,7 +17,7 @@ class SettingsController extends Controller {
 		$em = $this->getDoctrine()->getManager();
 		$repo = $em->getRepository($this->container->getParameter('craue_config.entity_name'));
 		$allStoredSettings = $repo->findAll();
-		$cache = $this->container->get('craue_config_cache_adapter');
+		$cache = $this->get('craue_config_cache_adapter');
 
 		$formData = array(
 			'settings' => $allStoredSettings,
