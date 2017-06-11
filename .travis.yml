@@ -7,13 +7,14 @@ php:
   - 5.6
   - 7.0
   - 7.1
-  - hhvm
 
 env:
   - SYMFONY_VERSION='2.7.*'
 
 matrix:
   include:
+    - php: hhvm
+      dist: trusty
     - php: 5.3
       env: DEPS='lowest' SYMFONY_DEPRECATIONS_HELPER='666'
     - php: 5.6
