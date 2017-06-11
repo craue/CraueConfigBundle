@@ -45,8 +45,11 @@ install:
   - composer show
 
 before_script:
-  # ensure MySQL database exists
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  # set up MySQL
+  - mysql -u root -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - mysql -u root -e 'GRANT USAGE ON *.* TO "travis"@"localhost"; DROP USER "travis"@"localhost";'
+  - mysql -u root -e 'CREATE USER "travis"@"localhost" IDENTIFIED BY PASSWORD "";'
+  - mysql -u root -e 'GRANT ALL ON test.* TO "travis"@"localhost"; FLUSH PRIVILEGES;'
   # create folder for code coverage data
   - mkdir -p build/logs
 
