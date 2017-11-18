@@ -29,6 +29,8 @@ matrix:
     - php: 5.6
       dist: precise
       env: SYMFONY_VERSION='3.4.*' MIN_STABILITY='dev'
+    - php: 7.1
+      env: SYMFONY_VERSION='4.0.*' MIN_STABILITY='beta'
   allow_failures:
     - env: SYMFONY_VERSION='3.4.*' MIN_STABILITY='dev'
   fast_finish: true
