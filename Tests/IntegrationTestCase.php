@@ -4,7 +4,6 @@ namespace Craue\ConfigBundle\Tests;
 
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Repository\SettingRepository;
-use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
 use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -139,13 +138,6 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 */
 	protected function getConfig() {
 		return $this->getService('craue_config');
-	}
-
-	/**
-	 * @return ConfigTemplateExtension
-	 */
-	protected function getConfigTemplateExtension() {
-		return $this->getService('twig.extension.craue_config_template');
 	}
 
 	/**

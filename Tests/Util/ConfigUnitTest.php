@@ -350,15 +350,14 @@ class ConfigUnitTest extends TestCase {
 		;
 
 		foreach ($methodsWithReturnValues as $method => $returnValue) {
-			if (!($returnValue instanceof \PHPUnit_Framework_MockObject_Stub_Return)
-					&& !($returnValue instanceof \PHPUnit_Framework_MockObject_Stub_ReturnValueMap)) {
-						$returnValue = $this->returnValue($returnValue);
-					}
+			if (!$returnValue instanceof \PHPUnit_Framework_MockObject_Stub_ReturnValueMap) {
+				$returnValue = $this->returnValue($returnValue);
+			}
 
-					$repo->expects($this->once())
-						->method($method)
-						->will($returnValue)
-					;
+			$repo->expects($this->once())
+				->method($method)
+				->will($returnValue)
+			;
 		}
 
 		return $repo;
