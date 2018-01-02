@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  * Configuration for the bundle.
  *
  * @author Christian Raue <christian.raue@gmail.com>
- * @copyright 2011-2017 Christian Raue
+ * @copyright 2011-present Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class Configuration implements ConfigurationInterface {

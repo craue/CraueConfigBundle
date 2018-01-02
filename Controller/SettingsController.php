@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
- * @copyright 2011-2017 Christian Raue
+ * @copyright 2011-present Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class SettingsController extends Controller {
