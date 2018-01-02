@@ -38,7 +38,6 @@ class AppKernel extends Kernel {
 		return array(
 			new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 			new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
-			new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
 			new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 			new \Symfony\Bundle\TwigBundle\TwigBundle(),
 			new \Craue\ConfigBundle\CraueConfigBundle(),
