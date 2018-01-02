@@ -3,9 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		{% block stylesheets %}
-			{% stylesheets '@CraueConfigBundle/Resources/assets/css/form.css' %}
-				<link type="text/css" rel="stylesheet" href="{{ asset_url }}" />
-			{% endstylesheets %}
+			<link type="text/css" rel="stylesheet" href="{{ asset('/bundles/craueconfig/css/form.css') }}" />
 		{% endblock %}
 	</head>
 	<body>

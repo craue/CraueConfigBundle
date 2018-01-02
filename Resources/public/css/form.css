@@ -1,5 +1,3 @@
-/* This legacy file is for BC only. */
-
 .craue_config_settings_modify label:after {
 	content: ': ';
 }
