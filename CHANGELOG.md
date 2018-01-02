@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.0] – 2018-01-02
+
+- [#41]:
+  - added support for Symfony 4.*
+  - no longer use Assetic
+
+[#41]: https://github.com/craue/CraueConfigBundle/issues/41
+[2.1.0]: https://github.com/craue/CraueConfigBundle/compare/2.0.0...2.1.0
+
 ## [2.0.0] – 2017-05-11
 
 - BC breaks (follow `UPGRADE-2.0.md` to upgrade):
