@@ -2,7 +2,7 @@
 	"name": "craue/config-bundle",
 	"type": "symfony-bundle",
 	"description": "Database-stored settings made available via a service for your Symfony project.",
-	"keywords": ["config", "symfony2", "symfony3"],
+	"keywords": ["config", "symfony2", "symfony3", "symfony4"],
 	"homepage": "https://github.com/craue/CraueConfigBundle",
 	"license": "MIT",
 	"authors": [
@@ -18,15 +18,14 @@
 	"require": {
 		"php": "^5.3.9|~7.0",
 		"doctrine/doctrine-bundle": "~1.3",
-		"symfony/framework-bundle": "~2.7|~3.0"
+		"symfony/framework-bundle": "~2.7|~3.0|~4.0"
 	},
 	"require-dev": {
 		"doctrine/doctrine-cache-bundle": "~1.3",
 		"doctrine/orm": "^2.3.1",
 		"phpunit/phpunit": "^4.8.35|~5.7|~6.0",
-		"symfony/assetic-bundle": "^2.8.1",
-		"symfony/phpunit-bridge": "~3.2",
-		"symfony/symfony": "~2.7|~3.0"
+		"symfony/phpunit-bridge": "~3.2|~4.0",
+		"symfony/symfony": "~2.7|~3.0|~4.0"
 	},
 	"minimum-stability": "stable",
 	"autoload": {
@@ -36,7 +35,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "2.0.x-dev"
+			"dev-master": "2.1.x-dev"
 		}
 	}
 }

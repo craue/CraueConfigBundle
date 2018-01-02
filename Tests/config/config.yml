@@ -1,9 +1,3 @@
-assetic:
-  debug: '%kernel.debug%'
-  use_controller: false
-  bundles:
-    - CraueConfigBundle
-
 doctrine:
   dbal:
     charset: UTF8
