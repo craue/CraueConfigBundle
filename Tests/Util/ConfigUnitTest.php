@@ -350,7 +350,8 @@ class ConfigUnitTest extends TestCase {
 		;
 
 		foreach ($methodsWithReturnValues as $method => $returnValue) {
-			if (!$returnValue instanceof \PHPUnit_Framework_MockObject_Stub_ReturnValueMap) {
+			if (!$returnValue instanceof \PHPUnit_Framework_MockObject_Stub_ReturnValueMap // phpunit-mock-objects < 5.0
+					&& !$returnValue instanceof \PHPUnit\Framework\MockObject\Stub\ReturnValueMap) { // phpunit-mock-objects >= 5.0
 				$returnValue = $this->returnValue($returnValue);
 			}
 
