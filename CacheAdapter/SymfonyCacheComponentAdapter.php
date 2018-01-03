@@ -6,7 +6,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
- * @copyright 2011-present Christian Raue
+ * @copyright 2011-2018 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class SymfonyCacheComponentAdapter implements CacheAdapterInterface {
