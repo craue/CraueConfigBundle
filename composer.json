@@ -31,7 +31,10 @@
 	"autoload": {
 		"psr-4": {
 			"Craue\\ConfigBundle\\": ""
-		}
+		},
+		"exclude-from-classmap": [
+			"/Tests/"
+		]
 	},
 	"extra": {
 		"branch-alias": {
