@@ -9,6 +9,6 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 	<route id="craue_config_settings_modify" path="/modify">
-		<default key="_controller">CraueConfigBundle:Settings:modify</default>
+		<default key="_controller">Craue\ConfigBundle\Controller\SettingsController::modifyAction</default>
 	</route>
 </routes>

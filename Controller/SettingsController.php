@@ -4,7 +4,7 @@ namespace Craue\ConfigBundle\Controller;
 
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Form\ModifySettingsForm;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @copyright 2011-2018 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class SettingsController extends Controller {
+class SettingsController extends AbstractController {
 
 	public function modifyAction(Request $request) {
 		$em = $this->getDoctrine()->getManager();

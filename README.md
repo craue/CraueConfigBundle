@@ -69,7 +69,7 @@ craue_config_settings:
 craue_config_settings_modify:
   path: /settings/modify
   defaults:
-    _controller: CraueConfigBundle:Settings:modify
+    _controller: Craue\ConfigBundle\Controller\SettingsController::modifyAction
 ```
 
 # Usage

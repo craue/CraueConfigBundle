@@ -1,3 +1,6 @@
+imports:
+  - { resource: '@IntegrationTestBundle/Resources/config/controller.xml' }
+
 doctrine:
   dbal:
     charset: UTF8

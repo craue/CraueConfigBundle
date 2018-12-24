@@ -5,9 +5,9 @@ craue_config_settings:
 admin_settings_start:
   path: /settings-start/modify
   defaults:
-    _controller: CraueConfigBundle:Settings:modify
+    _controller: Craue\ConfigBundle\Controller\SettingsController::modifyAction
 
 debug_get:
   path: /debug/get/{name}
   defaults:
-    _controller: IntegrationTestBundle:Debug:get
+    _controller: Craue\ConfigBundle\Tests\IntegrationTestBundle\Controller\DebugController::getAction

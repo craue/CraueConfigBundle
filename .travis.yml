@@ -12,7 +12,7 @@ env:
 matrix:
   include:
     - php: 7.0
-      env: DEPS='lowest'
+      env: DEPS='lowest' SYMFONY_DEPRECATIONS_HELPER='832'
     - php: 7.3
       env: DEPS='unmodified'
     - php: 7.3

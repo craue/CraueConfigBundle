@@ -28,6 +28,7 @@ class CraueConfigExtension extends Extension {
 		$container->setParameter('craue_config.entity_name', $config['entity_name']);
 
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+		$loader->load('controller.xml');
 		$loader->load('form.xml');
 		$loader->load('twig.xml');
 		$loader->load('util.xml');
