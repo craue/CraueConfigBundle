@@ -61,7 +61,7 @@ class SettingsController extends Controller {
 
 		foreach ($settings as $setting) {
 			$section = $setting->getSection();
-			if (!in_array($section, $sections)) {
+			if (!in_array($section, $sections, true)) {
 				$sections[] = $section;
 			}
 		}
