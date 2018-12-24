@@ -69,9 +69,9 @@ class Config {
 			return $this->cache->get($name);
 		}
 
-		$setting = $this->getRepo()->findOneBy(array(
+		$setting = $this->getRepo()->findOneBy([
 			'name' => $name,
-		));
+		]);
 
 		if ($setting === null) {
 			throw $this->createNotFoundException($name);
@@ -88,9 +88,9 @@ class Config {
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
 	public function set($name, $value) {
-		$setting = $this->getRepo()->findOneBy(array(
+		$setting = $this->getRepo()->findOneBy([
 			'name' => $name,
-		));
+		]);
 
 		if ($setting === null) {
 			throw $this->createNotFoundException($name);
@@ -142,7 +142,7 @@ class Config {
 	 * @return array with name => value
 	 */
 	public function getBySection($section) {
-		$settings = $this->getAsNamesAndValues($this->getRepo()->findBy(array('section' => $section)));
+		$settings = $this->getAsNamesAndValues($this->getRepo()->findBy(['section' => $section]));
 
 		$this->cache->setMultiple($settings);
 
@@ -154,7 +154,7 @@ class Config {
 	 * @return array with name => value
 	 */
 	protected function getAsNamesAndValues(array $settings) {
-		$result = array();
+		$result = [];
 
 		foreach ($settings as $setting) {
 			$result[$setting->getName()] = $setting->getValue();

@@ -22,7 +22,7 @@ class SettingRepository extends EntityRepository {
 			->from($this->getEntityName(), 's', 's.name')
 			->where('s.name IN (:names)')
 			->getQuery()
-			->execute(array('names' => $names))
+			->execute(['names' => $names])
 		;
 	}
 

@@ -18,9 +18,9 @@ class CustomConfig extends Config {
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
 	public function getRawSetting($name) {
-		$setting = $this->getRepo()->findOneBy(array(
+		$setting = $this->getRepo()->findOneBy([
 			'name' => $name,
-		));
+		]);
 
 		if ($setting === null) {
 			throw $this->createNotFoundException($name);

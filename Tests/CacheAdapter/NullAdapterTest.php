@@ -39,7 +39,7 @@ class NullAdapterTest extends TestCase {
 	}
 
 	public function testSetMultiple() {
-		$this->assertFalse($this->getAdapter()->setMultiple(array()));
+		$this->assertFalse($this->getAdapter()->setMultiple([]));
 	}
 
 }

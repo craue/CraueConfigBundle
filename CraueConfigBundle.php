@@ -25,11 +25,11 @@ class CraueConfigBundle extends Bundle {
 	 * @param ContainerBuilder $container
 	 */
 	private function addRegisterMappingsPass(ContainerBuilder $container) {
-		$mappings = array(
+		$mappings = [
 			realpath(__DIR__ . '/Resources/config/doctrine-mapping') => 'Craue\ConfigBundle\Entity',
-		);
+		];
 
-		$container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, array(), 'craue_config.db_driver.doctrine_orm'));
+		$container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, [], 'craue_config.db_driver.doctrine_orm'));
 	}
 
 }

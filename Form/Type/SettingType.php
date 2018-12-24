@@ -29,10 +29,10 @@ class SettingType extends AbstractType {
 	 * {@inheritDoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('value', null, array(
+		$builder->add('value', null, [
 			'required' => false,
 			'translation_domain' => 'CraueConfigBundle',
-		));
+		]);
 	}
 
 	/**
@@ -49,9 +49,9 @@ class SettingType extends AbstractType {
 	 * {@inheritDoc}
 	 */
 	public function configureOptions(OptionsResolver $resolver) {
-		$resolver->setDefaults(array(
+		$resolver->setDefaults([
 			'data_class' => $this->entityName,
-		));
+		]);
 	}
 
 	/**

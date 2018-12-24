@@ -34,7 +34,7 @@ class SymfonyCacheComponentAdapterTest extends BaseCacheAdapterTest {
 
 		$adapter = new SymfonyCacheComponentAdapter($providerMock);
 
-		$this->assertFalse($adapter->setMultiple(array('key' => 'value')));
+		$this->assertFalse($adapter->setMultiple(['key' => 'value']));
 	}
 
 }

@@ -31,9 +31,9 @@ class ConfigTemplateExtensionTest extends TestCase {
 
 	public function testSortSections() {
 		$ext = new ConfigTemplateExtension();
-		$ext->setSectionOrder(array('section1', 'section2'));
+		$ext->setSectionOrder(['section1', 'section2']);
 
-		$this->assertEquals(array(null, 'section1', 'section2'), $ext->sortSections(array('section2', null, 'section1')));
+		$this->assertEquals([null, 'section1', 'section2'], $ext->sortSections(['section2', null, 'section1']));
 	}
 
 	/**
@@ -42,7 +42,7 @@ class ConfigTemplateExtensionTest extends TestCase {
 	public function testSortSections_sectionOrderNotSet() {
 		$ext = new ConfigTemplateExtension();
 
-		$this->assertEquals(array(null, 'section2', 'section1'), $ext->sortSections(array('section2', null, 'section1')));
+		$this->assertEquals([null, 'section2', 'section1'], $ext->sortSections(['section2', null, 'section1']));
 	}
 
 }

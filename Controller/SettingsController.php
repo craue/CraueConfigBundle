@@ -20,9 +20,9 @@ class SettingsController extends AbstractController {
 		$allStoredSettings = $repo->findAll();
 		$cache = $this->get('craue_config_cache_adapter');
 
-		$formData = array(
+		$formData = [
 			'settings' => $allStoredSettings,
-		);
+		];
 
 		$form = $this->createForm(ModifySettingsForm::class, $formData);
 
@@ -41,15 +41,15 @@ class SettingsController extends AbstractController {
 				$em->flush();
 
 				$this->get('session')->getFlashBag()->set('notice',
-						$this->get('translator')->trans('settings_changed', array(), 'CraueConfigBundle'));
+						$this->get('translator')->trans('settings_changed', [], 'CraueConfigBundle'));
 				return $this->redirect($this->generateUrl($this->container->getParameter('craue_config.redirectRouteAfterModify')));
 			}
 		}
 
-		return $this->render('@CraueConfig/Settings/modify.html.twig', array(
+		return $this->render('@CraueConfig/Settings/modify.html.twig', [
 			'form' => $form->createView(),
 			'sections' => $this->getSections($allStoredSettings),
-		));
+		]);
 	}
 
 	/**
@@ -57,7 +57,7 @@ class SettingsController extends AbstractController {
 	 * @return string[] (may also contain a null value)
 	 */
 	protected function getSections(array $settings) {
-		$sections = array();
+		$sections = [];
 
 		foreach ($settings as $setting) {
 			$section = $setting->getSection();

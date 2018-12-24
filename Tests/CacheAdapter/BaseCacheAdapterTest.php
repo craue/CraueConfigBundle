@@ -33,7 +33,7 @@ abstract class BaseCacheAdapterTest extends TestCase {
 		$this->assertTrue($adapter->clear());
 		$this->assertFalse($adapter->has('key'));
 
-		$this->assertTrue($adapter->setMultiple(array('key1' => 'value1', 'key2' => 'value2')));
+		$this->assertTrue($adapter->setMultiple(['key1' => 'value1', 'key2' => 'value2']));
 		$this->assertTrue($adapter->has('key1'));
 		$this->assertTrue($adapter->has('key2'));
 		$this->assertSame('value1', $adapter->get('key1'));

@@ -31,13 +31,13 @@ class SettingsControllerUnitTest extends TestCase {
 		$setting2 = Setting::create('name2', null, 'section2');
 		$setting3 = Setting::create('name3', null);
 
-		return array(
-			array(array(),												array()),
-			array(array($setting1),										array('section1')),
-			array(array($setting1, $setting2),							array('section1', 'section2')),
-			array(array($setting2, $setting1, $setting2),				array('section1', 'section2')),
-			array(array($setting1, $setting2, $setting3, $setting3),	array(null, 'section1', 'section2')),
-		);
+		return [
+			[[],											[]],
+			[[$setting1],									['section1']],
+			[[$setting1, $setting2],						['section1', 'section2']],
+			[[$setting2, $setting1, $setting2],				['section1', 'section2']],
+			[[$setting1, $setting2, $setting3, $setting3],	[null, 'section1', 'section2']],
+		];
 	}
 
 	/**
@@ -55,11 +55,11 @@ class SettingsControllerUnitTest extends TestCase {
 		$setting1 = Setting::create('name1');
 		$setting2 = Setting::create('name2');
 
-		return array(
-			array(array($setting1),				'name1',	$setting1),
-			array(array($setting1, $setting2),	'name2',	$setting2),
-			array(array($setting1, $setting2),	'name3',	null),
-		);
+		return [
+			[[$setting1],				'name1',	$setting1],
+			[[$setting1, $setting2],	'name2',	$setting2],
+			[[$setting1, $setting2],	'name3',	null],
+		];
 	}
 
 }

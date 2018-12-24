@@ -22,7 +22,7 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * @dataProvider dataCacheUsage
 	 */
 	public function testCacheUsage($platform, $config, $requiredExtension, $environment) {
-		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
+		$client = $this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$container = $client->getContainer();
 
 		$this->persistSetting(Setting::create('name', 'value'));
@@ -34,12 +34,12 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	public function dataCacheUsage() {
 		return array_merge(
-			self::duplicateTestDataForEachPlatform(array(
-				array('cache_DoctrineCacheBundle_file_system'),
-			), 'config_cache_DoctrineCacheBundle_file_system.yml'),
-			self::duplicateTestDataForEachPlatform(array(
-				array('cache_SymfonyCacheComponent_filesystem'),
-			), 'config_cache_SymfonyCacheComponent_filesystem.yml')
+			self::duplicateTestDataForEachPlatform([
+				['cache_DoctrineCacheBundle_file_system'],
+			], 'config_cache_DoctrineCacheBundle_file_system.yml'),
+			self::duplicateTestDataForEachPlatform([
+				['cache_SymfonyCacheComponent_filesystem'],
+			], 'config_cache_SymfonyCacheComponent_filesystem.yml')
 		);
 	}
 
@@ -49,7 +49,7 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * @dataProvider dataCustomEntity
 	 */
 	public function testCustomEntity($platform, $config, $requiredExtension, $environment) {
-		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
+		$client = $this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$customSetting = $this->persistSetting(CustomSetting::create('name1', 'value1', 'section1', 'comment1'));
 
 		$customConfig = $client->getContainer()->get('craue_config');
@@ -61,9 +61,9 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	}
 
 	public function dataCustomEntity() {
-		return self::duplicateTestDataForEachPlatform(array(
-			array('customEntity'),
-		), 'config_customEntity.yml');
+		return self::duplicateTestDataForEachPlatform([
+			['customEntity'],
+		], 'config_customEntity.yml');
 	}
 
 	/**
@@ -76,9 +76,9 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * @expectedExceptionMessage Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'
 	 */
 	public function testDefaultEntityNameUnique($platform, $config, $requiredExtension) {
-		$this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
+		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 
-		$this->assertSame(array('name'), $this->getEntityManager()->getClassMetadata(Setting::class)->getIdentifier());
+		$this->assertSame(['name'], $this->getEntityManager()->getClassMetadata(Setting::class)->getIdentifier());
 
 		$this->persistSetting(Setting::create('name1'));
 		$this->persistSetting(Setting::create('name1'));
@@ -94,9 +94,9 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * @expectedExceptionMessage Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'
 	 */
 	public function testCustomEntityNameUnique($platform, $config, $requiredExtension, $environment) {
-		$this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
+		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
-		$this->assertSame(array('name'), $this->getEntityManager()->getClassMetadata(CustomSetting::class)->getIdentifier());
+		$this->assertSame(['name'], $this->getEntityManager()->getClassMetadata(CustomSetting::class)->getIdentifier());
 
 		$this->persistSetting(CustomSetting::create('name1'));
 		$this->persistSetting(CustomSetting::create('name1'));

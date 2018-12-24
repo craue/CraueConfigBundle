@@ -17,7 +17,7 @@ class AppKernel extends Kernel {
 			$configFiles = (array) $configFiles;
 		}
 
-		$this->configFiles = array();
+		$this->configFiles = [];
 
 		foreach ($configFiles as $configFile) {
 			$fs = new Filesystem();
@@ -34,14 +34,14 @@ class AppKernel extends Kernel {
 	}
 
 	public function registerBundles() {
-		return array(
+		return [
 			new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 			new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
 			new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 			new \Symfony\Bundle\TwigBundle\TwigBundle(),
 			new \Craue\ConfigBundle\CraueConfigBundle(),
 			new \Craue\ConfigBundle\Tests\IntegrationTestBundle\IntegrationTestBundle(),
-		);
+		];
 	}
 
 	public function registerContainerConfiguration(LoaderInterface $loader) {
@@ -71,7 +71,7 @@ class AppKernel extends Kernel {
 	}
 
 	public function serialize() {
-		return serialize(array($this->environment, $this->configFiles));
+		return serialize([$this->environment, $this->configFiles]);
 	}
 
 	public function unserialize($data) {

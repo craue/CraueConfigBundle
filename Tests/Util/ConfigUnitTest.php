@@ -25,9 +25,9 @@ class ConfigUnitTest extends TestCase {
 		$config = new Config();
 		$setting = Setting::create('name', 'value');
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $this->returnValueMap(array(
-			array(array('name' => $setting->getName()), null, $setting),
-		))))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $this->returnValueMap([
+			[['name' => $setting->getName()], null, $setting],
+		])])));
 
 		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
 	}
@@ -47,9 +47,9 @@ class ConfigUnitTest extends TestCase {
 		$config = new Config();
 		$setting = Setting::create('name', 'value');
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $this->returnValueMap(array(
-			array(array('name' => $setting->getName()), null, $setting),
-		))))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $this->returnValueMap([
+			[['name' => $setting->getName()], null, $setting],
+		])])));
 
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -76,15 +76,15 @@ class ConfigUnitTest extends TestCase {
 
 		$cache->expects($this->once())
 			->method('has')
-			->will($this->returnValueMap(array(
-				array('name', true),
-			)))
+			->will($this->returnValueMap([
+				['name', true],
+			]))
 		;
 		$cache->expects($this->once())
 			->method('get')
-			->will($this->returnValueMap(array(
-				array('name', 'value'),
-			)))
+			->will($this->returnValueMap([
+				['name', 'value'],
+			]))
 		;
 		$cache->expects($this->never())
 			->method('set')
@@ -101,7 +101,7 @@ class ConfigUnitTest extends TestCase {
 		$setting = $this->createMock(Setting::class);
 		$newValue = 'new-value';
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $setting))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $setting])));
 
 		$cache->expects($this->once())
 			->method('set')
@@ -132,15 +132,15 @@ class ConfigUnitTest extends TestCase {
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
 
-		$setting = $this->getMockBuilder(Setting::class)->setMethods(array('setValue'))->getMock();
+		$setting = $this->getMockBuilder(Setting::class)->setMethods(['setValue'])->getMock();
 		$setting->setName('name');
 		$newValue = 'new-value';
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findByNames' => array($setting->getName() => $setting)))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findByNames' => [$setting->getName() => $setting]])));
 
-		$settingsKeyValuePairs = array(
+		$settingsKeyValuePairs = [
 			$setting->getName() => $newValue,
-		);
+		];
 
 		$cache->expects($this->once())
 			->method('setMultiple')
@@ -163,7 +163,7 @@ class ConfigUnitTest extends TestCase {
 			->method('setValue')
 		;
 
-		$config->setMultiple(array());
+		$config->setMultiple([]);
 	}
 
 	/**
@@ -174,19 +174,19 @@ class ConfigUnitTest extends TestCase {
 		$config = new Config();
 		$setting = Setting::create('name1');
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findByNames' => array($setting->getName() => $setting)))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findByNames' => [$setting->getName() => $setting]])));
 
-		$config->setMultiple(array(
+		$config->setMultiple([
 			$setting->getName() => 'new-value1',
 			'oh-no' => 'new-value2',
-		));
+		]);
 	}
 
 	public function testAll_noSettings() {
 		$config = new Config();
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findAll' => array()))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findAll' => []])));
 
-		$this->assertEquals(array(), $config->all());
+		$this->assertEquals([], $config->all());
 	}
 
 	/**
@@ -200,12 +200,12 @@ class ConfigUnitTest extends TestCase {
 		$setting1 = Setting::create('name1', 'value1');
 		$setting2 = Setting::create('name2', 'value2');
 
-		$settingsKeyValuePairs = array(
+		$settingsKeyValuePairs = [
 			$setting1->getName() => $setting1->getValue(),
 			$setting2->getName() => $setting2->getValue(),
-		);
+		];
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findAll' => array($setting1, $setting2)))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findAll' => [$setting1, $setting2]])));
 
 		$cache->expects($this->once())
 			->method('setMultiple')
@@ -223,9 +223,9 @@ class ConfigUnitTest extends TestCase {
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findBy' => $this->returnValueMap(array(
-			array(array('section' => $section), null, null, null, $foundSettings),
-		))))));
+		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findBy' => $this->returnValueMap([
+			[['section' => $section], null, null, null, $foundSettings],
+		])])));
 
 		$cache->expects($this->once())
 			->method('setMultiple')
@@ -236,11 +236,11 @@ class ConfigUnitTest extends TestCase {
 	}
 
 	public function dataGetBySection() {
-		return array(
-			array('section',		array(Setting::create('name', 'value', 'section')),	array('name' => 'value')),
-			array(null,				array(Setting::create('name', 'value')),			array('name' => 'value')),
-			array('other-section',	array(),											array()),
-		);
+		return [
+			['section',			[Setting::create('name', 'value', 'section')],	['name' => 'value']],
+			[null,				[Setting::create('name', 'value')],				['name' => 'value']],
+			['other-section',	[],												[]],
+		];
 	}
 
 	/**
@@ -345,7 +345,7 @@ class ConfigUnitTest extends TestCase {
 	 * @param array $methodsWithReturnValues Method call expectations (method name => return value).
 	 * @return MockObject|SettingRepository
 	 */
-	protected function createEntityRepositoryMock(array $methodsWithReturnValues = array()) {
+	protected function createEntityRepositoryMock(array $methodsWithReturnValues = []) {
 		$repo = $this->getMockBuilder(SettingRepository::class)
 			->disableOriginalConstructor()
 			->getMock()

@@ -22,7 +22,7 @@ class DebugControllerTest extends IntegrationTestCase {
 	 * @dataProvider dataGetAction_severalRequests
 	 */
 	public function testGetAction_severalRequests($platform, $config, $requiredExtension, $environment) {
-		$client = $this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
+		$client = $this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1'));
 
 		$cache = $client->getContainer()->get('craue_config_cache_adapter');
@@ -39,12 +39,12 @@ class DebugControllerTest extends IntegrationTestCase {
 
 	public function dataGetAction_severalRequests() {
 		return array_merge(
-			self::duplicateTestDataForEachPlatform(array(
-				array('cache_DoctrineCacheBundle_file_system'),
-			), 'config_cache_DoctrineCacheBundle_file_system.yml'),
-			self::duplicateTestDataForEachPlatform(array(
-				array('cache_SymfonyCacheComponent_filesystem'),
-			), 'config_cache_SymfonyCacheComponent_filesystem.yml')
+			self::duplicateTestDataForEachPlatform([
+				['cache_DoctrineCacheBundle_file_system'],
+			], 'config_cache_DoctrineCacheBundle_file_system.yml'),
+			self::duplicateTestDataForEachPlatform([
+				['cache_SymfonyCacheComponent_filesystem'],
+			], 'config_cache_SymfonyCacheComponent_filesystem.yml')
 		);
 	}
 
@@ -54,7 +54,7 @@ class DebugControllerTest extends IntegrationTestCase {
 	 */
 	private function doRequest(Client $client) {
 		$client->enableProfiler();
-		$client->request('GET', $this->url($client, 'debug_get', array('name' => 'name1')));
+		$client->request('GET', $this->url($client, 'debug_get', ['name' => 'name1']));
 		$this->assertSame('{"name1":"value1"}', $client->getResponse()->getContent());
 
 		return $client->getProfile()->getCollector('db');

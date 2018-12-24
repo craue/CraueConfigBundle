@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class DebugController extends AbstractController {
 
 	public function getAction($name) {
-		return new JsonResponse(array(
+		return new JsonResponse([
 			$name => $this->container->get('craue_config')->get($name),
-		));
+		]);
 	}
 
 }

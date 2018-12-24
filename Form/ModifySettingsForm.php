@@ -18,9 +18,9 @@ class ModifySettingsForm extends AbstractType {
 	 * {@inheritDoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('settings', CollectionType::class, array(
+		$builder->add('settings', CollectionType::class, [
 			'entry_type' => SettingType::class,
-		));
+		]);
 	}
 
 	/**

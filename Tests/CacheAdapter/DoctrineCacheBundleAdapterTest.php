@@ -35,7 +35,7 @@ class DoctrineCacheBundleAdapterTest extends BaseCacheAdapterTest {
 
 		$adapter = new DoctrineCacheBundleAdapter($providerMock);
 
-		$this->assertFalse($adapter->setMultiple(array('key' => 'value')));
+		$this->assertFalse($adapter->setMultiple(['key' => 'value']));
 	}
 
 }

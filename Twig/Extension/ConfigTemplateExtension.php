@@ -14,7 +14,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	/**
 	 * @var string[]
 	 */
-	protected $sectionOrder = array();
+	protected $sectionOrder = [];
 
 	/**
 	 * @var Config
@@ -24,7 +24,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	/**
 	 * @param string[] $sectionOrder The order in which sections will be rendered.
 	 */
-	public function setSectionOrder(array $sectionOrder = array()) {
+	public function setSectionOrder(array $sectionOrder = []) {
 		$this->sectionOrder = $sectionOrder;
 	}
 
@@ -46,18 +46,18 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 * {@inheritDoc}
 	 */
 	public function getFilters() {
-		return array(
-			new \Twig_SimpleFilter('craue_sortSections', array($this, 'sortSections')),
-		);
+		return [
+			new \Twig_SimpleFilter('craue_sortSections', [$this, 'sortSections']),
+		];
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function getFunctions() {
-		return array(
-			new \Twig_SimpleFunction('craue_setting', array($this, 'getSetting')),
-		);
+		return [
+			new \Twig_SimpleFunction('craue_setting', [$this, 'getSetting']),
+		];
 	}
 
 	/**
@@ -65,7 +65,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 * @return string[]
 	 */
 	public function sortSections(array $sections) {
-		$finalSectionOrder = array();
+		$finalSectionOrder = [];
 
 		// add null section first (if it exists)
 		$nullIndex = array_search(null, $sections);
