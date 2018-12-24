@@ -8,6 +8,8 @@ use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub\ReturnValueMap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -96,7 +98,7 @@ class ConfigUnitTest extends TestCase {
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
 
-		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->getMock();
+		$setting = $this->createMock(Setting::class);
 		$newValue = 'new-value';
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(array('findOneBy' => $setting))));
@@ -130,7 +132,7 @@ class ConfigUnitTest extends TestCase {
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
 
-		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->setMethods(array('setValue'))->getMock();
+		$setting = $this->getMockBuilder(Setting::class)->setMethods(array('setValue'))->getMock();
 		$setting->setName('name');
 		$newValue = 'new-value';
 
@@ -155,7 +157,7 @@ class ConfigUnitTest extends TestCase {
 
 	public function testSetMultiple_noChanges() {
 		$config = new Config();
-		$setting = $this->getMockBuilder('Craue\ConfigBundle\Entity\Setting')->getMock();
+		$setting = $this->createMock(Setting::class);
 
 		$setting->expects($this->never())
 			->method('setValue')
@@ -282,14 +284,14 @@ class ConfigUnitTest extends TestCase {
 		$config->setEntityManager($em);
 
 		// 1st call to `getRepo` using the default entity name
-		$config->setEntityName('Craue\ConfigBundle\Entity\Setting');
+		$config->setEntityName(Setting::class);
 
 		// invoke twice to ensure the cached instance is used
 		$method->invoke($config);
 		$method->invoke($config);
 
 		// 2nd call to `getRepo` using a different entity name
-		$config->setEntityName('Craue\ConfigBundle\Entity\DoesNotExist');
+		$config->setEntityName(Setting::class . 'DoesNotExist');
 
 		// invoke twice to ensure the cached instance is used
 		$method->invoke($config);
@@ -341,17 +343,16 @@ class ConfigUnitTest extends TestCase {
 
 	/**
 	 * @param array $methodsWithReturnValues Method call expectations (method name => return value).
-	 * @return PHPUnit_Framework_MockObject_MockObject|SettingRepository
+	 * @return MockObject|SettingRepository
 	 */
 	protected function createEntityRepositoryMock(array $methodsWithReturnValues = array()) {
-		$repo = $this->getMockBuilder('Craue\ConfigBundle\Repository\SettingRepository')
+		$repo = $this->getMockBuilder(SettingRepository::class)
 			->disableOriginalConstructor()
 			->getMock()
 		;
 
 		foreach ($methodsWithReturnValues as $method => $returnValue) {
-			if (!$returnValue instanceof \PHPUnit_Framework_MockObject_Stub_ReturnValueMap // phpunit-mock-objects < 5.0
-					&& !$returnValue instanceof \PHPUnit\Framework\MockObject\Stub\ReturnValueMap) { // phpunit-mock-objects >= 5.0
+			if (!$returnValue instanceof ReturnValueMap) {
 				$returnValue = $this->returnValue($returnValue);
 			}
 
@@ -365,11 +366,11 @@ class ConfigUnitTest extends TestCase {
 	}
 
 	/**
-	 * @param PHPUnit_Framework_MockObject_MockObject|EntityRepository|null $repo
-	 * @return PHPUnit_Framework_MockObject_MockObject|EntityManager
+	 * @param MockObject|EntityRepository|null $repo
+	 * @return MockObject|EntityManager
 	 */
 	protected function createEntityManagerMock(EntityRepository $repo = null) {
-		$em = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
+		$em = $this->getMockBuilder(EntityManager::class)
 			->disableOriginalConstructor()
 			->getMock()
 		;
@@ -385,10 +386,10 @@ class ConfigUnitTest extends TestCase {
 	}
 
 	/**
-	 * @return PHPUnit_Framework_MockObject_MockObject|CacheAdapterInterface
+	 * @return MockObject|CacheAdapterInterface
 	 */
 	protected function createCacheMock() {
-		return $this->getMockBuilder('\Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface')->getMock();
+		return $this->createMock(CacheAdapterInterface::class);
 	}
 
 }

@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Tests\Twig\Extension;
 
 use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
+use Craue\ConfigBundle\Util\Config;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +17,7 @@ class ConfigTemplateExtensionTest extends TestCase {
 
 	public function testGetSetting() {
 		$ext = new ConfigTemplateExtension();
-		$config = $this->getMockBuilder('Craue\ConfigBundle\Util\Config')->getMock();
+		$config = $this->createMock(Config::class);
 
 		$config->expects($this->once())
 			->method('get')

@@ -15,19 +15,12 @@ use Symfony\Component\Cache\CacheItem;
  */
 class SymfonyCacheComponentAdapterTest extends BaseCacheAdapterTest {
 
-	public static function setUpBeforeClass() {
-		// TODO remove as soon as Symfony >= 3.1 is required
-		if (!class_exists('\Symfony\Component\Cache\Adapter\ArrayAdapter')) {
-			self::markTestSkipped('Symfony Cache component not available.');
-		}
-	}
-
 	protected function getAdapter() {
 		return new SymfonyCacheComponentAdapter(new ArrayAdapter());
 	}
 
 	public function testSetMultiple_fails() {
-		$providerMock = $this->getMockBuilder('\Symfony\Component\Cache\Adapter\ArrayAdapter')->getMock();
+		$providerMock = $this->createMock(ArrayAdapter::class);
 
 		$providerMock->expects($this->once())
 			->method('getItem')

@@ -22,11 +22,11 @@ class DoctrineCacheBundleAdapterTest extends BaseCacheAdapterTest {
 	 * TODO remove as soon as doctrine/cache >= 1.6 is required
 	 */
 	public function testSetMultiple_fails() {
-		if (method_exists('\Doctrine\Common\Cache\ArrayCache', 'saveMultiple')) {
+		if (method_exists(ArrayCache::class, 'saveMultiple')) {
 			$this->markTestSkipped('DoctrineCacheBundle already supports `saveMultiple`.');
 		}
 
-		$providerMock = $this->getMockBuilder('\Doctrine\Common\Cache\ArrayCache')->getMock();
+		$providerMock = $this->createMock(ArrayCache::class);
 
 		$providerMock->expects($this->once())
 			->method('save')

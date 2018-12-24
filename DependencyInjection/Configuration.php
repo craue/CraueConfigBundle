@@ -2,6 +2,7 @@
 
 namespace Craue\ConfigBundle\DependencyInjection;
 
+use Craue\ConfigBundle\Entity\Setting;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -23,16 +24,12 @@ class Configuration implements ConfigurationInterface {
 		$treeBuilder = new TreeBuilder();
 		$treeBuilder->root('craue_config')
 			->children()
-				// TODO replace by `->enumNode('db_driver')->values($supportedDrivers)->defaultValue($supportedDrivers[0])->end()` when at least two values are defined or as soon as Symfony >= 3.1 is required
-				->scalarNode('db_driver')
+				->enumNode('db_driver')
+					->values($supportedDrivers)
 					->defaultValue($supportedDrivers[0])
-					->validate()
-						->ifNotInArray($supportedDrivers)
-						->thenInvalid('The driver "%s" is not supported. Please choose one of ' . json_encode($supportedDrivers))
-					->end()
 				->end()
 				->scalarNode('entity_name')
-					->defaultValue('Craue\ConfigBundle\Entity\Setting')
+					->defaultValue(Setting::class)
 				->end()
 			->end()
 		;

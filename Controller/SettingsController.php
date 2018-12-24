@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\Controller;
 
 use Craue\ConfigBundle\Entity\SettingInterface;
+use Craue\ConfigBundle\Form\ModifySettingsForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,8 +24,7 @@ class SettingsController extends Controller {
 			'settings' => $allStoredSettings,
 		);
 
-		$useFqcn = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
-		$form = $this->createForm($useFqcn ? 'Craue\ConfigBundle\Form\ModifySettingsForm' : 'craue_config_modifySettings', $formData);
+		$form = $this->createForm(ModifySettingsForm::class, $formData);
 
 		if ($request->getMethod() === 'POST') {
 			$form->handleRequest($request);

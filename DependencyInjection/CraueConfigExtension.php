@@ -28,13 +28,7 @@ class CraueConfigExtension extends Extension {
 		$container->setParameter('craue_config.entity_name', $config['entity_name']);
 
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-
-		if (!method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-			$loader->load('form_legacy.xml'); // for symfony/form < 2.8
-		} else {
-			$loader->load('form.xml');
-		}
-
+		$loader->load('form.xml');
 		$loader->load('twig.xml');
 		$loader->load('util.xml');
 	}

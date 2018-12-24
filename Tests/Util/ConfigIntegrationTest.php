@@ -4,6 +4,7 @@ namespace Craue\ConfigBundle\Tests\Util;
 
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
+use Craue\ConfigBundle\Tests\IntegrationTestBundle\Util\CustomConfig;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 
 /**
@@ -32,19 +33,14 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	}
 
 	public function dataCacheUsage() {
-		$testData = self::duplicateTestDataForEachPlatform(array(
-			array('cache_DoctrineCacheBundle_file_system'),
-		), 'config_cache_DoctrineCacheBundle_file_system.yml');
-
-		// TODO remove check as soon as Symfony >= 3.1 is required
-		if (class_exists('\Symfony\Component\Cache\Adapter\ArrayAdapter')) {
-			$testData = array_merge($testData,
-				self::duplicateTestDataForEachPlatform(array(
-					array('cache_SymfonyCacheComponent_filesystem'),
-				), 'config_cache_SymfonyCacheComponent_filesystem.yml'));
-		}
-
-		return $testData;
+		return array_merge(
+			self::duplicateTestDataForEachPlatform(array(
+				array('cache_DoctrineCacheBundle_file_system'),
+			), 'config_cache_DoctrineCacheBundle_file_system.yml'),
+			self::duplicateTestDataForEachPlatform(array(
+				array('cache_SymfonyCacheComponent_filesystem'),
+			), 'config_cache_SymfonyCacheComponent_filesystem.yml')
+		);
 	}
 
 	/**
@@ -57,7 +53,7 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 		$customSetting = $this->persistSetting(CustomSetting::create('name1', 'value1', 'section1', 'comment1'));
 
 		$customConfig = $client->getContainer()->get('craue_config');
-		$this->assertInstanceOf('Craue\ConfigBundle\Tests\IntegrationTestBundle\Util\CustomConfig', $customConfig);
+		$this->assertInstanceOf(CustomConfig::class, $customConfig);
 
 		$fetchedSetting = $customConfig->getRawSetting('name1');
 		$this->assertSame($customSetting, $fetchedSetting);
@@ -75,16 +71,14 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider getPlatformConfigs
 	 *
-	 * @expectedException \Doctrine\DBAL\DBALException
+	 * @expectedException \Doctrine\DBAL\Exception\UniqueConstraintViolationException
 	 * @expectedExceptionMessage An exception occurred while executing 'INSERT INTO craue_config_setting
 	 * @expectedExceptionMessage Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'
-	 *
-	 * TODO expect \Doctrine\DBAL\Exception\UniqueConstraintViolationException as soon as Doctrine/DBAL >= 2.5 is required
 	 */
 	public function testDefaultEntityNameUnique($platform, $config, $requiredExtension) {
 		$this->initClient($requiredExtension, array('environment' => $platform, 'config' => $config));
 
-		$this->assertSame(array('name'), $this->getEntityManager()->getClassMetadata('Craue\ConfigBundle\Entity\Setting')->getIdentifier());
+		$this->assertSame(array('name'), $this->getEntityManager()->getClassMetadata(Setting::class)->getIdentifier());
 
 		$this->persistSetting(Setting::create('name1'));
 		$this->persistSetting(Setting::create('name1'));
@@ -95,16 +89,14 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider dataCustomEntity
 	 *
-	 * @expectedException \Doctrine\DBAL\DBALException
+	 * @expectedException \Doctrine\DBAL\Exception\UniqueConstraintViolationException
 	 * @expectedExceptionMessage An exception occurred while executing 'INSERT INTO craue_config_setting_custom
 	 * @expectedExceptionMessage Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'
-	 *
-	 * TODO expect \Doctrine\DBAL\Exception\UniqueConstraintViolationException as soon as Doctrine/DBAL >= 2.5 is required
 	 */
 	public function testCustomEntityNameUnique($platform, $config, $requiredExtension, $environment) {
 		$this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
 
-		$this->assertSame(array('name'), $this->getEntityManager()->getClassMetadata('Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting')->getIdentifier());
+		$this->assertSame(array('name'), $this->getEntityManager()->getClassMetadata(CustomSetting::class)->getIdentifier());
 
 		$this->persistSetting(CustomSetting::create('name1'));
 		$this->persistSetting(CustomSetting::create('name1'));
