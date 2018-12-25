@@ -36,7 +36,7 @@ class Config {
 	protected $entityName;
 
 	public function __construct(CacheAdapterInterface $cache = null) {
-		$this->setCache($cache !== null ? $cache : new NullAdapter());
+		$this->setCache($cache ?? new NullAdapter());
 	}
 
 	public function setCache(CacheAdapterInterface $cache) {
