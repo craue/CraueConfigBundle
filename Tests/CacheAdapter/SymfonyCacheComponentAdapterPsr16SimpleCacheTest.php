@@ -3,8 +3,7 @@
 namespace Craue\ConfigBundle\Tests\CacheAdapter;
 
 use Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\Cache\CacheItem;
+use Symfony\Component\Cache\Simple\ArrayCache;
 
 /**
  * @group unit
@@ -13,22 +12,17 @@ use Symfony\Component\Cache\CacheItem;
  * @copyright 2011-2018 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class SymfonyCacheComponentAdapterTest extends BaseCacheAdapterTest {
+class SymfonyCacheComponentAdapterPsr16SimpleCacheTest extends BaseCacheAdapterTest {
 
 	protected function getAdapter() {
-		return new SymfonyCacheComponentAdapter(new ArrayAdapter());
+		return new SymfonyCacheComponentAdapter(new ArrayCache());
 	}
 
 	public function testSetMultiple_fails() {
-		$providerMock = $this->createMock(ArrayAdapter::class);
+		$providerMock = $this->createMock(ArrayCache::class);
 
 		$providerMock->expects($this->once())
-			->method('getItem')
-			->will($this->returnValue(new CacheItem()))
-		;
-
-		$providerMock->expects($this->once())
-			->method('saveDeferred')
+			->method('setMultiple')
 			->will($this->returnValue(false))
 		;
 

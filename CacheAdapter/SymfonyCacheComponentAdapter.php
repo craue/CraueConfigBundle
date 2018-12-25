@@ -3,6 +3,8 @@
 namespace Craue\ConfigBundle\CacheAdapter;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Cache\Adapter\SimpleCacheAdapter;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -16,8 +18,21 @@ class SymfonyCacheComponentAdapter implements CacheAdapterInterface {
 	 */
 	private $cache;
 
-	public function __construct(CacheItemPoolInterface $cache) {
-		$this->cache = $cache;
+	public function __construct($cache) {
+		if ($cache instanceof CacheItemPoolInterface) {
+			$this->cache = $cache;
+			return;
+		}
+
+		if ($cache instanceof CacheInterface) {
+			$this->cache = new SimpleCacheAdapter($cache);
+			return;
+		}
+
+		throw new \InvalidArgumentException(sprintf('Expected argument of type "%s" or "%s", but "%s" given.',
+				CacheItemPoolInterface::class,
+				CacheInterface::class,
+				is_object($cache) ? get_class($cache) : gettype($cache)));
 	}
 
 	public function clear() {
