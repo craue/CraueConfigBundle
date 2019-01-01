@@ -72,6 +72,13 @@ craue_config_settings_modify:
     _controller: Craue\ConfigBundle\Controller\SettingsController::modifyAction
 ```
 
+Some CSS is needed to render the form correctly. Install the assets in your project:
+
+```sh
+# in a shell
+php bin/console assets:install --symlink web
+```
+
 # Usage
 
 ## Defining settings
