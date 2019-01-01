@@ -7,7 +7,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Configuration for the bundle.
+ * Semantic bundle configuration.
  *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2019 Christian Raue
