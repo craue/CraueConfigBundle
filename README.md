@@ -37,16 +37,16 @@ public function registerBundles() {
 Preferably you do this by calling
 
 ```sh
-# in a shell (run `bin/console` instead of `app/console` if your project is based on Symfony 3)
-php app/console doctrine:migrations:diff
-php app/console doctrine:migrations:migrate
+# in a shell
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
 ```
 
 or
 
 ```sh
-# in a shell (run `bin/console` instead of `app/console` if your project is based on Symfony 3)
-php app/console doctrine:schema:update
+# in a shell
+php bin/console doctrine:schema:update
 ```
 
 or however you like.
@@ -141,8 +141,8 @@ done, `CraueConfigBundle` will automatically cache settings (using the built-in 
 Keep in mind to clear the cache (if needed) after modifying settings outside of your app (e.g. by Doctrine migrations):
 
 ```sh
-# in a shell (run `bin/console` instead of `app/console` if your project is based on Symfony 3)
-php app/console doctrine:cache:clear craue_config_cache
+# in a shell
+php bin/console doctrine:cache:clear craue_config_cache
 ```
 
 ## Cache implementation: DoctrineCacheBundle
