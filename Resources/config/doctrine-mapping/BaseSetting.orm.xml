@@ -5,10 +5,9 @@
 	License: http://opensource.org/licenses/mit-license.php MIT License
 -->
 <doctrine-mapping
-	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-
+		xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 	<mapped-superclass name="Craue\ConfigBundle\Entity\BaseSetting">
 		<id name="name" column="name" type="string" />
 		<!-- Define the mapping for field "value" only in child classes to allow easy overriding. -->
