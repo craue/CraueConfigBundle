@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.2.0] – 2019-01-06
+
+- added support for Symfony Cache component's PSR-16 Simple Cache
+- dropped support for Symfony 2.7, 2.8, 3.0, 3.1, 3.2, 3.3, 4.0
+- dropped support for PHP 5.3, 5.4, 5.5, 5.6
+- dropped support for HHVM
+
+[2.2.0]: https://github.com/craue/CraueConfigBundle/compare/2.1.0...2.2.0
+
 ## [2.1.0] – 2018-01-02
 
 - [#41]:
