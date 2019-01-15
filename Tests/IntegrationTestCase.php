@@ -67,8 +67,8 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * {@inheritDoc}
 	 */
 	protected static function createKernel(array $options = []) {
-		$environment = isset($options['environment']) ? $options['environment'] : 'test';
-		$configFile = isset($options['config']) ? $options['config'] : 'config.yml';
+		$environment = $options['environment'] ?? 'test';
+		$configFile = $options['config'] ?? 'config.yml';
 
 		return new AppKernel($environment, $configFile);
 	}
