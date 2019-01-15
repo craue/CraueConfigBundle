@@ -80,8 +80,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @return Client
 	 */
 	protected function initClient($requiredExtension, array $options = []) {
-		if ($requiredExtension !== null && !in_array($requiredExtension, get_loaded_extensions(), true)) {
-			// !extension_loaded($requiredExtension) doesn't seem to work with HHVM as it returns false even though the extension is loaded
+		if ($requiredExtension !== null && !extension_loaded($requiredExtension)) {
 			$this->markTestSkipped(sprintf('Extension "%s" is not loaded.', $requiredExtension));
 		}
 
