@@ -150,7 +150,7 @@ class Config {
 	}
 
 	/**
-	 * @param SettingInterface[] $entities
+	 * @param SettingInterface[] $settings
 	 * @return array with name => value
 	 */
 	protected function getAsNamesAndValues(array $settings) {

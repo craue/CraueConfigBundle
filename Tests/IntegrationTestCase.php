@@ -108,7 +108,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * @param $setting SettingInterface The setting to persist.
+	 * @param SettingInterface $setting The setting to persist.
 	 * @return SettingInterface The persisted setting.
 	 */
 	protected function persistSetting(SettingInterface $setting) {
