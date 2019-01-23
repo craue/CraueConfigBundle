@@ -26,7 +26,7 @@ class Config {
 	protected $em;
 
 	/**
-	 * @var SettingRepository
+	 * @var SettingRepository|null
 	 */
 	protected $repo;
 
@@ -168,7 +168,13 @@ class Config {
 	 */
 	protected function getRepo() {
 		if ($this->repo === null) {
-			$this->repo = $this->em->getRepository($this->entityName);
+			$repo = $this->em->getRepository($this->entityName);
+
+			if (!$repo instanceof SettingRepository) {
+				throw new \RuntimeException(sprintf('Entity repository of type "%s" expected, but got "%s".', SettingRepository::class, get_class($repo)));
+			}
+
+			$this->repo = $repo;
 		}
 
 		return $this->repo;

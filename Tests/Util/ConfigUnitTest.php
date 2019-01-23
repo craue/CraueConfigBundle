@@ -244,6 +244,26 @@ class ConfigUnitTest extends TestCase {
 	}
 
 	/**
+	 * Ensure that the configured repository is returned.
+	 * @expectedException \RuntimeException
+	 * @expectedExceptionMessageRegExp /^Entity repository of type "Craue\\ConfigBundle\\Repository\\SettingRepository" expected, but got ".+"\.$/
+	 */
+	public function testGetRepo_configuredRepository() {
+		$config = new Config();
+		$method = new \ReflectionMethod($config, 'getRepo');
+		$method->setAccessible(true);
+
+		$repo = $this->getMockBuilder(EntityRepository::class)
+			->disableOriginalConstructor()
+			->getMock()
+		;
+
+		$config->setEntityManager($this->createEntityManagerMock($repo));
+
+		$method->invoke($config);
+	}
+
+	/**
 	 * Ensure that the repository is fetched only once from the EntityManager, but again if it's changed at runtime.
 	 */
 	public function testGetRepo_changedEntityManager() {
@@ -366,7 +386,7 @@ class ConfigUnitTest extends TestCase {
 	}
 
 	/**
-	 * @param MockObject|EntityRepository|null $repo
+	 * @param EntityRepository|null $repo
 	 * @return MockObject|EntityManager
 	 */
 	protected function createEntityManagerMock(EntityRepository $repo = null) {
