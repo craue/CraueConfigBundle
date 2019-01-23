@@ -17,9 +17,7 @@ class SettingRepository extends EntityRepository {
 	 * @return SettingInterface[] Array of settings, indexed by name.
 	 */
 	public function findByNames(array $names) {
-		return $this->getEntityManager()->createQueryBuilder()
-			->select('s')
-			->from($this->getEntityName(), 's', 's.name')
+		return $this->createQueryBuilder('s', 's.name')
 			->where('s.name IN (:names)')
 			->getQuery()
 			->execute(['names' => $names])
