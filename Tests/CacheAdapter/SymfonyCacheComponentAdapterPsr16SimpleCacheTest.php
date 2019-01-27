@@ -19,6 +19,16 @@ class SymfonyCacheComponentAdapterPsr16SimpleCacheTest extends BaseCacheAdapterT
 		return new SymfonyCacheComponentAdapter(new ArrayCache());
 	}
 
+	/**
+	 * @expectedDeprecation Configuring a cache of type Psr\SimpleCache\CacheInterface is deprecated since CraueConfigBundle 2.2.1. Use Psr\Cache\CacheItemPoolInterface instead.
+	 */
+	public function testOperations() {
+		parent::testOperations();
+	}
+
+	/**
+	 * @expectedDeprecation Configuring a cache of type Psr\SimpleCache\CacheInterface is deprecated since CraueConfigBundle 2.2.1. Use Psr\Cache\CacheItemPoolInterface instead.
+	 */
 	public function testSetMultiple_fails() {
 		$providerMock = $this->createMock(ArrayCache::class);
 

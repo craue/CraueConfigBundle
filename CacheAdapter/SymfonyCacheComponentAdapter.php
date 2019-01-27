@@ -26,6 +26,8 @@ class SymfonyCacheComponentAdapter implements CacheAdapterInterface {
 		}
 
 		if ($cache instanceof CacheInterface) {
+			@trigger_error(sprintf('Configuring a cache of type %s is deprecated since CraueConfigBundle 2.2.1. Use %s instead.', CacheInterface::class, CacheItemPoolInterface::class), E_USER_DEPRECATED);
+
 			// TODO remove as soon as Symfony >= 4.3 is required
 			if (!class_exists('Symfony\Component\Cache\Adapter\Psr16Adapter')) {
 				$this->cache = new SimpleCacheAdapter($cache);
