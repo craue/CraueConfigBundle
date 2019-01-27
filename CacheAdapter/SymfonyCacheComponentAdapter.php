@@ -4,6 +4,7 @@ namespace Craue\ConfigBundle\CacheAdapter;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Cache\Adapter\Psr16Adapter;
 use Symfony\Component\Cache\Adapter\SimpleCacheAdapter;
 
 /**
@@ -25,7 +26,13 @@ class SymfonyCacheComponentAdapter implements CacheAdapterInterface {
 		}
 
 		if ($cache instanceof CacheInterface) {
-			$this->cache = new SimpleCacheAdapter($cache);
+			// TODO remove as soon as Symfony >= 4.3 is required
+			if (!class_exists('Symfony\Component\Cache\Adapter\Psr16Adapter')) {
+				$this->cache = new SimpleCacheAdapter($cache);
+				return;
+			}
+
+			$this->cache = new Psr16Adapter($cache);
 			return;
 		}
 

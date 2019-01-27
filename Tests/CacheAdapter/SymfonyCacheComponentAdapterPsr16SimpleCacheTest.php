@@ -6,6 +6,7 @@ use Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter;
 use Symfony\Component\Cache\Simple\ArrayCache;
 
 /**
+ * @group legacy
  * @group unit
  *
  * @author Christian Raue <christian.raue@gmail.com>
