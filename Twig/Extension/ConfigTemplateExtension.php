@@ -3,13 +3,16 @@
 namespace Craue\ConfigBundle\Twig\Extension;
 
 use Craue\ConfigBundle\Util\Config;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2019 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ConfigTemplateExtension extends \Twig_Extension {
+class ConfigTemplateExtension extends AbstractExtension {
 
 	/**
 	 * @var string[]
@@ -47,7 +50,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 */
 	public function getFilters() {
 		return [
-			new \Twig_SimpleFilter('craue_sortSections', [$this, 'sortSections']),
+			new TwigFilter('craue_sortSections', [$this, 'sortSections']),
 		];
 	}
 
@@ -56,7 +59,7 @@ class ConfigTemplateExtension extends \Twig_Extension {
 	 */
 	public function getFunctions() {
 		return [
-			new \Twig_SimpleFunction('craue_setting', [$this, 'getSetting']),
+			new TwigFunction('craue_setting', [$this, 'getSetting']),
 		];
 	}
 

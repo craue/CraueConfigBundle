@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Twig\Environment;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -154,7 +155,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * @return \Twig_Environment
+	 * @return Environment
 	 */
 	protected function getTwig() {
 		return $this->getService('twig');

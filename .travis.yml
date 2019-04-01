@@ -7,7 +7,7 @@ php:
   - 7.3
 
 env:
-  - SYMFONY_VERSION='3.4.*'
+  - SYMFONY_VERSION='3.4.*' SYMFONY_DEPRECATIONS_HELPER='1'
 
 stages:
   - smoke test 🕵️
