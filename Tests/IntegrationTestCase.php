@@ -8,6 +8,7 @@ use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Twig\Environment;
 
@@ -17,6 +18,11 @@ use Twig\Environment;
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 abstract class IntegrationTestCase extends WebTestCase {
+
+	/**
+	 * @var Client|KernelBrowser|null
+	 */
+	protected static $client;
 
 	const PLATFORM_MYSQL = 'mysql';
 	const PLATFORM_SQLITE = 'sqlite';
@@ -78,14 +84,13 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * Initializes a client and prepares the database.
 	 * @param string|null $requiredExtension Required PHP extension.
 	 * @param array $options Options for creating the client.
-	 * @return Client
 	 */
 	protected function initClient($requiredExtension, array $options = []) {
 		if ($requiredExtension !== null && !extension_loaded($requiredExtension)) {
 			$this->markTestSkipped(sprintf('Extension "%s" is not loaded.', $requiredExtension));
 		}
 
-		$client = static::createClient($options);
+		static::$client = static::createClient($options);
 		$environment = static::$kernel->getEnvironment();
 
 		// Avoid completely rebuilding the database for each test. Create it only once per environment. After that, cleaning it is enough.
@@ -95,8 +100,6 @@ abstract class IntegrationTestCase extends WebTestCase {
 		} else {
 			$this->removeAllSettings();
 		}
-
-		return $client;
 	}
 
 	protected function rebuildDatabase() {
@@ -170,23 +173,21 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * @param Client $client
 	 * @param string $route
 	 * @param array $parameters
 	 * @return string URL
 	 */
-	protected function url(Client $client, $route, array $parameters = []) {
-		return $client->getContainer()->get('router')->generate($route, $parameters);
+	protected function url($route, array $parameters = []) {
+		return $this->getService('router')->generate($route, $parameters);
 	}
 
 	/**
-	 * @param Client $client
 	 * @param string $expectedTargetUrl
 	 */
-	protected function assertRedirect(Client $client, $expectedTargetUrl) {
-		// don't just check with $client->getResponse()->isRedirect() to know the actual URL on failure
-		$this->assertEquals(302, $client->getResponse()->getStatusCode());
-		$this->assertContains($expectedTargetUrl, $client->getResponse()->headers->get('Location'));
+	protected function assertRedirect($expectedTargetUrl) {
+		// don't just check with static::$client->getResponse()->isRedirect() to know the actual URL on failure
+		$this->assertEquals(302, static::$client->getResponse()->getStatusCode());
+		$this->assertContains($expectedTargetUrl, static::$client->getResponse()->headers->get('Location'));
 	}
 
 }

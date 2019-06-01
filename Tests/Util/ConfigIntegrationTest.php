@@ -22,14 +22,13 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * @dataProvider dataCacheUsage
 	 */
 	public function testCacheUsage($platform, $config, $requiredExtension, $environment) {
-		$client = $this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
-		$container = $client->getContainer();
+		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
 		$this->persistSetting(Setting::create('name', 'value'));
 
-		$container->get('craue_config')->all();
+		$this->getService('craue_config')->all();
 
-		$this->assertTrue($container->get('craue_config_cache_adapter')->has('name'));
+		$this->assertTrue($this->getService('craue_config_cache_adapter')->has('name'));
 	}
 
 	public function dataCacheUsage() {
@@ -49,10 +48,10 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * @dataProvider dataCustomEntity
 	 */
 	public function testCustomEntity($platform, $config, $requiredExtension, $environment) {
-		$client = $this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
+		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$customSetting = $this->persistSetting(CustomSetting::create('name1', 'value1', 'section1', 'comment1'));
 
-		$customConfig = $client->getContainer()->get('craue_config');
+		$customConfig = $this->getService('craue_config');
 		$this->assertInstanceOf(CustomConfig::class, $customConfig);
 
 		$fetchedSetting = $customConfig->getRawSetting('name1');
