@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1] – 2019-06-01
+
+- deprecated support for Symfony Cache component's PSR-16 Simple Cache
+- code updates to avoid deprecation notices
+
+[2.2.1]: https://github.com/craue/CraueConfigBundle/compare/2.2.0...2.2.1
+
 ## [2.2.0] – 2019-01-06
 
 - added support for Symfony Cache component's PSR-16 Simple Cache
