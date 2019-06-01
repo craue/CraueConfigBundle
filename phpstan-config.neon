@@ -1,0 +1,10 @@
+parameters:
+	level: 4
+	paths:
+		- %currentWorkingDirectory%
+	excludes_analyse:
+		- %currentWorkingDirectory%/Tests/*
+		- %currentWorkingDirectory%/vendor/*
+	ignoreErrors:
+		- '#^Call to an undefined method Psr\\Container\\ContainerInterface::getParameter\(\)\.$#'
+		- '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\)\.$#'
