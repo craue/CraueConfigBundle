@@ -6,6 +6,7 @@ use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Util\CustomConfig;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * @group integration
@@ -99,6 +100,22 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 		$this->persistSetting(CustomSetting::create('name1'));
 		$this->persistSetting(CustomSetting::create('name1'));
+	}
+
+	/**
+	 * Ensure that the database table is only created for the custom entity, but not for the bundle's original one.
+	 *
+	 * @dataProvider dataCustomEntity
+	 */
+	public function testCustomEntityTableCreation($platform, $config, $requiredExtension, $environment) {
+		$this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
+
+		$em = $this->getEntityManager();
+		$schemaTool = new SchemaTool($em);
+		$schema = $schemaTool->getSchemaFromMetadata($em->getMetadataFactory()->getAllMetadata());
+
+		$this->assertTrue($schema->hasTable('craue_config_setting_custom'));
+		$this->assertFalse($schema->hasTable('craue_config_setting'));
 	}
 
 }
