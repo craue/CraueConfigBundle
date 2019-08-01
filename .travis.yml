@@ -17,7 +17,7 @@ jobs:
   include:
     - stage: smoke test 🕵️
       php: 7.0
-      env: DEPS='lowest' SYMFONY_DEPRECATIONS_HELPER='832'
+      env: DEPS='lowest' SYMFONY_DEPRECATIONS_HELPER='850'
     -
       php: 7.3
       env: DEPS='unmodified' WITH_STATIC_ANALYSIS='yes'
