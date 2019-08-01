@@ -68,6 +68,9 @@ script:
   # upload code coverage data
   - travis_retry wget -q https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar && travis_retry php php-coveralls.phar -v
 
+services:
+  - mysql
+
 notifications:
   email:
     on_success: always
