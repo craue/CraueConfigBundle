@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0] – 2019-08-01
+
+- [#50]: prevent creating the default table when using a custom entity
+
+[#50]: https://github.com/craue/CraueConfigBundle/issues/50
+[2.3.0]: https://github.com/craue/CraueConfigBundle/compare/2.2.1...2.3.0
+
 ## [2.2.1] – 2019-06-01
 
 - deprecated support for Symfony Cache component's PSR-16 Simple Cache
