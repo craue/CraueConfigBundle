@@ -11,8 +11,16 @@ use Doctrine\Common\Cache\ArrayCache;
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2019 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * TODO remove as soon as Symfony >= 5.0 is required
  */
 class DoctrineCacheBundleAdapterTest extends BaseCacheAdapterTest {
+
+	protected function setUp() {
+		if (!class_exists(\Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class)) {
+			$this->markTestSkipped('DoctrineCacheBundle is not available.');
+		}
+	}
 
 	protected function getAdapter() {
 		return new DoctrineCacheBundleAdapter(new ArrayCache());

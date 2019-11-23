@@ -28,4 +28,8 @@ if [ -n "${WITH_STATIC_ANALYSIS:-}" ]; then
 	composer require --no-update --dev phpstan/phpstan-shim
 fi
 
+if [ -n "${WITH_DOCTRINE_CACHE_BUNDLE:-}" ]; then
+	composer require --no-update --dev "doctrine/doctrine-cache-bundle:^1.3.5"
+fi
+
 composer update ${COMPOSER_UPDATE_ARGS:-}

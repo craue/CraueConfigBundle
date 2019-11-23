@@ -116,14 +116,18 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	}
 
 	public function dataModifyAction_changeValue_cacheUsage() {
-		return array_merge(
-			self::duplicateTestDataForEachPlatform([
+		$testData = self::duplicateTestDataForEachPlatform([
+			['cache_SymfonyCacheComponent_filesystem'],
+		], 'config_cache_SymfonyCacheComponent_filesystem.yml');
+
+		// TODO remove as soon as Symfony >= 5.0 is required
+		if (class_exists(\Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class)) {
+			$testData = array_merge($testData, self::duplicateTestDataForEachPlatform([
 				['cache_DoctrineCacheBundle_file_system'],
-			], 'config_cache_DoctrineCacheBundle_file_system.yml'),
-			self::duplicateTestDataForEachPlatform([
-				['cache_SymfonyCacheComponent_filesystem'],
-			], 'config_cache_SymfonyCacheComponent_filesystem.yml')
-		);
+			], 'config_cache_DoctrineCacheBundle_file_system.yml'));
+		}
+
+		return $testData;
 	}
 
 	/**

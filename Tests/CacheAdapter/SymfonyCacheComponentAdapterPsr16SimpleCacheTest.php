@@ -4,6 +4,7 @@ namespace Craue\ConfigBundle\Tests\CacheAdapter;
 
 use Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter;
 use Symfony\Component\Cache\Simple\ArrayCache;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @group legacy
@@ -12,8 +13,16 @@ use Symfony\Component\Cache\Simple\ArrayCache;
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2019 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * TODO remove as soon as Symfony >= 5.0 is required
  */
 class SymfonyCacheComponentAdapterPsr16SimpleCacheTest extends BaseCacheAdapterTest {
+
+	protected function setUp() {
+		if (!class_exists(ArrayCache::class)) {
+			$this->markTestSkipped(sprintf('%s is not available in Symfony %s.', ArrayCache::class, Kernel::VERSION));
+		}
+	}
 
 	protected function getAdapter() {
 		return new SymfonyCacheComponentAdapter(new ArrayCache());

@@ -8,8 +8,8 @@ use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 use Twig\Environment;
 
 /**
@@ -20,7 +20,8 @@ use Twig\Environment;
 abstract class IntegrationTestCase extends WebTestCase {
 
 	/**
-	 * @var Client|KernelBrowser|null
+	 * @var AbstractBrowser|Client|null
+	 * TODO remove Client type as soon as Symfony >= 4.3 is required
 	 */
 	protected static $client;
 
