@@ -18,6 +18,27 @@ use Doctrine\ORM\Tools\SchemaTool;
 class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
+	 * Ensure that the code works with a real (i.e. not mocked) entity manager.
+	 *
+	 * @dataProvider getPlatformConfigs
+	 */
+	public function testWithRealEntityManager($platform, $config, $requiredExtension) {
+		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
+
+		$this->persistSetting(Setting::create('name1'));
+		$this->persistSetting(Setting::create('name2'));
+
+		$c = $this->getService('craue_config');
+
+		$c->set('name1', 'value1');
+		$this->assertSame('value1', $c->get('name1'));
+
+		$newValues = ['name1' => 'new-value1', 'name2' => 'new-value2'];
+		$c->setMultiple($newValues);
+		$this->assertEquals($newValues, $c->all());
+	}
+
+	/**
 	 * Ensure that the configured cache is actually used.
 	 *
 	 * @dataProvider dataCacheUsage

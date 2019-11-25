@@ -97,7 +97,7 @@ class Config {
 		}
 
 		$setting->setValue($value);
-		$this->em->flush($setting);
+		$this->em->flush();
 
 		$this->cache->set($name, $value);
 	}
