@@ -27,9 +27,6 @@ jobs:
       env: SYMFONY_VERSION='3.4.*' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=0'
     -
       php: 7.3
-      env: SYMFONY_VERSION='4.1.*' WITH_DOCTRINE_CACHE_BUNDLE='yes'
-    -
-      php: 7.3
       env: SYMFONY_VERSION='4.2.*' WITH_DOCTRINE_CACHE_BUNDLE='yes'
     -
       php: 7.3
