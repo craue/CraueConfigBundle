@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0] – 2019-12-03
+
+- added support for Symfony 5.*
+- dropped support for Symfony 4.1
+
+[2.4.0]: https://github.com/craue/CraueConfigBundle/compare/2.3.0...2.4.0
+
 ## [2.3.0] – 2019-08-01
 
 - [#50]: prevent creating the default table when using a custom entity
