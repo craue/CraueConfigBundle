@@ -9,7 +9,7 @@ use Doctrine\Common\Cache\ArrayCache;
  * @group unit
  *
  * @author Christian Raue <christian.raue@gmail.com>
- * @copyright 2011-2019 Christian Raue
+ * @copyright 2011-2020 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  *
  * TODO remove as soon as Symfony >= 5.0 is required
