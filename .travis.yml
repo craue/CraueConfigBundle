@@ -10,7 +10,7 @@ jobs:
       php: 7.0
       env: DEPS='lowest' SYMFONY_DEPRECATIONS_HELPER='872' WITH_DOCTRINE_CACHE_BUNDLE='yes'
     -
-      php: 7.3
+      php: 7.4
       env: DEPS='unmodified' WITH_STATIC_ANALYSIS='yes'
 
     - stage: test
