@@ -25,7 +25,7 @@ case "${DEPS:-}" in
 esac
 
 if [ -n "${WITH_STATIC_ANALYSIS:-}" ]; then
-	composer require --no-update --dev phpstan/phpstan-shim
+	composer require --no-update --dev "phpstan/phpstan:^0.12"
 fi
 
 if [ -n "${WITH_DOCTRINE_CACHE_BUNDLE:-}" ]; then
