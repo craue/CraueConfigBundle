@@ -1,5 +1,6 @@
 imports:
   - { resource: '@IntegrationTestBundle/Resources/config/controller.xml' }
+  - { resource: config_hacks.php }
 
 doctrine:
   dbal:
