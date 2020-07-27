@@ -6,6 +6,8 @@ use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Form\ModifySettingsForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -14,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SettingsController extends AbstractController {
 
-	public function modifyAction(Request $request) {
+	public function modifyAction(Request $request, Environment $twig) {
 		$em = $this->getDoctrine()->getManager();
 		$repo = $em->getRepository($this->container->getParameter('craue_config.entity_name'));
 		$allStoredSettings = $repo->findAll();
@@ -46,10 +48,10 @@ class SettingsController extends AbstractController {
 			}
 		}
 
-		return $this->render('@CraueConfig/Settings/modify.html.twig', [
+		return new Response($twig->render('@CraueConfig/Settings/modify.html.twig', [
 			'form' => $form->createView(),
 			'sections' => $this->getSections($allStoredSettings),
-		]);
+		]));
 	}
 
 	/**
