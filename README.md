@@ -103,41 +103,50 @@ migration.
 ## Managing settings' values
 
 If you added the route described above you can manage the values of all defined settings in a simple form.
-By default, you can access that form by browsing to `app_dev.php/settings/modify`.
+By default, you can access that form by browsing to `/settings/modify`.
 But you probably want to limit access to this form in your security configuration.
 
-## Reading settings
+## Reading and writing settings
 
-The bundle provides a service called `craue_config`. Inside of a controller you can call
-
-```php
-$this->get('craue_config')->get('name-of-a-setting')
-```
-
-to retrieve the value of the setting `name-of-a-setting`. Furthermore, you can call
+For accessing settings, the bundle provides the service `Craue\ConfigBundle\Util\Config`.
+To use it directly in a controller, either add an autowired type-hinted argument to the action...
 
 ```php
-$this->get('craue_config')->all()
+// in src/Controller/MyController.php
+use Craue\ConfigBundle\Util\Config;
+
+public function indexAction(Config $config) {
+	// use $config
+}
 ```
 
-to get an associative array of all defined settings and their values.
+...or let your controller extend `Symfony\Bundle\FrameworkBundle\Controller\AbstractController` and make the
+service alias `craue_config` available by defining `getSubscribedServices`:
 
 ```php
-$this->get('craue_config')->getBySection('name-of-a-section')
+// in src/Controller/MyController.php
+use Craue\ConfigBundle\Util\Config;
+
+public function indexAction() {
+	// use $this->get('craue_config')
+}
+
+public static function getSubscribedServices() {
+	return array_merge(parent::getSubscribedServices(), [
+		'craue_config' => Config::class,
+	]);
+}
 ```
 
-will fetch only settings with the specified section (or those without a section if explicitly passing `null` for the name).
+The service defines the following methods:
 
-## Writing settings
+- `all()` - get an associative array of all defined settings and their values
+- `get($name)` - get the value of the specified setting
+- `getBySection($section)` - like `all()`, but get only settings within the specified section (or those without a section if explicitly passing `null`)
+- `set($name, $value)` - set the value of the specified setting
+- `setMultiple([$name1 => $value1, $name2 => $value2])` - set values for multiple settings at once
 
-With the same service you can set new values of settings:
-
-```php
-$this->get('craue_config')->set('name-of-a-setting', 'new value');
-$this->get('craue_config')->setMultiple(['setting-1' => 'foo', 'setting-2' => 'bar']);
-```
-
-Keep in mind that the setting has to be present, or an exception will be thrown.
+Keep in mind that each setting has to be present, or an exception will be thrown.
 
 ## Usage in Twig templates
 
