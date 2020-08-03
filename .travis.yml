@@ -8,7 +8,7 @@ jobs:
   include:
     - stage: smoke test 🕵️
       php: 7.0
-      env: DEPS='lowest' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=0&max[total]=872'
+      env: DEPS='lowest' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=0&max[total]=1010'
     -
       php: 7.4
       env: DEPS='unmodified' WITH_STATIC_ANALYSIS='yes'
@@ -55,6 +55,9 @@ before_script:
   - mysql -u root -e 'GRANT USAGE ON *.* TO "travis"@"localhost"; DROP USER "travis"@"localhost";'
   - mysql -u root -e 'CREATE USER "travis"@"localhost" IDENTIFIED BY PASSWORD "";'
   - mysql -u root -e 'GRANT ALL ON test.* TO "travis"@"localhost"; FLUSH PRIVILEGES;'
+  # set up Redis
+  - echo "extension=redis.so" > redis.ini
+  - phpenv config-add redis.ini
   # create folder for code coverage data
   - mkdir -p build/logs
 
@@ -70,6 +73,7 @@ script:
 
 services:
   - mysql
+  - redis-server
 
 notifications:
   email:

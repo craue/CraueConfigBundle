@@ -21,6 +21,7 @@
 		</whitelist>
 	</filter>
 	<php>
+		<env name="REDIS_DSN" value="redis://localhost:6379" />
 		<env name="SHELL_VERBOSITY" value="-1" />
 		<!--
 		<env name="CACHE_DIR" value="/path/to/your/cache/" />

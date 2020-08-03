@@ -58,6 +58,12 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 			['cache_SymfonyCacheComponent_filesystem'],
 		], 'config_cache_SymfonyCacheComponent_filesystem.yml');
 
+		if (!empty($_ENV['REDIS_DSN'])) {
+			$testData = array_merge($testData, self::duplicateTestDataForEachPlatform([
+				['cache_SymfonyCacheComponent_redis'],
+			], 'config_cache_SymfonyCacheComponent_redis.yml'));
+		}
+
 		// TODO remove as soon as Symfony >= 5.0 is required
 		if (class_exists(\Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class)) {
 			$testData = array_merge($testData, self::duplicateTestDataForEachPlatform([

@@ -1,0 +1,18 @@
+imports:
+  - { resource: config.yml }
+
+parameters:
+  craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter
+
+services:
+  my_redis_provider:
+    class: \Redis
+    factory: ['Symfony\Component\Cache\Adapter\RedisAdapter', 'createConnection']
+    arguments:
+      - '%REDIS_DSN%'
+  craue_config_cache_provider:
+    class: Symfony\Component\Cache\Adapter\RedisAdapter
+    public: false
+    arguments:
+      - '@my_redis_provider'
+      - 'craue_config'
