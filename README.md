@@ -164,44 +164,48 @@ Keep in mind to clear the cache (if needed) after modifying settings outside of 
 php bin/console doctrine:cache:clear craue_config_cache
 ```
 
-## Cache implementation: DoctrineCacheBundle
+<details>
+  <summary>Cache implementation: DoctrineCacheBundle</summary>
 
-Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache provider with the
-alias `craue_config_cache_provider`:
+  Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache provider with the
+  alias `craue_config_cache_provider`:
 
-```yaml
-# in app/config/config.yml
-parameters:
-  craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\DoctrineCacheBundleAdapter
+  ```yaml
+  # in app/config/config.yml
+  parameters:
+    craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\DoctrineCacheBundleAdapter
 
-doctrine_cache:
-  providers:
-    craue_config_cache:
-      apc: ~
-      namespace: craue_config
-      aliases:
-        - craue_config_cache_provider
-```
+  doctrine_cache:
+    providers:
+      craue_config_cache:
+        apc: ~
+        namespace: craue_config
+        aliases:
+          - craue_config_cache_provider
+  ```
+</details>
 
-## Cache implementation: Symfony Cache component
+<details>
+  <summary>Cache implementation: Symfony Cache component</summary>
 
-Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache pool with the
-service id `craue_config_cache_provider`:
+  Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache pool with the
+  service id `craue_config_cache_provider`:
 
-```yaml
-# in app/config/config.yml
-parameters:
-  craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter
+  ```yaml
+  # in app/config/config.yml
+  parameters:
+    craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter
 
-services:
-  craue_config_cache_provider:
-    class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-    public: false
-    arguments:
-      - 'craue_config'
-      - 0
-      - '%kernel.cache_dir%'
-```
+  services:
+    craue_config_cache_provider:
+      class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+      public: false
+      arguments:
+        - 'craue_config'
+        - 0
+        - '%kernel.cache_dir%'
+  ```
+</details>
 
 # Customization
 
