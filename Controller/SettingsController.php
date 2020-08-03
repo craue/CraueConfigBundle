@@ -5,6 +5,7 @@ namespace Craue\ConfigBundle\Controller;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Form\ModifySettingsForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -16,7 +17,7 @@ use Twig\Environment;
  */
 class SettingsController extends AbstractController {
 
-	public function modifyAction(Request $request, Environment $twig) {
+	public function modifyAction(Request $request, FormFactoryInterface $formFactory, Environment $twig) {
 		$em = $this->getDoctrine()->getManager();
 		$repo = $em->getRepository($this->container->getParameter('craue_config.entity_name'));
 		$allStoredSettings = $repo->findAll();
@@ -26,7 +27,7 @@ class SettingsController extends AbstractController {
 			'settings' => $allStoredSettings,
 		];
 
-		$form = $this->createForm(ModifySettingsForm::class, $formData);
+		$form = $formFactory->create(ModifySettingsForm::class, $formData);
 
 		if ($request->getMethod() === 'POST') {
 			$form->handleRequest($request);
