@@ -29,5 +29,8 @@
 		</service>
 
 		<service id="craue_config" alias="craue_config_default" public="true" />
+
+		<!-- autowiring alias -->
+		<service id="Craue\ConfigBundle\Util\Config" alias="craue_config_default" public="false" />
 	</services>
 </container>
