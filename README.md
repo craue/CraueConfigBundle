@@ -160,7 +160,7 @@ The Twig extension in this bundle supports reading settings directly in your tem
 
 To reduce the number of database queries, you can set up a cache for settings. First, you have to choose which cache
 implementation you'd like to use. Currently, there are adapters available for:
-- [DoctrineCacheBundle](https://symfony.com/doc/current/bundles/DoctrineCacheBundle/index.html)
+- [DoctrineCacheBundle](https://github.com/doctrine/DoctrineCacheBundle)
 - [Symfony Cache component](https://symfony.com/doc/current/components/cache.html)
 
 Refer to the documentation of each implementation for details and read on in the corresponding section below. When
