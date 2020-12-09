@@ -32,14 +32,12 @@ class ConfigUnitTest extends TestCase {
 		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
 	}
 
-	/**
-	 * @expectedException \RuntimeException
-	 * @expectedExceptionMessage Setting "oh-no" couldn't be found.
-	 */
 	public function testGet_nonexistentSetting() {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
 
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Setting "oh-no" couldn\'t be found.');
 		$config->get('oh-no');
 	}
 
@@ -116,14 +114,12 @@ class ConfigUnitTest extends TestCase {
 		$config->set($setting->getName(), $newValue);
 	}
 
-	/**
-	 * @expectedException \RuntimeException
-	 * @expectedExceptionMessage Setting "oh-no" couldn't be found.
-	 */
 	public function testSet_nonexistentSetting() {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
 
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Setting "oh-no" couldn\'t be found.');
 		$config->set('oh-no', 'new-value');
 	}
 
@@ -166,16 +162,14 @@ class ConfigUnitTest extends TestCase {
 		$config->setMultiple([]);
 	}
 
-	/**
-	 * @expectedException \RuntimeException
-	 * @expectedExceptionMessage Setting "oh-no" couldn't be found.
-	 */
 	public function testSetMultiple_nonexistentSetting() {
 		$config = new Config();
 		$setting = Setting::create('name1');
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findByNames' => [$setting->getName() => $setting]])));
 
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Setting "oh-no" couldn\'t be found.');
 		$config->setMultiple([
 			$setting->getName() => 'new-value1',
 			'oh-no' => 'new-value2',
@@ -245,8 +239,6 @@ class ConfigUnitTest extends TestCase {
 
 	/**
 	 * Ensure that the configured repository is returned.
-	 * @expectedException \RuntimeException
-	 * @expectedExceptionMessageRegExp /^Entity repository of type "Craue\\ConfigBundle\\Repository\\SettingRepository" expected, but got ".+"\.$/
 	 */
 	public function testGetRepo_configuredRepository() {
 		$config = new Config();
@@ -260,6 +252,8 @@ class ConfigUnitTest extends TestCase {
 
 		$config->setEntityManager($this->createEntityManagerMock($repo));
 
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessageMatches(sprintf('/^Entity repository of type "%s" expected, but got ".+"\.$/', preg_quote(SettingRepository::class)));
 		$method->invoke($config);
 	}
 

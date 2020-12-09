@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class SymfonyCacheComponentAdapterPsr16SimpleCacheTest extends BaseCacheAdapterTest {
 
-	protected function setUp() {
+	protected function setUp() : void {
 		if (!class_exists(ArrayCache::class)) {
 			$this->markTestSkipped(sprintf('%s is not available in Symfony %s.', ArrayCache::class, Kernel::VERSION));
 		}

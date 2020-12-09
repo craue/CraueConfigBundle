@@ -11,15 +11,15 @@
 			<directory suffix="Test.php">Tests</directory>
 		</testsuite>
 	</testsuites>
-	<filter>
-		<whitelist>
+	<coverage>
+		<include>
 			<directory suffix=".php">.</directory>
-			<exclude>
-				<directory suffix=".php">Tests</directory>
-				<directory suffix=".php">vendor</directory>
-			</exclude>
-		</whitelist>
-	</filter>
+		</include>
+		<exclude>
+			<directory suffix=".php">Tests</directory>
+			<directory suffix=".php">vendor</directory>
+		</exclude>
+	</coverage>
 	<php>
 		<env name="REDIS_DSN" value="redis://localhost:6379" />
 		<env name="SHELL_VERBOSITY" value="-1" />

@@ -193,7 +193,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	protected function assertRedirect($expectedTargetUrl) {
 		// don't just check with static::$client->getResponse()->isRedirect() to know the actual URL on failure
 		$this->assertEquals(302, static::$client->getResponse()->getStatusCode());
-		$this->assertContains($expectedTargetUrl, static::$client->getResponse()->headers->get('Location'));
+		$this->assertStringContainsString($expectedTargetUrl, static::$client->getResponse()->headers->get('Location'));
 	}
 
 }

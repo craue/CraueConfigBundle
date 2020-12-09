@@ -24,8 +24,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
 		$this->assertSame(200, static::$client->getResponse()->getStatusCode(), $content);
-		$this->assertContains('<div class="craue_config_settings_modify">', $content);
-		$this->assertContains('There are no settings defined yet.', $content);
+		$this->assertStringContainsString('<div class="craue_config_settings_modify">', $content);
+		$this->assertStringContainsString('There are no settings defined yet.', $content);
 	}
 
 	/**
@@ -38,16 +38,16 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
 		$this->assertSame(200, static::$client->getResponse()->getStatusCode(), $content);
-		$this->assertRegExp('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
-		$this->assertContains('<label for="craue_config_modifySettings_settings_0_value">name</label>', $content);
-		$this->assertContains('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
-		$this->assertContains('<button type="submit">apply</button>', $content);
+		$this->assertMatchesRegularExpression('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
+		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_0_value">name</label>', $content);
+		$this->assertStringContainsString('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
+		$this->assertStringContainsString('<button type="submit">apply</button>', $content);
 
 		$form = $crawler->selectButton('apply')->form();
 		static::$client->followRedirects();
 		static::$client->submit($form);
 		$content = static::$client->getResponse()->getContent();
-		$this->assertContains('<div class="notice">The settings were changed.</div>', $content);
+		$this->assertStringContainsString('<div class="notice">The settings were changed.</div>', $content);
 
 		$settings = $this->getSettingsRepo()->findAll();
 		$this->assertCount(1, $settings);
@@ -76,7 +76,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 			'craue_config_modifySettings[settings][0][value]' => 'new-value',
 		]);
 		$content = static::$client->getResponse()->getContent();
-		$this->assertContains('<div class="notice">The settings were changed.</div>', $content);
+		$this->assertStringContainsString('<div class="notice">The settings were changed.</div>', $content);
 
 		$settings = $this->getSettingsRepo()->findAll();
 		$this->assertCount(1, $settings);
@@ -151,7 +151,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		static::$client->followRedirects();
 		static::$client->submit($form);
 		$content = static::$client->getResponse()->getContent();
-		$this->assertNotContains('<div class="notice">The settings were changed.</div>', $content);
+		$this->assertStringNotContainsString('<div class="notice">The settings were changed.</div>', $content);
 	}
 
 	/**
@@ -166,8 +166,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		static::$client->enableProfiler();
 		static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
-		$this->assertContains('<legend>section no. 1</legend>', $content);
-		$this->assertContains('<label for="craue_config_modifySettings_settings_0_value">setting no. 1</label>', $content);
+		$this->assertStringContainsString('<legend>section no. 1</legend>', $content);
+		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_0_value">setting no. 1</label>', $content);
 
 		$profile = static::$client->getProfile();
 		$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
@@ -184,8 +184,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
-		$this->assertContains('<legend>section1</legend>', $content);
-		$this->assertContains('<legend>section2</legend>', $content);
+		$this->assertStringContainsString('<legend>section1</legend>', $content);
+		$this->assertStringContainsString('<legend>section2</legend>', $content);
 		$strPosField1 = strpos($content, '<label for="craue_config_modifySettings_settings_0_value">name1</label>');
 		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_1_value">name2</label>');
 		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_2_value">name3</label>');
@@ -203,8 +203,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
-		$this->assertContains('<legend>section1</legend>', $content);
-		$this->assertContains('<legend>section2</legend>', $content);
+		$this->assertStringContainsString('<legend>section1</legend>', $content);
+		$this->assertStringContainsString('<legend>section2</legend>', $content);
 		$strPosField1 = strpos($content, '<label for="craue_config_modifySettings_settings_0_value">name1</label>');
 		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_1_value">name2</label>');
 		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_2_value">name3</label>');
@@ -250,7 +250,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
-		$this->assertContains('<textarea id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]">value</textarea>', $content);
+		$this->assertStringContainsString('<textarea id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]">value</textarea>', $content);
 
 		$form = $crawler->selectButton('apply')->form();
 		static::$client->followRedirects();

@@ -14,7 +14,7 @@ use Symfony\Component\Cache\Adapter\RedisAdapter;
  */
 class SymfonyCacheComponentAdapterRedisCacheTest extends BaseCacheAdapterTest {
 
-	protected function setUp() {
+	protected function setUp() : void {
 		if (empty($_ENV['REDIS_DSN'])) {
 			$this->markTestSkipped('Environment variable REDIS_DSN is not set.');
 		}

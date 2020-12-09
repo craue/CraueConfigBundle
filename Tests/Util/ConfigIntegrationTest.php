@@ -6,6 +6,7 @@ use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Util\CustomConfig;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**
@@ -101,10 +102,6 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * Ensure that the database enforces a unique name for settings.
 	 *
 	 * @dataProvider getPlatformConfigs
-	 *
-	 * @expectedException \Doctrine\DBAL\Exception\UniqueConstraintViolationException
-	 * @expectedExceptionMessage An exception occurred while executing 'INSERT INTO craue_config_setting
-	 * @expectedExceptionMessage Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'
 	 */
 	public function testDefaultEntityNameUnique($platform, $config, $requiredExtension) {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
@@ -112,6 +109,17 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 		$this->assertSame(['name'], $this->getEntityManager()->getClassMetadata(Setting::class)->getIdentifier());
 
 		$this->persistSetting(Setting::create('name1'));
+
+		$this->expectException(UniqueConstraintViolationException::class);
+		switch ($platform) {
+			case self::PLATFORM_MYSQL:
+				$expectedErrorMessage = "Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'";
+				break;
+			case self::PLATFORM_SQLITE:
+				$expectedErrorMessage = "UNIQUE constraint failed: craue_config_setting.name";
+				break;
+		}
+		$this->expectExceptionMessageMatches(sprintf('/^%s.+%s/s', preg_quote("An exception occurred while executing 'INSERT INTO craue_config_setting"), preg_quote($expectedErrorMessage)));
 		$this->persistSetting(Setting::create('name1'));
 	}
 
@@ -119,10 +127,6 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * Ensure that the database enforces a unique name for settings with a custom entity.
 	 *
 	 * @dataProvider dataCustomEntity
-	 *
-	 * @expectedException \Doctrine\DBAL\Exception\UniqueConstraintViolationException
-	 * @expectedExceptionMessage An exception occurred while executing 'INSERT INTO craue_config_setting_custom
-	 * @expectedExceptionMessage Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'
 	 */
 	public function testCustomEntityNameUnique($platform, $config, $requiredExtension, $environment) {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
@@ -130,6 +134,17 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 		$this->assertSame(['name'], $this->getEntityManager()->getClassMetadata(CustomSetting::class)->getIdentifier());
 
 		$this->persistSetting(CustomSetting::create('name1'));
+
+		$this->expectException(UniqueConstraintViolationException::class);
+		switch ($platform) {
+			case self::PLATFORM_MYSQL:
+				$expectedErrorMessage = "Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'";
+				break;
+			case self::PLATFORM_SQLITE:
+				$expectedErrorMessage = "UNIQUE constraint failed: craue_config_setting_custom.name";
+				break;
+		}
+		$this->expectExceptionMessageMatches(sprintf('/^%s.+%s/s', preg_quote("An exception occurred while executing 'INSERT INTO craue_config_setting_custom"), preg_quote($expectedErrorMessage)));
 		$this->persistSetting(CustomSetting::create('name1'));
 	}
 

@@ -16,7 +16,7 @@ use Doctrine\Common\Cache\ArrayCache;
  */
 class DoctrineCacheBundleAdapterTest extends BaseCacheAdapterTest {
 
-	protected function setUp() {
+	protected function setUp() : void {
 		if (!class_exists(\Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class)) {
 			$this->markTestSkipped('DoctrineCacheBundle is not available.');
 		}

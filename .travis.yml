@@ -7,23 +7,17 @@ stages:
 jobs:
   include:
     - stage: smoke test 🕵️
-      php: 7.0
+      php: 7.3
       env: DEPS='lowest' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=0&max[total]=1010'
     -
-      php: 7.4
+      php: 8.0
       env: DEPS='unmodified' WITH_STATIC_ANALYSIS='yes'
 
     - stage: test
-      php: 7.0
-      env: SYMFONY_VERSION='3.4.*' WITH_DOCTRINE_CACHE_BUNDLE='yes'
-    -
-      php: 7.1
-      env: SYMFONY_VERSION='3.4.*' WITH_DOCTRINE_CACHE_BUNDLE='yes'
-    -
-      php: 7.2
+      php: 7.3
       env: SYMFONY_VERSION='3.4.*' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=0&max[direct]=0&max[indirect]=4'
     -
-      php: 7.3
+      php: 7.4
       env: SYMFONY_VERSION='3.4.*' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=0&max[direct]=0&max[indirect]=4'
     -
       php: 7.3

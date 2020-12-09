@@ -14,19 +14,17 @@ use PHPUnit\Framework\TestCase;
  */
 class SymfonyCacheComponentAdapterInvalidCacheTest extends TestCase {
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage Expected argument of type "Psr\Cache\CacheItemPoolInterface" or "Psr\SimpleCache\CacheInterface", but "NULL" given.
-	 */
 	public function testInvalidCache_null() {
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Expected argument of type "Psr\Cache\CacheItemPoolInterface" or "Psr\SimpleCache\CacheInterface", but "NULL" given.');
+
 		new SymfonyCacheComponentAdapter(null);
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage Expected argument of type "Psr\Cache\CacheItemPoolInterface" or "Psr\SimpleCache\CacheInterface", but "stdClass" given.
-	 */
 	public function testInvalidCache_stdClass() {
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Expected argument of type "Psr\Cache\CacheItemPoolInterface" or "Psr\SimpleCache\CacheInterface", but "stdClass" given.');
+
 		new SymfonyCacheComponentAdapter(new \stdClass());
 	}
 

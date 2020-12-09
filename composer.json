@@ -16,7 +16,7 @@
 		}
 	],
 	"require": {
-		"php": "~7.0",
+		"php": "^7.3|^8",
 		"doctrine/doctrine-bundle": "^1.5.1|~2.0",
 		"psr/simple-cache": "^1.0",
 		"symfony/cache": "~3.4|~4.4|~5.1",
@@ -33,9 +33,9 @@
 		"craue/translations-tests": "^1.0",
 		"doctrine/instantiator": "^1.0.5",
 		"doctrine/orm": "^2.5.14",
-		"phpunit/phpunit": "^6.5.13|^7.5.1",
+		"phpunit/phpunit": "^9.4",
 		"symfony/phpunit-bridge": "~5.2",
-		"symfony/symfony": "~3.4|~4.4|~5.1"
+		"symfony/symfony": "~3.4.23|~4.4|~5.1"
 	},
 	"minimum-stability": "stable",
 	"autoload": {
