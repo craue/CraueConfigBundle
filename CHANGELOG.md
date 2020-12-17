@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.5.0] – 2020-12-17
+
+- [#57]: added autowiring alias for `Craue\ConfigBundle\Util\Config`
+- added support for PHP 8.0
+- dropped support for PHP 7.0, 7.1, 7.2
+- dropped support for Symfony 4.2, 4.3, 5.0
+
+[#57]: https://github.com/craue/CraueConfigBundle/issues/57
+[2.5.0]: https://github.com/craue/CraueConfigBundle/compare/2.4.0...2.5.0
+
 ## [2.4.0] – 2019-12-03
 
 - added support for Symfony 5.*
