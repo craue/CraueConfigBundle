@@ -76,7 +76,7 @@ script:
 
 services:
   - mysql
-  - redis-server
+  - redis
 
 notifications:
   email:
