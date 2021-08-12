@@ -23,13 +23,10 @@ jobs:
       php: 7.3
       env: SYMFONY_VERSION='4.4.*' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[indirect]=4'
     -
-      php: 7.3
-      env: SYMFONY_VERSION='5.2.*'
-    -
-      php: 7.3
+      php: 7.4
       env: SYMFONY_VERSION='5.3.*'
     -
-      php: 7.3
+      php: 7.4
       env: SYMFONY_VERSION='5.4.*' MIN_STABILITY='dev'
   allow_failures:
     - env: SYMFONY_VERSION='5.4.*' MIN_STABILITY='dev'
