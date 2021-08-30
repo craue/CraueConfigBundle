@@ -18,6 +18,9 @@
 			<argument type="service" id="craue_config_cache_provider" on-invalid="ignore" />
 		</service>
 
+		<!-- autowiring alias -->
+		<service id="Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface" alias="craue_config_cache_adapter" public="false" />
+
 		<service id="craue_config_default" class="Craue\ConfigBundle\Util\Config" public="true">
 			<argument type="service" id="craue_config_cache_adapter" />
 			<call method="setEntityManager">
