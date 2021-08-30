@@ -10,6 +10,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
 
 /**
@@ -74,7 +75,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected static function createKernel(array $options = []) {
+	protected static function createKernel(array $options = []) : KernelInterface {
 		$environment = $options['environment'] ?? 'test';
 		$configFile = $options['config'] ?? 'config.yml';
 

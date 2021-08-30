@@ -57,7 +57,7 @@ class SettingType extends AbstractType {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getBlockPrefix() {
+	public function getBlockPrefix() : string {
 		return 'craue_config_setting';
 	}
 

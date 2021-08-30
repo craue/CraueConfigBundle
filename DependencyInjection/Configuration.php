@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getConfigTreeBuilder() {
+	public function getConfigTreeBuilder() : TreeBuilder {
 		$supportedDrivers = ['doctrine_orm'];
 
 		$treeBuilder = new TreeBuilder('craue_config');

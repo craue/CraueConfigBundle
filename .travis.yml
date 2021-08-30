@@ -9,7 +9,7 @@ jobs:
   include:
     - stage: smoke test 🕵️
       php: 7.3
-      env: DEPS='lowest' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=2&max[direct]=286&max[indirect]=753'
+      env: DEPS='lowest' WITH_DOCTRINE_CACHE_BUNDLE='yes' SYMFONY_DEPRECATIONS_HELPER='max[self]=2&max[direct]=168&max[indirect]=871'
     -
       php: 8.0
       env: DEPS='unmodified' WITH_STATIC_ANALYSIS='yes'
@@ -28,6 +28,9 @@ jobs:
       env: SYMFONY_VERSION='5.3.*'
     -
       php: 7.4
+      env: SYMFONY_VERSION='5.4.*' MIN_STABILITY='dev'
+    -
+      php: 8.0
       env: SYMFONY_VERSION='5.4.*' MIN_STABILITY='dev'
   allow_failures:
     - env: SYMFONY_VERSION='5.4.*' MIN_STABILITY='dev'

@@ -48,7 +48,7 @@ class ConfigTemplateExtension extends AbstractExtension {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getFilters() {
+	public function getFilters() : array {
 		return [
 			new TwigFilter('craue_sortSections', [$this, 'sortSections']),
 		];
@@ -57,7 +57,7 @@ class ConfigTemplateExtension extends AbstractExtension {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getFunctions() {
+	public function getFunctions() : array {
 		return [
 			new TwigFunction('craue_setting', [$this, 'getSetting']),
 		];

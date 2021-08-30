@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
 /**
@@ -18,7 +20,8 @@ use Twig\Environment;
  */
 class SettingsController extends AbstractController {
 
-	public function modifyAction(Request $request, FormFactoryInterface $formFactory, Environment $twig, CacheAdapterInterface $cache) {
+	public function modifyAction(CacheAdapterInterface $cache, FormFactoryInterface $formFactory, Request $request,
+			SessionInterface $session, Environment $twig) {
 		$em = $this->getDoctrine()->getManager();
 		$repo = $em->getRepository($this->container->getParameter('craue_config.entity_name'));
 		$allStoredSettings = $repo->findAll();
@@ -43,8 +46,10 @@ class SettingsController extends AbstractController {
 
 				$em->flush();
 
-				$this->get('session')->getFlashBag()->set('notice',
-						$this->get('translator')->trans('settings_changed', [], 'CraueConfigBundle'));
+				if ($session instanceof Session) {
+					$session->getFlashBag()->set('notice', $this->get('translator')->trans('settings_changed', [], 'CraueConfigBundle'));
+				}
+
 				return $this->redirect($this->generateUrl($this->container->getParameter('craue_config.redirectRouteAfterModify')));
 			}
 		}
