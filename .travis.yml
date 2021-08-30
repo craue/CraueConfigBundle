@@ -1,4 +1,5 @@
 language: php
+dist: bionic # https://docs.travis-ci.com/user/reference/overview/#which-one-do-i-use
 
 stages:
   - smoke test 🕵️
@@ -46,9 +47,10 @@ install:
 before_script:
   # set up MySQL
   - mysql -u root -e 'CREATE DATABASE IF NOT EXISTS test;'
-  - mysql -u root -e 'GRANT USAGE ON *.* TO "travis"@"localhost"; DROP USER "travis"@"localhost";'
-  - mysql -u root -e 'CREATE USER "travis"@"localhost" IDENTIFIED BY PASSWORD "";'
-  - mysql -u root -e 'GRANT ALL ON test.* TO "travis"@"localhost"; FLUSH PRIVILEGES;'
+  - mysql -u root -e 'DROP USER "travis"@"localhost";'
+  - mysql -u root -e 'CREATE USER "travis"@"localhost" IDENTIFIED BY "";'
+  - mysql -u root -e 'GRANT ALL ON test.* TO "travis"@"localhost";'
+  - mysql -u root -e 'FLUSH PRIVILEGES;'
   # set up Redis
   - echo "extension=redis.so" > redis.ini
   - phpenv config-add redis.ini

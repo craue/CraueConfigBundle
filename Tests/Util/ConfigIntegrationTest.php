@@ -113,13 +113,12 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 		$this->expectException(UniqueConstraintViolationException::class);
 		switch ($platform) {
 			case self::PLATFORM_MYSQL:
-				$expectedErrorMessage = "Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'";
+				$this->expectExceptionMessageMatches(sprintf('/%s%s%s/s', preg_quote("Integrity constraint violation: 1062 Duplicate entry 'name1' for key '"), '(craue_config_setting\.)?PRIMARY', preg_quote("'")));
 				break;
 			case self::PLATFORM_SQLITE:
-				$expectedErrorMessage = "UNIQUE constraint failed: craue_config_setting.name";
+				$this->expectExceptionMessageMatches(sprintf('/%s/s', preg_quote("UNIQUE constraint failed: craue_config_setting.name")));
 				break;
 		}
-		$this->expectExceptionMessageMatches(sprintf('/^%s.+%s/s', preg_quote("An exception occurred while executing 'INSERT INTO craue_config_setting"), preg_quote($expectedErrorMessage)));
 		$this->persistSetting(Setting::create('name1'));
 	}
 
@@ -138,13 +137,12 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 		$this->expectException(UniqueConstraintViolationException::class);
 		switch ($platform) {
 			case self::PLATFORM_MYSQL:
-				$expectedErrorMessage = "Integrity constraint violation: 1062 Duplicate entry 'name1' for key 'PRIMARY'";
+				$this->expectExceptionMessageMatches(sprintf('/%s%s%s/s', preg_quote("Integrity constraint violation: 1062 Duplicate entry 'name1' for key '"), '(craue_config_setting_custom\.)?PRIMARY', preg_quote("'")));
 				break;
 			case self::PLATFORM_SQLITE:
-				$expectedErrorMessage = "UNIQUE constraint failed: craue_config_setting_custom.name";
+				$this->expectExceptionMessageMatches(sprintf('/%s/s', preg_quote("UNIQUE constraint failed: craue_config_setting_custom.name")));
 				break;
 		}
-		$this->expectExceptionMessageMatches(sprintf('/^%s.+%s/s', preg_quote("An exception occurred while executing 'INSERT INTO craue_config_setting_custom"), preg_quote($expectedErrorMessage)));
 		$this->persistSetting(CustomSetting::create('name1'));
 	}
 
