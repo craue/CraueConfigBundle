@@ -1,6 +1,6 @@
 # Information
 
-[![Build Status](https://travis-ci.org/craue/CraueConfigBundle.svg?branch=master)](https://travis-ci.org/craue/CraueConfigBundle)
+[![Build Status](https://app.travis-ci.com/craue/CraueConfigBundle.svg?branch=master)](https://app.travis-ci.com/craue/CraueConfigBundle)
 [![Coverage Status](https://coveralls.io/repos/github/craue/CraueConfigBundle/badge.svg?branch=master)](https://coveralls.io/github/craue/CraueConfigBundle?branch=master)
 
 CraueConfigBundle manages configuration settings stored in the database and makes them accessible via a service in your
