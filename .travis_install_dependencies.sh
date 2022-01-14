@@ -30,7 +30,7 @@ if [ -n "${WITH_STATIC_ANALYSIS:-}" ]; then
 fi
 
 if [ -n "${WITH_DOCTRINE_CACHE_BUNDLE:-}" ]; then
-	composer require --no-update --dev "doctrine/doctrine-cache-bundle:^1.3.5"
+	composer require --no-update --dev "doctrine/doctrine-cache-bundle:^1.3.1"
 fi
 
 composer update ${COMPOSER_UPDATE_ARGS:-} --with-all-dependencies

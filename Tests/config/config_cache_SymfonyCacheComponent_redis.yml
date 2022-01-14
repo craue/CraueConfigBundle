@@ -9,7 +9,7 @@ services:
     class: \Redis
     factory: ['Symfony\Component\Cache\Adapter\RedisAdapter', 'createConnection']
     arguments:
-      - '%REDIS_DSN%'
+      - '%env(REDIS_DSN)%'
   craue_config_cache_provider:
     class: Symfony\Component\Cache\Adapter\RedisAdapter
     public: false

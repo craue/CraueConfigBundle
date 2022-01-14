@@ -7,7 +7,6 @@ use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Util\Config;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -21,8 +20,7 @@ use Twig\Environment;
 abstract class IntegrationTestCase extends WebTestCase {
 
 	/**
-	 * @var AbstractBrowser|Client|null
-	 * TODO remove Client type as soon as Symfony >= 4.3 is required
+	 * @var AbstractBrowser|null
 	 */
 	protected static $client;
 
@@ -171,12 +169,12 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @return object The associated service.
 	 */
 	protected function getService($id) {
-		// TODO remove as soon as Symfony >= 4.3 is required
-		if (!property_exists($this, 'container')) {
+		// TODO remove as soon as Symfony >= 5.3 is required
+		if (!method_exists($this, 'getContainer')) {
 			return static::$kernel->getContainer()->get($id);
 		}
 
-		return self::$container->get($id);
+		return static::getContainer()->get($id);
 	}
 
 	/**

@@ -23,14 +23,7 @@ class Configuration implements ConfigurationInterface {
 
 		$treeBuilder = new TreeBuilder('craue_config');
 
-		if (!method_exists($treeBuilder, 'getRootNode')) {
-			// TODO remove as soon as Symfony >= 4.2 is required
-			$rootNode = $treeBuilder->root('craue_config');
-		} else {
-			$rootNode = $treeBuilder->getRootNode();
-		}
-
-		$rootNode
+		$treeBuilder->getRootNode()
 			->children()
 				->enumNode('db_driver')
 					->values($supportedDrivers)

@@ -7,15 +7,7 @@ parameters:
 		- vendor/*
 	ignoreErrors:
 		- '#^Call to an undefined method Psr\\Container\\ContainerInterface::getParameter\(\)\.$#'
-		- '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder::root\(\)\.$#'
+		- '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\)\.$#'
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			path: Entity/BaseSetting.php
-		# TODO remove as soon as Symfony >= 4.3 is required
-		-
-			message: '#^Instantiated class Symfony\\Component\\Cache\\Adapter\\SimpleCacheAdapter not found\.$#'
-			path: CacheAdapter/SymfonyCacheComponentAdapter.php
-		# TODO remove as soon as Symfony >= 4.3 is required
-		-
-			message: '#^Property Craue\\ConfigBundle\\CacheAdapter\\SymfonyCacheComponentAdapter::\$cache \(Psr\\Cache\\CacheItemPoolInterface\) does not accept Symfony\\Component\\Cache\\Adapter\\SimpleCacheAdapter\.$#'
-			path: CacheAdapter/SymfonyCacheComponentAdapter.php

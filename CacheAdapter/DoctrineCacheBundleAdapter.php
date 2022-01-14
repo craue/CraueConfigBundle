@@ -37,17 +37,6 @@ class DoctrineCacheBundleAdapter implements CacheAdapterInterface {
 	}
 
 	public function setMultiple(array $keysAndValues) {
-		// TODO remove as soon as doctrine/cache >= 1.6 is required
-		if (!method_exists($this->cache, 'saveMultiple')) {
-			foreach ($keysAndValues as $key => $value) {
-				if (!$this->cache->save($key, $value)) {
-					return false;
-				}
-			}
-
-			return true;
-		}
-
 		return $this->cache->saveMultiple($keysAndValues);
 	}
 
