@@ -107,7 +107,7 @@ class Config {
 	 * @throws \RuntimeException If at least one of the settings is not defined.
 	 */
 	public function setMultiple(array $newSettings) {
-		if (empty($newSettings)) {
+		if ($newSettings === []) {
 			return;
 		}
 

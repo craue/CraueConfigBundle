@@ -71,7 +71,7 @@ class ConfigTemplateExtension extends AbstractExtension {
 		$finalSectionOrder = [];
 
 		// add null section first (if it exists)
-		$nullIndex = array_search(null, $sections);
+		$nullIndex = array_search(null, $sections, true);
 		if ($nullIndex !== false) {
 			$finalSectionOrder[] = $sections[$nullIndex];
 			unset($sections[$nullIndex]);

@@ -1,5 +1,6 @@
 parameters:
 	level: 5
+	treatPhpDocTypesAsCertain: false
 	paths:
 		- .
 	excludePaths:
@@ -7,7 +8,9 @@ parameters:
 		- vendor/*
 	ignoreErrors:
 		- '#^Call to an undefined method Psr\\Container\\ContainerInterface::getParameter\(\)\.$#'
-		- '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\)\.$#'
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			path: Entity/BaseSetting.php
+		-
+			message: '#^Strict comparison using !== between false and false will always evaluate to false\.$#'
+			path: Twig/Extension/ConfigTemplateExtension.php

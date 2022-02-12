@@ -32,7 +32,11 @@
 	"require-dev": {
 		"craue/translations-tests": "^1.0",
 		"doctrine/orm": "^2.5.14",
+		"phpstan/extension-installer": "^1.1",
 		"phpstan/phpstan": "^1.4",
+		"phpstan/phpstan-deprecation-rules": "^1.0",
+		"phpstan/phpstan-strict-rules": "^1.1",
+		"phpstan/phpstan-symfony": "^1.1",
 		"phpunit/phpunit": "^9.5",
 		"symfony/asset": "~4.4|~5.3|^6",
 		"symfony/browser-kit": "~4.4|~5.3|^6",
@@ -59,6 +63,7 @@
 	},
 	"config": {
 		"allow-plugins": {
+			"phpstan/extension-installer": true,
 			"symfony/flex": true
 		},
 		"sort-packages": true
