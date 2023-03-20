@@ -5,6 +5,8 @@ namespace Craue\ConfigBundle\Form\Type;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,6 +35,21 @@ class SettingType extends AbstractType {
 			'required' => false,
 			'translation_domain' => 'CraueConfigBundle',
 		]);
+
+		$builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) : void {
+			$form = $event->getForm();
+			$submittedData = $event->getData();
+
+			// replace non-submitted values by defaults - this avoids nulling values of settings missing from the request
+			// idea from https://stackoverflow.com/questions/11687760/form-avoid-setting-null-to-non-submitted-field/16522446#16522446
+			foreach ($form->all() as $name => $child) {
+				if (!isset($submittedData[$name])) {
+					$submittedData[$name] = $child->getData();
+				}
+			}
+
+			$event->setData($submittedData);
+		});
 	}
 
 	/**

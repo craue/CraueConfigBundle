@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	Author: Christian Raue <christian.raue@gmail.com>
+	Copyright: 2011-2023 Christian Raue
+	License: http://opensource.org/licenses/mit-license.php MIT License
+-->
+<doctrine-mapping
+		xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	<entity name="Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CanBeDisabledSetting" repository-class="Craue\ConfigBundle\Repository\SettingRepository" table="craue_config_setting_can_be_disabled">
+		<field name="value" column="value" type="string" nullable="true" />
+		<field name="disabled" column="disabled" type="boolean" />
+	</entity>
+</doctrine-mapping>

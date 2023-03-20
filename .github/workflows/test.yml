@@ -28,7 +28,7 @@ jobs:
             php: '7.3'
             DEPS: 'lowest'
             WITH_DOCTRINE_CACHE_BUNDLE: 'yes'
-            SYMFONY_DEPRECATIONS_HELPER: 'max[self]=2&max[indirect]=1230'
+            SYMFONY_DEPRECATIONS_HELPER: 'max[self]=2&max[indirect]=1394'
           -
             php: '8.2'
             DEPS: 'unmodified'

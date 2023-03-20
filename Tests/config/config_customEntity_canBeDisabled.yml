@@ -1,0 +1,9 @@
+imports:
+  - { resource: config.yml }
+
+craue_config:
+  entity_name: Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CanBeDisabledSetting
+
+services:
+  Craue\ConfigBundle\Tests\IntegrationTestBundle\Form\Extension\SettingTypeExtension:
+    tags: [form.type_extension]

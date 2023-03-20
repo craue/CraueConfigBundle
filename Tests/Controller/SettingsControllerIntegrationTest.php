@@ -3,6 +3,8 @@
 namespace Craue\ConfigBundle\Tests\Controller;
 
 use Craue\ConfigBundle\Entity\Setting;
+use Craue\ConfigBundle\Entity\SettingInterface;
+use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CanBeDisabledSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 
@@ -39,8 +41,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$content = static::$client->getResponse()->getContent();
 		$this->assertSame(200, static::$client->getResponse()->getStatusCode(), $content);
 		$this->assertMatchesRegularExpression('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
-		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_0_value">name</label>', $content);
-		$this->assertStringContainsString('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
+		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_name_value">name</label>', $content);
+		$this->assertStringContainsString('<input type="text" id="craue_config_modifySettings_settings_name_value" name="craue_config_modifySettings[settings][name][value]" value="value" />', $content);
 		$this->assertStringContainsString('<button type="submit">apply</button>', $content);
 
 		$form = $crawler->selectButton('apply')->form();
@@ -49,13 +51,36 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$content = static::$client->getResponse()->getContent();
 		$this->assertStringContainsString('<div class="notice">The settings were changed.</div>', $content);
 
-		$settings = $this->getSettingsRepo()->findAll();
-		$this->assertCount(1, $settings);
-
-		$setting = $settings[0];
+		/* @var $setting SettingInterface */
+		$setting = $this->getSettingsRepo()->findOneBy([]);
 		$this->assertSame('name', $setting->getName());
 		$this->assertSame('value', $setting->getValue());
 		$this->assertNull($setting->getSection());
+	}
+
+	/**
+	 * Ensure that the value of a setting added between rendering and submitting the form won't get lost.
+	 *
+	 * @dataProvider getPlatformConfigs
+	 */
+	public function testModifyAction_noChanges_concurrentlyAddedSetting($platform, $config, $requiredExtension) : void {
+		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
+		$this->persistSetting(Setting::create('name1', 'value1'));
+		$this->persistSetting(Setting::create('name2', 'value2'));
+
+		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
+		$form = $crawler->selectButton('apply')->form();
+
+		// add a new setting which would be placed between name1 and name2
+		$this->persistSetting(Setting::create('name11', 'value11'));
+
+		static::$client->submit($form);
+
+		/* @var $setting SettingInterface */
+		$setting = $this->getSettingsRepo()->findOneBy([
+			'name' => 'name11',
+		]);
+		$this->assertSame('value11', $setting->getValue());
 	}
 
 	/**
@@ -69,19 +94,17 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
-		$this->assertFalse($form->has('craue_config_modifySettings[settings][0][name]'));
-		$this->assertFalse($form->has('craue_config_modifySettings[settings][0][section]'));
+		$this->assertFalse($form->has('craue_config_modifySettings[settings][name][name]'));
+		$this->assertFalse($form->has('craue_config_modifySettings[settings][name][section]'));
 		static::$client->followRedirects();
 		static::$client->submit($form, [
-			'craue_config_modifySettings[settings][0][value]' => 'new-value',
+			'craue_config_modifySettings[settings][name][value]' => 'new-value',
 		]);
 		$content = static::$client->getResponse()->getContent();
 		$this->assertStringContainsString('<div class="notice">The settings were changed.</div>', $content);
 
-		$settings = $this->getSettingsRepo()->findAll();
-		$this->assertCount(1, $settings);
-
-		$setting = $settings[0];
+		/* @var $setting SettingInterface */
+		$setting = $this->getSettingsRepo()->findOneBy([]);
 		$this->assertSame('name', $setting->getName());
 		$this->assertSame('new-value', $setting->getValue());
 		$this->assertSame('section', $setting->getSection());
@@ -104,9 +127,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
-		static::$client->followRedirects();
 		static::$client->submit($form, [
-			'craue_config_modifySettings[settings][0][value]' => 'new-value1',
+			'craue_config_modifySettings[settings][name1][value]' => 'new-value1',
 		]);
 
 		$this->assertTrue($cache->has('name1'));
@@ -137,6 +159,35 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	}
 
 	/**
+	 * Ensure that values are assigned to their originating setting when adding a setting between rendering and submitting the form.
+	 *
+	 * @dataProvider getPlatformConfigs
+	 */
+	public function testModifyAction_changeValue_concurrentlyAddedSetting($platform, $config, $requiredExtension) : void {
+		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
+		$this->persistSetting(Setting::create('name1', 'old-value1'));
+		$this->persistSetting(Setting::create('name2', 'old-value2'));
+		$this->persistSetting(Setting::create('name3', 'old-value3'));
+
+		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
+		$form = $crawler->selectButton('apply')->form();
+
+		// add a new setting which would be placed between name1 and name2
+		$this->persistSetting(Setting::create('name11', 'old-value11'));
+
+		static::$client->submit($form, [
+			'craue_config_modifySettings[settings][name1][value]' => 'new-value1',
+			'craue_config_modifySettings[settings][name2][value]' => '',
+			'craue_config_modifySettings[settings][name3][value]' => 'new-value3',
+		]);
+
+		$this->assertSame('new-value1', $this->getSettingsRepo()->findOneBy(['name' => 'name1'])->getValue());
+		$this->assertSame('old-value11', $this->getSettingsRepo()->findOneBy(['name' => 'name11'])->getValue());
+		$this->assertNull($this->getSettingsRepo()->findOneBy(['name' => 'name2'])->getValue());
+		$this->assertSame('new-value3', $this->getSettingsRepo()->findOneBy(['name' => 'name3'])->getValue());
+	}
+
+	/**
 	 * Ensure that an invalid form submission is handled properly.
 	 *
 	 * @dataProvider getPlatformConfigs
@@ -147,7 +198,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
-		$form->remove('craue_config_modifySettings[settings][0][value]');
+		$form->remove('craue_config_modifySettings[settings][name][value]');
 		static::$client->followRedirects();
 		static::$client->submit($form);
 		$content = static::$client->getResponse()->getContent();
@@ -167,7 +218,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
 		$this->assertStringContainsString('<legend>section no. 1</legend>', $content);
-		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_0_value">setting no. 1</label>', $content);
+		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_setting-number-one_value">setting no. 1</label>', $content);
 
 		$profile = static::$client->getProfile();
 		$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
@@ -186,9 +237,9 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$content = static::$client->getResponse()->getContent();
 		$this->assertStringContainsString('<legend>section1</legend>', $content);
 		$this->assertStringContainsString('<legend>section2</legend>', $content);
-		$strPosField1 = strpos($content, '<label for="craue_config_modifySettings_settings_0_value">name1</label>');
-		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_1_value">name2</label>');
-		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_2_value">name3</label>');
+		$strPosField1 = strpos($content, '<label for="craue_config_modifySettings_settings_name1_value">name1</label>');
+		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_name2_value">name2</label>');
+		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_name3_value">name3</label>');
 		$this->assertTrue($strPosField2 < $strPosField1 && $strPosField1 < $strPosField3, 'The sections are rendered in wrong order.');
 	}
 
@@ -205,9 +256,9 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$content = static::$client->getResponse()->getContent();
 		$this->assertStringContainsString('<legend>section1</legend>', $content);
 		$this->assertStringContainsString('<legend>section2</legend>', $content);
-		$strPosField1 = strpos($content, '<label for="craue_config_modifySettings_settings_0_value">name1</label>');
-		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_1_value">name2</label>');
-		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_2_value">name3</label>');
+		$strPosField1 = strpos($content, '<label for="craue_config_modifySettings_settings_name1_value">name1</label>');
+		$strPosField2 = strpos($content, '<label for="craue_config_modifySettings_settings_name2_value">name2</label>');
+		$strPosField3 = strpos($content, '<label for="craue_config_modifySettings_settings_name3_value">name3</label>');
 		$this->assertTrue($strPosField2 < $strPosField3 && $strPosField3 < $strPosField1, 'The sections are rendered in wrong order.');
 	}
 
@@ -250,18 +301,15 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$content = static::$client->getResponse()->getContent();
-		$this->assertStringContainsString('<textarea id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]">value</textarea>', $content);
+		$this->assertStringContainsString('<textarea id="craue_config_modifySettings_settings_name_value" name="craue_config_modifySettings[settings][name][value]">value</textarea>', $content);
 
 		$form = $crawler->selectButton('apply')->form();
-		static::$client->followRedirects();
 		static::$client->submit($form, [
-			'craue_config_modifySettings[settings][0][value]' => $newValue,
+			'craue_config_modifySettings[settings][name][value]' => $newValue,
 		]);
 
-		$settings = $this->getSettingsRepo()->findAll();
-		$this->assertCount(1, $settings);
-
-		$setting = $settings[0];
+		/* @var $setting CustomSetting */
+		$setting = $this->getSettingsRepo()->findOneBy([]);
 		$this->assertSame('name', $setting->getName());
 		$this->assertSame(strlen($newValue), strlen($setting->getValue()));
 		$this->assertSame($newValue, $setting->getValue());
@@ -273,6 +321,35 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		return self::duplicateTestDataForEachPlatform([
 			['customEntity'],
 		], 'config_customEntity.yml');
+	}
+
+	/**
+	 * Ensure that submitting a disabled form field will keep the setting's old value.
+	 *
+	 * @dataProvider dataModifyAction_customEntity_disabled
+	 */
+	public function testModifyAction_customEntity_disabled($platform, $config, $requiredExtension, $environment) {
+		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
+		$this->persistSetting(CanBeDisabledSetting::create('name', 'old-value', null, true));
+
+		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
+		$form = $crawler->selectButton('apply')->form();
+
+		$this->assertTrue($form->get('craue_config_modifySettings[settings][name][value]')->isDisabled());
+
+		static::$client->submit($form, [
+			'craue_config_modifySettings[settings][name][value]' => 'new-value', // will be ignored
+		]);
+
+		/* @var $setting CanBeDisabledSetting */
+		$setting = $this->getSettingsRepo()->findOneBy([]);
+		$this->assertSame('old-value', $setting->getValue());
+	}
+
+	public function dataModifyAction_customEntity_disabled() {
+		return self::duplicateTestDataForEachPlatform([
+			['config_customEntity_canBeDisabled'],
+		], 'config_customEntity_canBeDisabled.yml');
 	}
 
 }
