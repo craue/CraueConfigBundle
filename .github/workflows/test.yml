@@ -1,0 +1,143 @@
+name: Tests
+
+on:
+  pull_request: ~
+  push: ~
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }} @ ${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: "PHP ${{ matrix.php }} - ${{ matrix.DEPS || format('Symfony {0}', matrix.SYMFONY_VERSION) }}${{ (matrix.allow-failure && ' 🔕') || '' }}"
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.allow-failure || false }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          -
+            php: '7.3'
+            DEPS: 'lowest'
+            WITH_DOCTRINE_CACHE_BUNDLE: 'yes'
+            SYMFONY_DEPRECATIONS_HELPER: 'max[self]=2&max[indirect]=1230'
+          -
+            php: '8.2'
+            DEPS: 'unmodified'
+            WITH_STATIC_ANALYSIS: 'yes'
+          - 
+            php: '7.3'
+            SYMFONY_VERSION: '4.4.*'
+            WITH_DOCTRINE_CACHE_BUNDLE: 'yes'
+            SYMFONY_DEPRECATIONS_HELPER: 'max[indirect]=4'
+          -
+            php: '7.4'
+            SYMFONY_VERSION: '5.4.*'
+          -
+            php: '8.0'
+            SYMFONY_VERSION: '5.4.*'
+          -
+            php: '8.1'
+            SYMFONY_VERSION: '5.4.*'
+          -
+            php: '8.2'
+            SYMFONY_VERSION: '6.3.*'
+            MIN_STABILITY: 'dev'
+            allow-failure: true
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: set up MySQL
+      run: |
+        sudo systemctl start mysql
+        echo '
+          CREATE DATABASE IF NOT EXISTS test;
+          DROP USER IF EXISTS "tester"@"localhost";
+          CREATE USER "tester"@"localhost" IDENTIFIED WITH mysql_native_password BY "";
+          GRANT ALL ON test.* TO "tester"@"localhost";
+          FLUSH PRIVILEGES;
+        ' > /tmp/mysql-init.sql
+        mysql --user=root --password=root -e 'source /tmp/mysql-init.sql'
+
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: "${{ matrix.php }}"
+        extensions: mysql, redis
+        coverage: pcov
+        ini-values: memory_limit=-1
+        tools: flex
+      env:
+        fail-fast: true # interrupt on extension setup error
+
+    - name: get Composer's cache directory
+      id: composer-cache
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+    - name: cache Composer's package cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-php-${{ matrix.php }}-${{ matrix.DEPS || format('symfony-{0}', matrix.SYMFONY_VERSION) }}
+
+    - name: install dependencies
+      run: bash .github/install_dependencies.sh
+      env:
+        DEPS: "${{ matrix.DEPS }}"
+        MIN_STABILITY: "${{ matrix.MIN_STABILITY }}"
+        SYMFONY_VERSION: "${{ matrix.SYMFONY_VERSION }}"
+        WITH_DOCTRINE_CACHE_BUNDLE: "${{ matrix.WITH_DOCTRINE_CACHE_BUNDLE }}"
+
+    - name: show installed dependencies
+      run: composer show
+
+    - name: validate composer.json
+      if: ${{ matrix.WITH_STATIC_ANALYSIS == 'yes' }}
+      run: composer validate --strict --no-check-lock
+
+    - name: run PHPStan
+      if: ${{ matrix.WITH_STATIC_ANALYSIS == 'yes' }}
+      run: vendor/bin/phpstan analyse
+
+    - name: run PHPUnit
+      run: |
+        mkdir -p build/logs
+        vendor/bin/phpunit -v --coverage-clover build/logs/clover.xml
+      env:
+        REDIS_DSN: redis://localhost:6379
+        SYMFONY_DEPRECATIONS_HELPER: "${{ matrix.SYMFONY_DEPRECATIONS_HELPER }}"
+
+    - name: upload code coverage data
+      if: ${{ github.repository == 'craue/CraueConfigBundle' }}
+      env:
+        COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      uses: nick-fields/retry@v2
+      with:
+        command: |
+          PHP_COVERALLS_VERSION=`curl --retry 5 -Is https://github.com/php-coveralls/php-coveralls/releases/latest | grep -i 'Location:' | sed 's/.*\/tag\/\(.*\)$/\1/' | tr -d "[:cntrl:]"`
+          echo "using php-coveralls '${PHP_COVERALLS_VERSION}'"
+          wget -q "https://github.com/php-coveralls/php-coveralls/releases/download/${PHP_COVERALLS_VERSION}/php-coveralls.phar" -O php-coveralls.phar
+          php php-coveralls.phar -v
+        max_attempts: 3
+        timeout_seconds: 10

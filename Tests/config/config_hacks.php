@@ -23,3 +23,19 @@ $container->loadFromExtension('framework', [
 		'storage_id' => 'session.storage.mock_file',
 	],
 ]);
+
+// TODO remove as soon as Symfony >= 6 is required
+if (Kernel::VERSION_ID >= 50200 && Kernel::VERSION_ID < 60000) {
+	$container->loadFromExtension('framework', [
+		'form' => [
+			'legacy_error_messages' => false,
+		],
+	]);
+}
+
+// TODO remove as soon as Symfony >= 7 is required
+if (Kernel::VERSION_ID < 70000) {
+	$container->loadFromExtension('framework', [
+		'http_method_override' => false,
+	]);
+}

@@ -11,6 +11,3 @@ parameters:
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			path: Entity/BaseSetting.php
-		-
-			message: '#^Strict comparison using !== between false and false will always evaluate to false\.$#'
-			path: Twig/Extension/ConfigTemplateExtension.php

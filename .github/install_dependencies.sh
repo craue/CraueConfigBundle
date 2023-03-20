@@ -2,12 +2,6 @@
 
 set -euv
 
-export COMPOSER_NO_INTERACTION=1
-composer self-update
-
-# install Symfony Flex
-composer require --no-progress --no-scripts --no-plugins symfony/flex
-
 case "${DEPS:-}" in
 	'lowest')
 		COMPOSER_UPDATE_ARGS='--prefer-lowest'
@@ -22,6 +16,11 @@ case "${DEPS:-}" in
 
 		if [ -n "${SYMFONY_VERSION:-}" ]; then
 			composer config extra.symfony.require "${SYMFONY_VERSION}"
+			# ensure the given version is installed for all components - this is needed at least for (PHP 7.3 + Symfony 4.4) & (PHP 7.4 + Symfony 5.4)
+			# TODO remove as soon as PHP >= 8 is required
+			if [ "$(php -r 'echo PHP_MAJOR_VERSION;')" = "7" ]; then
+				composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"
+			fi
 		fi
 esac
 
