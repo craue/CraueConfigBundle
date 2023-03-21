@@ -1,5 +1,11 @@
 # Changelog
 
+## [master]
+
+- dropped support for Symfony 5.3, 6.0, 6.1
+
+[master]: https://github.com/craue/CraueConfigBundle/compare/2.6.0...master
+
 ## [2.6.0] – 2022-01-24
 
 - added autowiring alias for `Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface`
