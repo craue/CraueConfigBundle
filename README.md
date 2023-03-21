@@ -31,19 +31,6 @@ return [
 ];
 ```
 
-Or, for Symfony 3.4:
-
-```php
-// in app/AppKernel.php
-public function registerBundles() {
-	$bundles = [
-		// ...
-		new Craue\ConfigBundle\CraueConfigBundle(),
-	];
-	// ...
-}
-```
-
 ## Create the table
 
 Preferably you do this by calling
