@@ -48,8 +48,11 @@ jobs:
             php: '8.1'
             SYMFONY_VERSION: '5.4.*'
           -
-            php: '8.2'
+            php: '8.1'
             SYMFONY_VERSION: '6.3.*'
+          -
+            php: '8.2'
+            SYMFONY_VERSION: '6.4.*'
             MIN_STABILITY: 'dev'
             allow-failure: true
 
