@@ -132,12 +132,6 @@ jobs:
       if: ${{ github.repository == 'craue/CraueConfigBundle' }}
       env:
         COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      uses: nick-fields/retry@v2
-      with:
-        command: |
-          PHP_COVERALLS_VERSION=`curl --retry 5 -Is https://github.com/php-coveralls/php-coveralls/releases/latest | grep -i 'Location:' | sed 's/.*\/tag\/\(.*\)$/\1/' | tr -d "[:cntrl:]"`
-          echo "using php-coveralls '${PHP_COVERALLS_VERSION}'"
-          wget -q "https://github.com/php-coveralls/php-coveralls/releases/download/${PHP_COVERALLS_VERSION}/php-coveralls.phar" -O php-coveralls.phar
-          php php-coveralls.phar -v
-        max_attempts: 3
-        timeout_seconds: 10
+      run: |
+        composer global require php-coveralls/php-coveralls
+        php-coveralls --coverage_clover=build/logs/clover.xml -v
