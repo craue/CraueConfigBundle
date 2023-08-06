@@ -110,15 +110,7 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 		$this->persistSetting(Setting::create('name1'));
 
-		$this->expectException(UniqueConstraintViolationException::class);
-		switch ($platform) {
-			case self::PLATFORM_MYSQL:
-				$this->expectExceptionMessageMatches(sprintf('/%s%s%s/s', preg_quote("Integrity constraint violation: 1062 Duplicate entry 'name1' for key '"), '(craue_config_setting\.)?PRIMARY', preg_quote("'")));
-				break;
-			case self::PLATFORM_SQLITE:
-				$this->expectExceptionMessageMatches(sprintf('/%s/s', preg_quote("UNIQUE constraint failed: craue_config_setting.name")));
-				break;
-		}
+		$this->expectExceptionForEntityNameUnique(Setting::class, $platform, 'craue_config_setting');
 		$this->persistSetting(Setting::create('name1'));
 	}
 
@@ -134,16 +126,40 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 		$this->persistSetting(CustomSetting::create('name1'));
 
-		$this->expectException(UniqueConstraintViolationException::class);
-		switch ($platform) {
-			case self::PLATFORM_MYSQL:
-				$this->expectExceptionMessageMatches(sprintf('/%s%s%s/s', preg_quote("Integrity constraint violation: 1062 Duplicate entry 'name1' for key '"), '(craue_config_setting_custom\.)?PRIMARY', preg_quote("'")));
-				break;
-			case self::PLATFORM_SQLITE:
-				$this->expectExceptionMessageMatches(sprintf('/%s/s', preg_quote("UNIQUE constraint failed: craue_config_setting_custom.name")));
-				break;
-		}
+		$this->expectExceptionForEntityNameUnique(CustomSetting::class, $platform, 'craue_config_setting_custom');
 		$this->persistSetting(CustomSetting::create('name1'));
+	}
+
+	private function expectExceptionForEntityNameUnique(string $entityName, string $platform, string $tableName) : void {
+		/**
+		 * TODO clean up as soon as doctrine/orm >= 2.16.1 is required
+		 *  - doctrine/orm < 2.16.0 throws a UniqueConstraintViolationException
+		 *  - doctrine/orm 2.16.0 throws a RuntimeException instead of a UniqueConstraintViolationException, see https://github.com/doctrine/orm/pull/10785
+		 *  - doctrine/orm 2.16.1 will (hopefully) throw a EntityIdentityCollisionException, see https://github.com/doctrine/orm/issues/10872
+		 */
+
+		$orm216message = sprintf('While adding an entity of class %1$s with an ID hash of "%2$s" to the identity map,%3$sanother object of class %1$s was already present for the same ID.', $entityName, 'name1', "\n");
+
+		if (class_exists(\Doctrine\ORM\Exception\EntityIdentityCollisionException::class)) {
+			// doctrine/orm > 2.16.0
+			$this->expectException(\Doctrine\ORM\Exception\EntityIdentityCollisionException::class);
+			$this->expectExceptionMessage($orm216message);
+		} elseif (class_exists(\Doctrine\ORM\Internal\TopologicalSort::class)) {
+			// doctrine/orm = 2.16.0 (TopologicalSort class was added in this version)
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage($orm216message);
+		} else {
+			// doctrine/orm < 2.16.0
+			$this->expectException(UniqueConstraintViolationException::class);
+				switch ($platform) {
+					case self::PLATFORM_MYSQL:
+						$this->expectExceptionMessageMatches(sprintf('/%s%s%s/s', preg_quote("Integrity constraint violation: 1062 Duplicate entry 'name1' for key '"), sprintf('(%s\.)?PRIMARY', $tableName), preg_quote("'")));
+						break;
+					case self::PLATFORM_SQLITE:
+						$this->expectExceptionMessageMatches(sprintf('/%s/s', preg_quote(sprintf("UNIQUE constraint failed: %s.name", $tableName))));
+						break;
+				}
+		}
 	}
 
 	/**
