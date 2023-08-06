@@ -19,15 +19,15 @@
 		"php": "^7.3|^8",
 		"doctrine/doctrine-bundle": "^1.6.12|^2",
 		"psr/simple-cache": "^1|^2|^3",
-		"symfony/cache": "~4.4|~5.4|^6.2",
-		"symfony/config": "~4.4|~5.4|^6.2",
-		"symfony/dependency-injection": "~4.4|~5.4|^6.2",
-		"symfony/form": "~4.4|~5.4|^6.2",
-		"symfony/framework-bundle": "~4.4|~5.4|^6.2",
-		"symfony/http-foundation": "~4.4|~5.4|^6.2",
-		"symfony/http-kernel": "~4.4|~5.4|^6.2",
-		"symfony/options-resolver": "~4.4|~5.4|^6.2",
-		"symfony/validator": "~4.4|~5.4|^6.2"
+		"symfony/cache": "~4.4|~5.4|^6.3",
+		"symfony/config": "~4.4|~5.4|^6.3",
+		"symfony/dependency-injection": "~4.4|~5.4|^6.3",
+		"symfony/form": "~4.4|~5.4|^6.3",
+		"symfony/framework-bundle": "~4.4|~5.4|^6.3",
+		"symfony/http-foundation": "~4.4|~5.4|^6.3",
+		"symfony/http-kernel": "~4.4|~5.4|^6.3",
+		"symfony/options-resolver": "~4.4|~5.4|^6.3",
+		"symfony/validator": "~4.4|~5.4|^6.3"
 	},
 	"require-dev": {
 		"craue/translations-tests": "^1.0",
@@ -38,11 +38,11 @@
 		"phpstan/phpstan-strict-rules": "^1.1",
 		"phpstan/phpstan-symfony": "^1.1",
 		"phpunit/phpunit": "^9.6",
-		"symfony/asset": "~4.4|~5.4|^6.2",
-		"symfony/browser-kit": "~4.4|~5.4|^6.2",
-		"symfony/phpunit-bridge": "^6.2",
-		"symfony/twig-bundle": "~4.4|~5.4|^6.2",
-		"symfony/web-profiler-bundle": "~4.4|~5.4|^6.2"
+		"symfony/asset": "~4.4|~5.4|^6.3",
+		"symfony/browser-kit": "~4.4|~5.4|^6.3",
+		"symfony/phpunit-bridge": "^6.3",
+		"symfony/twig-bundle": "~4.4|~5.4|^6.3",
+		"symfony/web-profiler-bundle": "~4.4|~5.4|^6.3"
 	},
 	"minimum-stability": "stable",
 	"autoload": {
@@ -58,7 +58,7 @@
 			"dev-master": "2.7.x-dev"
 		},
 		"symfony": {
-			"require": "~4.4|~5.4|^6.2"
+			"require": "~4.4|~5.4|^6.3"
 		}
 	},
 	"config": {

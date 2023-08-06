@@ -2,7 +2,7 @@
 
 ## [master]
 
-- dropped support for Symfony 5.3, 6.0, 6.1
+- dropped support for Symfony 5.3, 6.0, 6.1, 6.2
 
 [master]: https://github.com/craue/CraueConfigBundle/compare/2.6.0...master
 
