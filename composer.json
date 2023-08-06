@@ -55,7 +55,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "2.7.x-dev"
+			"dev-master": "3.0.x-dev"
 		},
 		"symfony": {
 			"require": "~4.4|~5.4|^6.3"

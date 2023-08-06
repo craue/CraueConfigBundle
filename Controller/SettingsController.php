@@ -37,10 +37,10 @@ class SettingsController extends AbstractController {
 			$form->handleRequest($request);
 
 			if ($form->isSubmitted() && $form->isValid()) {
+				// update the cache
 				foreach ($formData['settings'] as $formSetting) {
 					$storedSetting = $this->getSettingByName($allStoredSettings, $formSetting->getName());
 					if ($storedSetting !== null) {
-						$storedSetting->setValue($formSetting->getValue());
 						$cache->set($storedSetting->getName(), $storedSetting->getValue());
 					}
 				}
