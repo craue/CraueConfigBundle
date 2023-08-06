@@ -28,7 +28,7 @@ class SettingType extends AbstractType {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function buildForm(FormBuilderInterface $builder, array $options) {
+	public function buildForm(FormBuilderInterface $builder, array $options) : void {
 		$builder->add('value', null, [
 			'required' => false,
 			'translation_domain' => 'CraueConfigBundle',
@@ -38,7 +38,7 @@ class SettingType extends AbstractType {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function finishView(FormView $view, FormInterface $form, array $options) {
+	public function finishView(FormView $view, FormInterface $form, array $options) : void {
 		/* @var $setting SettingInterface */
 		$setting = $form->getData();
 
@@ -48,7 +48,7 @@ class SettingType extends AbstractType {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function configureOptions(OptionsResolver $resolver) {
+	public function configureOptions(OptionsResolver $resolver) : void {
 		$resolver->setDefaults([
 			'data_class' => $this->entityName,
 		]);

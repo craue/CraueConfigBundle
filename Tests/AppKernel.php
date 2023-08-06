@@ -50,7 +50,7 @@ class AppKernel extends Kernel {
 		return $bundles;
 	}
 
-	public function registerContainerConfiguration(LoaderInterface $loader) {
+	public function registerContainerConfiguration(LoaderInterface $loader) : void {
 		if (!is_array($this->configFiles)) {
 			$this->configFiles = (array) $this->configFiles;
 		}

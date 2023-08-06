@@ -21,7 +21,7 @@ class CraueConfigExtension extends Extension implements PrependExtensionInterfac
 	/**
 	 * {@inheritDoc}
 	 */
-	public function load(array $configs, ContainerBuilder $container) {
+	public function load(array $configs, ContainerBuilder $container) : void {
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 		$loader->load('controller.xml');
 		$loader->load('form.xml');
@@ -32,7 +32,7 @@ class CraueConfigExtension extends Extension implements PrependExtensionInterfac
 	/**
 	 * {@inheritDoc}
 	 */
-	public function prepend(ContainerBuilder $container) {
+	public function prepend(ContainerBuilder $container) : void {
 		$config = $this->processConfiguration(new Configuration(), $container->getExtensionConfig($this->getAlias()));
 
 		$container->setParameter('craue_config.db_driver.' . $config['db_driver'], true);
