@@ -2,7 +2,6 @@
 
 ## [2.7.0] – 2023-08-07
 
-- migrated from Travis CI to GitHub Actions
 - dropped support for Symfony 5.3, 6.0, 6.1, 6.2
 
 [2.7.0]: https://github.com/craue/CraueConfigBundle/compare/2.6.0...2.7.0
