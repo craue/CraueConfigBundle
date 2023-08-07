@@ -1,0 +1,7 @@
+services:
+  Craue\ConfigBundle\EventListener\SettingUpdateListener:
+    autowire: true
+    public: false
+    tags:
+      - name: doctrine.event_listener
+        event: postUpdate
