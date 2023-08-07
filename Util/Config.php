@@ -99,7 +99,7 @@ class Config {
 		$setting->setValue($value);
 		$this->em->flush();
 
-		$this->cache->set($name, $value);
+		// cache is updated in SettingUpdateListener
 	}
 
 	/**
@@ -123,7 +123,7 @@ class Config {
 
 		$this->em->flush();
 
-		$this->cache->setMultiple($newSettings);
+		// cache is updated in SettingUpdateListener
 	}
 
 	/**

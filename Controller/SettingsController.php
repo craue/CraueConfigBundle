@@ -2,7 +2,6 @@
 
 namespace Craue\ConfigBundle\Controller;
 
-use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Form\ModifySettingsForm;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +21,7 @@ use Twig\Environment;
  */
 class SettingsController extends AbstractController {
 
-	public function modifyAction(CacheAdapterInterface $cache, FormFactoryInterface $formFactory, Request $request,
+	public function modifyAction(FormFactoryInterface $formFactory, Request $request,
 			SessionInterface $session, Environment $twig, EntityManagerInterface $em, TranslatorInterface $translator) {
 		$repo = $em->getRepository($this->container->getParameter('craue_config.entity_name'));
 		$allStoredSettings = $repo->findAll();
@@ -37,14 +36,6 @@ class SettingsController extends AbstractController {
 			$form->handleRequest($request);
 
 			if ($form->isSubmitted() && $form->isValid()) {
-				// update the cache
-				foreach ($formData['settings'] as $formSetting) {
-					$storedSetting = $this->getSettingByName($allStoredSettings, $formSetting->getName());
-					if ($storedSetting !== null) {
-						$cache->set($storedSetting->getName(), $storedSetting->getValue());
-					}
-				}
-
 				$em->flush();
 
 				if ($session instanceof Session) {
@@ -78,21 +69,6 @@ class SettingsController extends AbstractController {
 		sort($sections);
 
 		return $sections;
-	}
-
-	/**
-	 * @param SettingInterface[] $settings
-	 * @param string $name
-	 * @return SettingInterface|null
-	 */
-	protected function getSettingByName(array $settings, $name) {
-		foreach ($settings as $setting) {
-			if ($setting->getName() === $name) {
-				return $setting;
-			}
-		}
-
-		return null;
 	}
 
 }

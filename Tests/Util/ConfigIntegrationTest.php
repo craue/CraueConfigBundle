@@ -76,6 +76,30 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	}
 
 	/**
+	 * Ensure that the cache is updated when updating a setting entity directly.
+	 *
+	 * @dataProvider dataCacheUsage
+	 */
+	public function testCacheUpdateOnEntityUpdate($platform, $config, $requiredExtension, $environment) : void {
+		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
+
+		$cache = $this->getService('craue_config_cache_adapter');
+		$cache->clear();
+
+		$setting = Setting::create('name', 'value');
+		$this->persistSetting($setting);
+
+		$this->assertFalse($cache->has($setting->getName()));
+
+		// update the entity directly
+		$setting->setValue('new-value2');
+		$this->getEntityManager()->flush();
+
+		$this->assertTrue($cache->has($setting->getName()));
+		$this->assertSame('new-value2', $cache->get($setting->getName()));
+	}
+
+	/**
 	 * Ensure that a custom config class can actually be used with a custom model class.
 	 *
 	 * @dataProvider dataCustomEntity
