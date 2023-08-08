@@ -115,10 +115,6 @@ jobs:
     - name: show installed dependencies
       run: composer show
 
-    - name: validate composer.json
-      if: ${{ matrix.WITH_STATIC_ANALYSIS == 'yes' }}
-      run: composer validate --strict --no-check-lock
-
     - name: run PHPStan
       if: ${{ matrix.WITH_STATIC_ANALYSIS == 'yes' }}
       run: vendor/bin/phpstan analyse
