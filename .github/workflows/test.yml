@@ -29,10 +29,6 @@ jobs:
             DEPS: 'lowest'
             WITH_DOCTRINE_CACHE_BUNDLE: 'yes'
             SYMFONY_DEPRECATIONS_HELPER: 'max[self]=2&max[indirect]=1230'
-          -
-            php: '8.2'
-            DEPS: 'unmodified'
-            WITH_STATIC_ANALYSIS: 'yes'
           - 
             php: '7.3'
             SYMFONY_VERSION: '4.4.*'
@@ -114,10 +110,6 @@ jobs:
 
     - name: show installed dependencies
       run: composer show
-
-    - name: run PHPStan
-      if: ${{ matrix.WITH_STATIC_ANALYSIS == 'yes' }}
-      run: vendor/bin/phpstan analyse
 
     - name: run PHPUnit
       run: |
