@@ -134,22 +134,19 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 		/**
 		 * TODO clean up as soon as doctrine/orm >= 2.16.1 is required
 		 *  - doctrine/orm < 2.16.0 throws a UniqueConstraintViolationException
-		 *  - doctrine/orm 2.16.0 throws a RuntimeException instead of a UniqueConstraintViolationException, see https://github.com/doctrine/orm/pull/10785
-		 *  - doctrine/orm 2.16.1 will (hopefully) throw a EntityIdentityCollisionException, see https://github.com/doctrine/orm/issues/10872
+		 *  - doctrine/orm 2.16.0 throws a RuntimeException instead, see https://github.com/doctrine/orm/pull/10785
+		 *  - doctrine/orm 2.16.1 would throw an EntityIdentityCollisionException, see https://github.com/doctrine/orm/pull/10881, but in the end throws a UniqueConstraintViolationException again until 3.0, see https://github.com/doctrine/orm/pull/10878
 		 */
 
-		$orm216message = sprintf('While adding an entity of class %1$s with an ID hash of "%2$s" to the identity map,%3$sanother object of class %1$s was already present for the same ID.', $entityName, 'name1', "\n");
-
-		if (class_exists(\Doctrine\ORM\Exception\EntityIdentityCollisionException::class)) {
-			// doctrine/orm > 2.16.0
-			$this->expectException(\Doctrine\ORM\Exception\EntityIdentityCollisionException::class);
-			$this->expectExceptionMessage($orm216message);
-		} elseif (class_exists(\Doctrine\ORM\Internal\TopologicalSort::class)) {
-			// doctrine/orm = 2.16.0 (TopologicalSort class was added in this version)
+		// 2.16.0 introduces \Doctrine\ORM\Internal\TopologicalSort
+		// 2.16.1 introduces \Doctrine\ORM\Exception\EntityIdentityCollisionException
+		if (class_exists(\Doctrine\ORM\Internal\TopologicalSort::class) && !class_exists(\Doctrine\ORM\Exception\EntityIdentityCollisionException::class)) {
+			// doctrine/orm = 2.16.0
 			$this->expectException(\RuntimeException::class);
-			$this->expectExceptionMessage($orm216message);
+			$this->expectExceptionMessage(sprintf('While adding an entity of class %1$s with an ID hash of "%2$s" to the identity map,%3$sanother object of class %1$s was already present for the same ID.', $entityName, 'name1', "\n"));
 		} else {
 			// doctrine/orm < 2.16.0
+			// doctrine/orm > 2.16.0
 			$this->expectException(UniqueConstraintViolationException::class);
 				switch ($platform) {
 					case self::PLATFORM_MYSQL:
