@@ -1,6 +1,6 @@
 # Information
 
-[![Tests](https://github.com/craue/CraueConfigBundle/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/craue/CraueConfigBundle/actions/workflows/test.yml)
+[![Tests](https://github.com/craue/CraueConfigBundle/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/craue/CraueConfigBundle/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/craue/CraueConfigBundle/badge.svg?branch=master)](https://coveralls.io/github/craue/CraueConfigBundle?branch=master)
 
 CraueConfigBundle manages configuration settings stored in the database and makes them accessible via a service in your
