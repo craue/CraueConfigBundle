@@ -90,9 +90,6 @@ jobs:
         env:
           fail-fast: true # interrupt on extension setup error
 
-      - name: globally install symfony/flex
-        run: composer global require --no-progress --no-scripts --no-plugins symfony/flex
-
       - name: require doctrine/cache-bundle
         if: matrix.doctrine-cache-bundle == true
         run: composer require --no-update --dev doctrine/doctrine-cache-bundle:^1.3.1
