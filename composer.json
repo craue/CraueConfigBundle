@@ -47,6 +47,9 @@
 		"symfony/twig-bundle": "^4.4 || ^5.4 || ^6.3",
 		"symfony/web-profiler-bundle": "^4.4 || ^5.4 || ^6.3"
 	},
+	"conflict": {
+		"doctrine/cache": "<1.6"
+	},
 	"minimum-stability": "stable",
 	"autoload": {
 		"psr-4": {
