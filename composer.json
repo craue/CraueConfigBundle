@@ -1,10 +1,12 @@
 {
 	"name": "craue/config-bundle",
-	"type": "symfony-bundle",
 	"description": "Database-stored settings made available via a service for your Symfony project.",
-	"keywords": ["config", "symfony"],
-	"homepage": "https://github.com/craue/CraueConfigBundle",
 	"license": "MIT",
+	"type": "symfony-bundle",
+	"keywords": [
+		"config",
+		"symfony"
+	],
 	"authors": [
 		{
 			"name": "Christian Raue",
@@ -15,19 +17,20 @@
 			"homepage": "https://github.com/craue/CraueConfigBundle/contributors"
 		}
 	],
+	"homepage": "https://github.com/craue/CraueConfigBundle",
 	"require": {
-		"php": "^7.3|^8",
-		"doctrine/doctrine-bundle": "^1.6.12|^2",
-		"psr/simple-cache": "^1|^2|^3",
-		"symfony/cache": "~4.4|~5.4|^6.3",
-		"symfony/config": "~4.4|~5.4|^6.3",
-		"symfony/dependency-injection": "~4.4|~5.4|^6.3",
-		"symfony/form": "~4.4|~5.4|^6.3",
-		"symfony/framework-bundle": "~4.4|~5.4|^6.3",
-		"symfony/http-foundation": "~4.4|~5.4|^6.3",
-		"symfony/http-kernel": "~4.4|~5.4|^6.3",
-		"symfony/options-resolver": "~4.4|~5.4|^6.3",
-		"symfony/validator": "~4.4|~5.4|^6.3"
+		"php": "^7.3 || ^8",
+		"doctrine/doctrine-bundle": "^1.6.12 || ^2",
+		"psr/simple-cache": "^1 || ^2 || ^3",
+		"symfony/cache": "^4.4 || ^5.4 || ^6.3",
+		"symfony/config": "^4.4 || ^5.4 || ^6.3",
+		"symfony/dependency-injection": "^4.4 || ^5.4 || ^6.3",
+		"symfony/form": "^4.4 || ^5.4 || ^6.3",
+		"symfony/framework-bundle": "^4.4 || ^5.4 || ^6.3",
+		"symfony/http-foundation": "^4.4 || ^5.4 || ^6.3",
+		"symfony/http-kernel": "^4.4 || ^5.4 || ^6.3",
+		"symfony/options-resolver": "^4.4 || ^5.4 || ^6.3",
+		"symfony/validator": "^4.4 || ^5.4 || ^6.3"
 	},
 	"require-dev": {
 		"craue/translations-tests": "^1.0",
@@ -38,11 +41,14 @@
 		"phpstan/phpstan-strict-rules": "^1.1",
 		"phpstan/phpstan-symfony": "^1.1",
 		"phpunit/phpunit": "^9.6",
-		"symfony/asset": "~4.4|~5.4|^6.3",
-		"symfony/browser-kit": "~4.4|~5.4|^6.3",
+		"symfony/asset": "^4.4 || ^5.4 || ^6.3",
+		"symfony/browser-kit": "^4.4 || ^5.4 || ^6.3",
 		"symfony/phpunit-bridge": "^6.3",
-		"symfony/twig-bundle": "~4.4|~5.4|^6.3",
-		"symfony/web-profiler-bundle": "~4.4|~5.4|^6.3"
+		"symfony/twig-bundle": "^4.4 || ^5.4 || ^6.3",
+		"symfony/web-profiler-bundle": "^4.4 || ^5.4 || ^6.3"
+	},
+	"conflict": {
+		"doctrine/cache": "<1.6"
 	},
 	"minimum-stability": "stable",
 	"autoload": {
@@ -53,19 +59,16 @@
 			"/Tests/"
 		]
 	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "3.0.x-dev"
-		},
-		"symfony": {
-			"require": "~4.4|~5.4|^6.3"
-		}
-	},
 	"config": {
 		"allow-plugins": {
 			"phpstan/extension-installer": true,
 			"symfony/flex": true
 		},
 		"sort-packages": true
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "3.0.x-dev"
+		}
 	}
 }
