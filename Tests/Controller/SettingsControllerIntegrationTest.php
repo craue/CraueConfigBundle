@@ -5,6 +5,8 @@ namespace Craue\ConfigBundle\Tests\Controller;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 
 /**
  * @group integration
@@ -40,7 +42,10 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertSame(200, static::$client->getResponse()->getStatusCode(), $content);
 		$this->assertMatchesRegularExpression('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
 		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_0_value">name</label>', $content);
-		$this->assertStringContainsString('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value" />', $content);
+		// TODO clean up as soon as Symfony >= 6.4 is required, see https://github.com/symfony/symfony/pull/47715
+		// (and remove composer/semver dependency)
+		$this->assertStringContainsString(sprintf('<input type="text" id="craue_config_modifySettings_settings_0_value" name="craue_config_modifySettings[settings][0][value]" value="value"%s>',
+				InstalledVersions::satisfies(new VersionParser(), 'symfony/form', '<6.4') ? ' /' : ''), $content);
 		$this->assertStringContainsString('<button type="submit">apply</button>', $content);
 
 		$form = $crawler->selectButton('apply')->form();
