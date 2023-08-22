@@ -33,6 +33,7 @@
 		"symfony/validator": "^4.4 || ^5.4 || ^6.3"
 	},
 	"require-dev": {
+		"composer/semver": "^3.0",
 		"craue/translations-tests": "^1.0",
 		"doctrine/orm": "^2.5.14",
 		"phpstan/extension-installer": "^1.1",
