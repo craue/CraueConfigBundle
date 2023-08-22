@@ -113,6 +113,7 @@ jobs:
         if: github.repository == 'craue/CraueConfigBundle'
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: PHP ${{ matrix.php }} - ${{ matrix.dependencies || format('Symfony {0}', matrix.symfony) }}
         run: |
           unset SYMFONY_REQUIRE
           composer global require php-coveralls/php-coveralls
