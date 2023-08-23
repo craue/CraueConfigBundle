@@ -24,6 +24,7 @@ class CraueConfigExtension extends Extension implements PrependExtensionInterfac
 	public function load(array $configs, ContainerBuilder $container) : void {
 		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 		$loader->load('controller.xml');
+		$loader->load('event_listener.xml');
 		$loader->load('form.xml');
 		$loader->load('twig.xml');
 		$loader->load('util.xml');

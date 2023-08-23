@@ -137,9 +137,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		]);
 
 		$this->assertTrue($cache->has('name1'));
-		$this->assertTrue($cache->has('name2'));
+		$this->assertFalse($cache->has('name2'));
 		$this->assertSame('new-value1', $cache->get('name1'));
-		$this->assertSame('value2', $cache->get('name2'));
 	}
 
 	public function dataModifyAction_changeValue_cacheUsage() {

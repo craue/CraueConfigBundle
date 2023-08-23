@@ -101,9 +101,8 @@ class ConfigUnitTest extends TestCase {
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $setting])));
 
-		$cache->expects($this->once())
-			->method('set')
-			->with($setting->getName(), $newValue)
+		$cache->expects($this->never())
+			->method($this->anything())
 		;
 
 		$setting->expects($this->once())
@@ -138,9 +137,8 @@ class ConfigUnitTest extends TestCase {
 			$setting->getName() => $newValue,
 		];
 
-		$cache->expects($this->once())
-			->method('setMultiple')
-			->with($settingsKeyValuePairs)
+		$cache->expects($this->never())
+			->method($this->anything())
 		;
 
 		$setting->expects($this->once())

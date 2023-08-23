@@ -40,26 +40,4 @@ class SettingsControllerUnitTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataGetSettingByName
-	 */
-	public function testGetSettingByName(array $settings, $name, $expectedResult) {
-		$controller = new SettingsController();
-		$method = new \ReflectionMethod($controller, 'getSettingByName');
-		$method->setAccessible(true);
-
-		$this->assertSame($expectedResult, $method->invoke($controller, $settings, $name));
-	}
-
-	public function dataGetSettingByName() {
-		$setting1 = Setting::create('name1');
-		$setting2 = Setting::create('name2');
-
-		return [
-			[[$setting1],				'name1',	$setting1],
-			[[$setting1, $setting2],	'name2',	$setting2],
-			[[$setting1, $setting2],	'name3',	null],
-		];
-	}
-
 }
