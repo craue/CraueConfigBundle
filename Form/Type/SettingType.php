@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
- * @copyright 2011-2023 Christian Raue
+ * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 class SettingType extends AbstractType {
