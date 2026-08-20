@@ -57,7 +57,7 @@ You can either import the default routing configuration
 ```yaml
 # in app/config/routing.yml
 craue_config_settings:
-  resource: "@CraueConfigBundle/Resources/config/routing/settings.xml"
+  resource: "@CraueConfigBundle/Resources/config/routing/settings.yml"
   prefix: /settings
 ```
 

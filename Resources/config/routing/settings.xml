@@ -4,6 +4,9 @@
 	Copyright: 2011-2026 Christian Raue
 	License: http://opensource.org/licenses/mit-license.php MIT License
 -->
+<!--
+	TODO remove as soon as Symfony >= 8 is required ("Since symfony/routing 7.4: XML configuration format is deprecated.")
+-->
 <routes
 		xmlns="http://symfony.com/schema/routing"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
