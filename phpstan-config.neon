@@ -7,7 +7,50 @@ parameters:
 		- Tests/*
 		- vendor/*
 	ignoreErrors:
-		- '#^Call to an undefined method Psr\\Container\\ContainerInterface::getParameter\(\)\.$#'
+		-
+			message: '#^Call to an undefined method Psr\\Container\\ContainerInterface::getParameter\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: Controller/SettingsController.php
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
 			path: Entity/BaseSetting.php
+
+		# TODO remove as soon as Symfony >= 5.0 is required
+		-
+			message: '#^Call to method contains\(\) on an unknown class Doctrine\\Common\\Cache\\CacheProvider\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CacheAdapter/DoctrineCacheBundleAdapter.php
+		-
+			message: '#^Call to method deleteAll\(\) on an unknown class Doctrine\\Common\\Cache\\CacheProvider\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CacheAdapter/DoctrineCacheBundleAdapter.php
+		-
+			message: '#^Call to method fetch\(\) on an unknown class Doctrine\\Common\\Cache\\CacheProvider\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CacheAdapter/DoctrineCacheBundleAdapter.php
+		-
+			message: '#^Call to method save\(\) on an unknown class Doctrine\\Common\\Cache\\CacheProvider\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CacheAdapter/DoctrineCacheBundleAdapter.php
+		-
+			message: '#^Call to method saveMultiple\(\) on an unknown class Doctrine\\Common\\Cache\\CacheProvider\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CacheAdapter/DoctrineCacheBundleAdapter.php
+		-
+			message: '#^Parameter \$cache of method Craue\\ConfigBundle\\CacheAdapter\\DoctrineCacheBundleAdapter\:\:__construct\(\) has invalid type Doctrine\\Common\\Cache\\CacheProvider\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CacheAdapter/DoctrineCacheBundleAdapter.php
+		-
+			message: '#^Property Craue\\ConfigBundle\\CacheAdapter\\DoctrineCacheBundleAdapter\:\:\$cache has unknown class Doctrine\\Common\\Cache\\CacheProvider as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CacheAdapter/DoctrineCacheBundleAdapter.php
