@@ -153,13 +153,6 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 			], 'config_cache_SymfonyCacheComponent_redis.yml'));
 		}
 
-		// TODO remove as soon as Symfony >= 5.0 is required
-		if (class_exists(\Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class)) {
-			$testData = array_merge($testData, self::duplicateTestDataForEachPlatform([
-				['cache_DoctrineCacheBundle_file_system'],
-			], 'config_cache_DoctrineCacheBundle_file_system.yml'));
-		}
-
 		return $testData;
 	}
 

@@ -254,11 +254,6 @@ class ConfigUnitTest extends TestCase {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
 
-		// TODO remove as soon as PHP >= 8.1 is required
-		if (\PHP_VERSION_ID < 80100) {
-			$method->setAccessible(true);
-		}
-
 		$repo = $this->getMockBuilder(EntityRepository::class)
 			->disableOriginalConstructor()
 			->getMock()
@@ -278,11 +273,6 @@ class ConfigUnitTest extends TestCase {
 	public function testGetRepo_changedEntityManager() {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
-
-		// TODO remove as soon as PHP >= 8.1 is required
-		if (\PHP_VERSION_ID < 80100) {
-			$method->setAccessible(true);
-		}
 
 		// 1st call to `getRepo` using a mocked EntityManager
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
@@ -306,11 +296,6 @@ class ConfigUnitTest extends TestCase {
 	public function testGetRepo_changedEntityName() {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
-
-		// TODO remove as soon as PHP >= 8.1 is required
-		if (\PHP_VERSION_ID < 80100) {
-			$method->setAccessible(true);
-		}
 
 		$em = $this->createEntityManagerMock();
 

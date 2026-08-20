@@ -169,11 +169,6 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @return object The associated service.
 	 */
 	protected function getService($id) {
-		// TODO remove as soon as Symfony >= 5.3 is required
-		if (!method_exists($this, 'getContainer')) {
-			return static::$kernel->getContainer()->get($id);
-		}
-
 		return static::getContainer()->get($id);
 	}
 

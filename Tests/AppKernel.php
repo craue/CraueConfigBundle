@@ -34,20 +34,13 @@ class AppKernel extends Kernel {
 	}
 
 	public function registerBundles() : iterable {
-		$bundles = [
+		return [
 			new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 			new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 			new \Symfony\Bundle\TwigBundle\TwigBundle(),
 			new \Craue\ConfigBundle\CraueConfigBundle(),
 			new \Craue\ConfigBundle\Tests\IntegrationTestBundle\IntegrationTestBundle(),
 		];
-
-		// TODO remove as soon as Symfony >= 5.0 is required
-		if (class_exists(\Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class)) {
-			$bundles[] = new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle();
-		}
-
-		return $bundles;
 	}
 
 	public function registerContainerConfiguration(LoaderInterface $loader) : void {
