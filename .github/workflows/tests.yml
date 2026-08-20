@@ -77,7 +77,7 @@ jobs:
           mysql --user=root --password=root -e 'source /tmp/mysql-init.sql'
 
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: setup PHP
         uses: shivammathur/setup-php@v2
@@ -99,7 +99,7 @@ jobs:
         run: composer config minimum-stability dev
 
       - name: install dependencies with Composer
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v4
         with:
           dependency-versions: ${{ matrix.dependencies }}
           composer-options: --prefer-dist
