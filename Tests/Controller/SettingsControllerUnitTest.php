@@ -21,7 +21,11 @@ class SettingsControllerUnitTest extends TestCase {
 	public function testGetSections(array $settings, array $expectedResult) {
 		$controller = new SettingsController();
 		$method = new \ReflectionMethod($controller, 'getSections');
-		$method->setAccessible(true);
+
+		// TODO remove as soon as PHP >= 8.1 is required
+		if (\PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true);
+		}
 
 		$this->assertSame($expectedResult, $method->invoke($controller, $settings));
 	}
@@ -46,7 +50,11 @@ class SettingsControllerUnitTest extends TestCase {
 	public function testGetSettingByName(array $settings, $name, $expectedResult) {
 		$controller = new SettingsController();
 		$method = new \ReflectionMethod($controller, 'getSettingByName');
-		$method->setAccessible(true);
+
+		// TODO remove as soon as PHP >= 8.1 is required
+		if (\PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true);
+		}
 
 		$this->assertSame($expectedResult, $method->invoke($controller, $settings, $name));
 	}

@@ -44,10 +44,10 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertSame(200, static::$client->getResponse()->getStatusCode(), $content);
 		$this->assertMatchesRegularExpression('/<form .*method="post" .*class="craue_config_settings_modify".*>/', $content);
 		$this->assertStringContainsString('<label for="craue_config_modifySettings_settings_name_value">name</label>', $content);
-		// TODO clean up as soon as Symfony >= 6.4 is required, see https://github.com/symfony/symfony/pull/47715
+		// TODO clean up as soon as Symfony >= 6.4.3 is required, see https://github.com/symfony/symfony/pull/47715
 		// (and remove composer/semver dependency)
 		$this->assertStringContainsString(sprintf('<input type="text" id="craue_config_modifySettings_settings_name_value" name="craue_config_modifySettings[settings][name][value]" value="value"%s>',
-				InstalledVersions::satisfies(new VersionParser(), 'symfony/form', '<6.4') ? ' /' : ''), $content);
+				InstalledVersions::satisfies(new VersionParser(), 'symfony/twig-bridge', '<6 || >=6.4.3') ? ' /' : ''), $content);
 		$this->assertStringContainsString('<button type="submit">apply</button>', $content);
 
 		$form = $crawler->selectButton('apply')->form();

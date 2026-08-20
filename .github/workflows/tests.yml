@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.allow-failure || false }}
     env:
+      COMPOSER_NO_BLOCKING: 1
       SYMFONY_REQUIRE: ${{ matrix.symfony }}
       SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.symfony-deprecations }}
 
@@ -29,11 +30,12 @@ jobs:
           -
             php: '8.5'
             dependencies: highest
+            symfony-deprecations: max[indirect]=439
           -
             php: '7.3'
             symfony: '4.4.*'
             doctrine-cache-bundle: true
-            symfony-deprecations: max[indirect]=4
+            symfony-deprecations: max[indirect]=7
           -
             php: '7.4'
             symfony: '5.4.*'

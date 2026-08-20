@@ -144,9 +144,15 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 			// doctrine/orm = 2.16.0
 			$this->expectException(\RuntimeException::class);
 			$this->expectExceptionMessage(sprintf('While adding an entity of class %1$s with an ID hash of "%2$s" to the identity map,%3$sanother object of class %1$s was already present for the same ID.', $entityName, 'name1', "\n"));
+		} elseif (class_exists(\Doctrine\ORM\Exception\EntityIdentityCollisionException::class)) {
+			// doctrine/orm > 2.16.0
+			$this->expectException(\Doctrine\ORM\Exception\EntityIdentityCollisionException::class);
+			$this->expectExceptionMessage(sprintf('While adding an entity of class %1$s with an ID hash of "%2$s" to the identity map,%3$sanother object of class %1$s was already present for the same ID.', $entityName, 'name1', "\n"));
+
+			// with this, even doctrine/orm >= 2.16.1 will throw an EntityIdentityCollisionException
+			$this->getEntityManager()->getConfiguration()->setRejectIdCollisionInIdentityMap(true);
 		} else {
 			// doctrine/orm < 2.16.0
-			// doctrine/orm > 2.16.0
 			$this->expectException(UniqueConstraintViolationException::class);
 				switch ($platform) {
 					case self::PLATFORM_MYSQL:

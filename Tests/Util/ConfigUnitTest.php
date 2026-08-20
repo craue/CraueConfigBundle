@@ -28,6 +28,7 @@ class ConfigUnitTest extends TestCase {
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $this->returnValueMap([
 			[['name' => $setting->getName()], null, $setting],
 		])])));
+		$config->setEntityName(Setting::class);
 
 		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
 	}
@@ -35,6 +36,7 @@ class ConfigUnitTest extends TestCase {
 	public function testGet_nonexistentSetting() {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
+		$config->setEntityName(Setting::class);
 
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessage('Setting "oh-no" couldn\'t be found.');
@@ -48,6 +50,7 @@ class ConfigUnitTest extends TestCase {
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $this->returnValueMap([
 			[['name' => $setting->getName()], null, $setting],
 		])])));
+		$config->setEntityName(Setting::class);
 
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -100,6 +103,7 @@ class ConfigUnitTest extends TestCase {
 		$newValue = 'new-value';
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $setting])));
+		$config->setEntityName(Setting::class);
 
 		$cache->expects($this->once())
 			->method('set')
@@ -117,6 +121,7 @@ class ConfigUnitTest extends TestCase {
 	public function testSet_nonexistentSetting() {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
+		$config->setEntityName(Setting::class);
 
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessage('Setting "oh-no" couldn\'t be found.');
@@ -133,6 +138,7 @@ class ConfigUnitTest extends TestCase {
 		$newValue = 'new-value';
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findByNames' => [$setting->getName() => $setting]])));
+		$config->setEntityName(Setting::class);
 
 		$settingsKeyValuePairs = [
 			$setting->getName() => $newValue,
@@ -167,6 +173,7 @@ class ConfigUnitTest extends TestCase {
 		$setting = Setting::create('name1');
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findByNames' => [$setting->getName() => $setting]])));
+		$config->setEntityName(Setting::class);
 
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessage('Setting "oh-no" couldn\'t be found.');
@@ -179,6 +186,7 @@ class ConfigUnitTest extends TestCase {
 	public function testAll_noSettings() {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findAll' => []])));
+		$config->setEntityName(Setting::class);
 
 		$this->assertEquals([], $config->all());
 	}
@@ -200,6 +208,7 @@ class ConfigUnitTest extends TestCase {
 		];
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findAll' => [$setting1, $setting2]])));
+		$config->setEntityName(Setting::class);
 
 		$cache->expects($this->once())
 			->method('setMultiple')
@@ -220,6 +229,7 @@ class ConfigUnitTest extends TestCase {
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findBy' => $this->returnValueMap([
 			[['section' => $section], null, null, null, $foundSettings],
 		])])));
+		$config->setEntityName(Setting::class);
 
 		$cache->expects($this->once())
 			->method('setMultiple')
@@ -243,7 +253,11 @@ class ConfigUnitTest extends TestCase {
 	public function testGetRepo_configuredRepository() {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
-		$method->setAccessible(true);
+
+		// TODO remove as soon as PHP >= 8.1 is required
+		if (\PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true);
+		}
 
 		$repo = $this->getMockBuilder(EntityRepository::class)
 			->disableOriginalConstructor()
@@ -251,6 +265,7 @@ class ConfigUnitTest extends TestCase {
 		;
 
 		$config->setEntityManager($this->createEntityManagerMock($repo));
+		$config->setEntityName(Setting::class);
 
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessageMatches(sprintf('/^Entity repository of type "%s" expected, but got ".+"\.$/', preg_quote(SettingRepository::class)));
@@ -263,10 +278,15 @@ class ConfigUnitTest extends TestCase {
 	public function testGetRepo_changedEntityManager() {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
-		$method->setAccessible(true);
+
+		// TODO remove as soon as PHP >= 8.1 is required
+		if (\PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true);
+		}
 
 		// 1st call to `getRepo` using a mocked EntityManager
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
+		$config->setEntityName(Setting::class);
 
 		// invoke twice to ensure the cached instance is used
 		$method->invoke($config);
@@ -286,7 +306,11 @@ class ConfigUnitTest extends TestCase {
 	public function testGetRepo_changedEntityName() {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
-		$method->setAccessible(true);
+
+		// TODO remove as soon as PHP >= 8.1 is required
+		if (\PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true);
+		}
 
 		$em = $this->createEntityManagerMock();
 
@@ -383,7 +407,7 @@ class ConfigUnitTest extends TestCase {
 	 * @param EntityRepository|null $repo
 	 * @return MockObject|EntityManager
 	 */
-	protected function createEntityManagerMock(EntityRepository $repo = null) {
+	protected function createEntityManagerMock(?EntityRepository $repo = null) {
 		$em = $this->getMockBuilder(EntityManager::class)
 			->disableOriginalConstructor()
 			->getMock()
