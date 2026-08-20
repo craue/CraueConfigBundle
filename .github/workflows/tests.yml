@@ -27,7 +27,7 @@ jobs:
             doctrine-cache-bundle: true
             symfony-deprecations: max[self]=2&max[indirect]=1360
           -
-            php: '8.2'
+            php: '8.5'
             dependencies: highest
           -
             php: '7.3'
@@ -49,8 +49,12 @@ jobs:
           -
             php: '8.2'
             symfony: '6.4.*'
-            stability: dev
-            allow-failure: true
+          -
+            php: '8.3'
+            symfony: '6.4.*'
+          -
+            php: '8.4'
+            symfony: '6.4.*'
 
     services:
       redis:
