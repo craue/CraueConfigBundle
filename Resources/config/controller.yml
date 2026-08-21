@@ -1,0 +1,7 @@
+services:
+  Craue\ConfigBundle\Controller\SettingsController:
+    class: Craue\ConfigBundle\Controller\SettingsController
+    calls:
+      - setContainer: ['@service_container']
+    tags:
+      - controller.service_arguments

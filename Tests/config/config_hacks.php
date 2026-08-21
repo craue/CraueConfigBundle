@@ -50,6 +50,27 @@ if (Kernel::VERSION_ID < 70000) {
 	]);
 }
 
+// TODO remove as soon as Symfony >= 8 is required
+// "Since symfony/framework-bundle 7.3: Not setting the "property_info.with_constructor_extractor" option explicitly is deprecated because its default value will change in version 8.0."
+if (Kernel::VERSION_ID >= 70300 && Kernel::VERSION_ID < 80000) {
+	$container->loadFromExtension('framework', [
+		'property_info' => [
+			'with_constructor_extractor' => true,
+		],
+	]);
+}
+
+// TODO remove as soon as Symfony >= 8.1 is required
+// "Since symfony/framework-bundle 7.3: Not setting the "framework.profiler.collect_serializer_data" config option to "true" is deprecated."
+// "Since symfony/framework-bundle 8.1: Setting the "framework.profiler.collect_serializer_data" configuration option is deprecated. It will be removed in version 9.0."
+if (Kernel::VERSION_ID >= 70300 && Kernel::VERSION_ID < 80100) {
+	$container->loadFromExtension('framework', [
+		'profiler' => [
+			'collect_serializer_data' => true,
+		],
+	]);
+}
+
 // TODO remove as soon as doctrine/doctrine-bundle >= 3.1 is required
 if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/doctrine-bundle', '<3.1')) {
 	if (\PHP_VERSION_ID >= 80400 && InstalledVersions::satisfies(new VersionParser(), 'doctrine/orm', '>=3.4')) {

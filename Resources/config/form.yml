@@ -1,0 +1,7 @@
+services:
+  craue_config.form_type.setting:
+    class: Craue\ConfigBundle\Form\Type\SettingType
+    tags:
+      - form.type
+    arguments:
+      - '%craue_config.entity_name%'

@@ -1,5 +1,5 @@
 imports:
-  - { resource: '@IntegrationTestBundle/Resources/config/controller.xml' }
+  - { resource: '@IntegrationTestBundle/Resources/config/controller.yml' }
   - { resource: config_hacks.php }
 
 doctrine:
@@ -33,7 +33,6 @@ framework:
 twig:
   debug: '%kernel.debug%'
   strict_variables: '%kernel.debug%'
-  exception_controller: ~
 
 services:
   twig.test:

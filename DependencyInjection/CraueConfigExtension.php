@@ -7,7 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Registration of the extension via DI.
@@ -22,11 +22,11 @@ class CraueConfigExtension extends Extension implements PrependExtensionInterfac
 	 * {@inheritDoc}
 	 */
 	public function load(array $configs, ContainerBuilder $container) : void {
-		$loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-		$loader->load('controller.xml');
-		$loader->load('form.xml');
-		$loader->load('twig.xml');
-		$loader->load('util.xml');
+		$loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+		$loader->load('controller.yml');
+		$loader->load('form.yml');
+		$loader->load('twig.yml');
+		$loader->load('util.yml');
 	}
 
 	/**

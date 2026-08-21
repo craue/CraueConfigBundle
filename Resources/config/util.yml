@@ -1,0 +1,31 @@
+parameters:
+  craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\NullAdapter
+  craue_config.redirectRouteAfterModify: craue_config_settings_modify
+
+services:
+  craue_config_cache_adapter:
+    class: '%craue_config.cache_adapter.class%'
+    public: true
+    arguments:
+      - '@?craue_config_cache_provider'
+
+  Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface:
+    alias: craue_config_cache_adapter
+    public: false
+
+  craue_config_default:
+    class: Craue\ConfigBundle\Util\Config
+    public: true
+    arguments:
+      - '@craue_config_cache_adapter'
+    calls:
+      - setEntityManager: ['@doctrine.orm.default_entity_manager']
+      - setEntityName: ['%craue_config.entity_name%']
+
+  craue_config:
+    alias: craue_config_default
+    public: true
+
+  Craue\ConfigBundle\Util\Config:
+    alias: craue_config_default
+    public: false

@@ -1,0 +1,6 @@
+services:
+  Craue\ConfigBundle\Tests\IntegrationTestBundle\Controller\:
+    resource: '../../Controller/*'
+    autoconfigure: true
+    calls:
+      - setContainer: ['@service_container']

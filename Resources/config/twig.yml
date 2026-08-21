@@ -1,0 +1,11 @@
+parameters:
+  craue_config.configTemplate.sectionOrder: []
+
+services:
+  twig.extension.craue_config_template:
+    class: Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension
+    tags:
+      - twig.extension
+    calls:
+      - setSectionOrder: ['%craue_config.configTemplate.sectionOrder%']
+      - setConfig: ['@craue_config']

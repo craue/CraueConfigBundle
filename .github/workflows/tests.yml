@@ -25,11 +25,10 @@ jobs:
           -
             php: '8.2'
             dependencies: lowest
-            symfony-deprecations: max[direct]=216&max[indirect]=161
+            symfony-deprecations: max[direct]=234&max[indirect]=189
           -
             php: '8.5'
             dependencies: highest
-            symfony-deprecations: max[indirect]=439
           -
             php: '8.2'
             symfony: '5.4.*'
@@ -42,6 +41,17 @@ jobs:
           -
             php: '8.4'
             symfony: '6.4.*'
+          -
+            php: '8.5'
+            symfony: '6.4.*'
+          -
+            php: '8.5'
+            symfony: '7.4.*'
+          -
+            php: '8.5'
+            symfony: '8.2.*'
+            stability: dev
+            allow-failure: true
 
     services:
       redis:
