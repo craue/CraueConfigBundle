@@ -145,12 +145,9 @@ The Twig extension in this bundle supports reading settings directly in your tem
 
 # Enable caching (optional)
 
-To reduce the number of database queries, you can set up a cache for settings. First, you have to choose which cache
-implementation you'd like to use. Currently, there are adapters available for:
-- [DoctrineCacheBundle](https://github.com/doctrine/DoctrineCacheBundle)
-- [Symfony Cache component](https://symfony.com/doc/current/components/cache.html)
-
-Refer to the documentation of each implementation for details and read on in the corresponding section below. When
+To reduce the number of database queries, you can set up a cache for settings. Currently, there's an adapter
+available for the [Symfony Cache component](https://symfony.com/doc/current/components/cache.html).
+Refer to its documentation for details and read on in the corresponding section below. When
 done, `CraueConfigBundle` will automatically cache settings (using the built-in `craue_config_cache_adapter` service).
 
 Keep in mind to clear the cache (if needed) after modifying settings outside of your app (e.g. by Doctrine migrations):
@@ -159,27 +156,6 @@ Keep in mind to clear the cache (if needed) after modifying settings outside of 
 # in a shell
 php bin/console doctrine:cache:clear craue_config_cache
 ```
-
-<details>
-  <summary>Cache implementation: DoctrineCacheBundle</summary>
-
-  Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache provider with the
-  alias `craue_config_cache_provider`:
-
-  ```yaml
-  # in app/config/config.yml
-  parameters:
-    craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\DoctrineCacheBundleAdapter
-
-  doctrine_cache:
-    providers:
-      craue_config_cache:
-        apc: ~
-        namespace: craue_config
-        aliases:
-          - craue_config_cache_provider
-  ```
-</details>
 
 <details>
   <summary>Cache implementation: Symfony Cache component</summary>
