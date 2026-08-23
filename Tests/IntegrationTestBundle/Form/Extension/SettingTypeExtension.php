@@ -18,7 +18,7 @@ class SettingTypeExtension extends AbstractTypeExtension {
 	 * {@inheritDoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) : void {
-		/* @var $formData SettingInterface */
+		/** @var SettingInterface $formData */
 		$formData = $options['data'];
 
 		$config = $builder->get('value')->getForm()->getConfig();

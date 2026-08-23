@@ -56,7 +56,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$content = static::$client->getResponse()->getContent();
 		$this->assertStringContainsString('<div class="notice">The settings were changed.</div>', $content);
 
-		/* @var $setting SettingInterface */
+		/** @var SettingInterface $setting */
 		$setting = $this->getSettingsRepo()->findOneBy([]);
 		$this->assertSame('name', $setting->getName());
 		$this->assertSame('value', $setting->getValue());
@@ -81,7 +81,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 		static::$client->submit($form);
 
-		/* @var $setting SettingInterface */
+		/** @var SettingInterface $setting */
 		$setting = $this->getSettingsRepo()->findOneBy([
 			'name' => 'name11',
 		]);
@@ -108,7 +108,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$content = static::$client->getResponse()->getContent();
 		$this->assertStringContainsString('<div class="notice">The settings were changed.</div>', $content);
 
-		/* @var $setting SettingInterface */
+		/** @var SettingInterface $setting */
 		$setting = $this->getSettingsRepo()->findOneBy([]);
 		$this->assertSame('name', $setting->getName());
 		$this->assertSame('new-value', $setting->getValue());
@@ -306,7 +306,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 			'craue_config_modifySettings[settings][name][value]' => $newValue,
 		]);
 
-		/* @var $setting CustomSetting */
+		/** @var CustomSetting $setting */
 		$setting = $this->getSettingsRepo()->findOneBy([]);
 		$this->assertSame('name', $setting->getName());
 		$this->assertSame(strlen($newValue), strlen($setting->getValue()));
@@ -339,7 +339,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 			'craue_config_modifySettings[settings][name][value]' => 'new-value', // will be ignored
 		]);
 
-		/* @var $setting CanBeDisabledSetting */
+		/** @var CanBeDisabledSetting $setting */
 		$setting = $this->getSettingsRepo()->findOneBy([]);
 		$this->assertSame('old-value', $setting->getValue());
 	}

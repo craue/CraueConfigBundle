@@ -24,7 +24,7 @@ class ModifySettingsForm extends AbstractType {
 		$settingsForm = $builder->create('settings', FormType::class);
 
 		foreach ($options['data']['settings'] as $setting) {
-			/* @var $setting SettingInterface */
+			/** @var SettingInterface $setting */
 			$settingsForm->add($setting->getName(), SettingType::class, [
 				'data' => $setting,
 			]);

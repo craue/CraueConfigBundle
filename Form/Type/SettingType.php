@@ -61,7 +61,7 @@ class SettingType extends AbstractType {
 	 * {@inheritdoc}
 	 */
 	public function finishView(FormView $view, FormInterface $form, array $options) : void {
-		/* @var $setting SettingInterface */
+		/** @var SettingInterface $setting */
 		$setting = $form->getData();
 
 		$view->children['value']->vars['label'] = $setting->getName();
