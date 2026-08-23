@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
+ * @extends AbstractType<FormType>
+ *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License

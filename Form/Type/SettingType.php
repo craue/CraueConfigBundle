@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
+ * @extends AbstractType<SettingInterface>
+ *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
@@ -19,11 +21,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SettingType extends AbstractType {
 
 	/**
-	 * @var string
+	 * @var class-string
 	 */
 	protected $entityName;
 
-	public function __construct($entityName) {
+	/**
+	 * @param class-string $entityName
+	 */
+	public function __construct(string $entityName) {
 		$this->entityName = $entityName;
 	}
 

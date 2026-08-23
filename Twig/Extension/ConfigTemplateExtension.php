@@ -27,21 +27,18 @@ class ConfigTemplateExtension extends AbstractExtension {
 	/**
 	 * @param string[] $sectionOrder The order in which sections will be rendered.
 	 */
-	public function setSectionOrder(array $sectionOrder = []) {
+	public function setSectionOrder(array $sectionOrder = []) : void {
 		$this->sectionOrder = $sectionOrder;
 	}
 
-	/**
-	 * @param Config $config
-	 */
-	public function setConfig(Config $config) {
+	public function setConfig(Config $config) : void {
 		$this->config = $config;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName() {
+	public function getName() : string {
 		return 'craue_config_template';
 	}
 
@@ -67,7 +64,7 @@ class ConfigTemplateExtension extends AbstractExtension {
 	 * @param string[] $sections
 	 * @return string[]
 	 */
-	public function sortSections(array $sections) {
+	public function sortSections(array $sections) : array {
 		$finalSectionOrder = [];
 
 		// add null section first (if it exists)
@@ -95,7 +92,7 @@ class ConfigTemplateExtension extends AbstractExtension {
 	 * @return string|null Value of the setting.
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
-	public function getSetting($name) {
+	public function getSetting(string $name) : ?string {
 		return $this->config->get($name);
 	}
 

@@ -9,23 +9,23 @@ namespace Craue\ConfigBundle\CacheAdapter;
  */
 class NullAdapter implements CacheAdapterInterface {
 
-	public function clear() {
+	public function clear() : bool {
 		return true;
 	}
 
-	public function has($key) {
+	public function has(string $key) : bool {
 		return false;
 	}
 
-	public function get($key) {
+	public function get(string $key) : mixed {
 		return null;
 	}
 
-	public function set($key, $value) {
+	public function set(string $key, mixed $value) : bool {
 		return false;
 	}
 
-	public function setMultiple(array $keysAndValues) {
+	public function setMultiple(array $keysAndValues) : bool {
 		return false;
 	}
 

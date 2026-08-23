@@ -9,13 +9,13 @@ namespace Craue\ConfigBundle\Entity;
  */
 interface SettingInterface {
 
-	function setName($name);
-	function getName();
+	function setName(string $name) : void;
+	function getName() : string;
 
-	function setValue($value);
-	function getValue();
+	function setValue(?string $value) : void;
+	function getValue() : ?string;
 
-	function setSection($section);
-	function getSection();
+	function setSection(?string $section) : void;
+	function getSection() : ?string;
 
 }

@@ -31,7 +31,7 @@ class Config {
 	protected $repo;
 
 	/**
-	 * @var string
+	 * @var class-string
 	 */
 	protected $entityName;
 
@@ -39,11 +39,11 @@ class Config {
 		$this->setCache($cache ?? new NullAdapter());
 	}
 
-	public function setCache(CacheAdapterInterface $cache) {
+	public function setCache(CacheAdapterInterface $cache) : void {
 		$this->cache = $cache;
 	}
 
-	public function setEntityManager(EntityManager $em) {
+	public function setEntityManager(EntityManager $em) : void {
 		if ($this->em !== $em) {
 			if ($this->em !== null) {
 				$this->cache->clear();
@@ -54,7 +54,10 @@ class Config {
 		}
 	}
 
-	public function setEntityName($entityName) {
+	/**
+	 * @param class-string $entityName
+	 */
+	public function setEntityName(string $entityName) : void {
 		$this->entityName = $entityName;
 		$this->repo = null;
 	}
@@ -64,7 +67,7 @@ class Config {
 	 * @return string|null Value of the setting.
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
-	public function get($name) {
+	public function get(string $name) : ?string {
 		if ($this->cache->has($name)) {
 			return $this->cache->get($name);
 		}
@@ -87,7 +90,7 @@ class Config {
 	 * @param string|null $value New value for the setting.
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
-	public function set($name, $value) {
+	public function set(string $name, ?string $value) : void {
 		$setting = $this->getRepo()->findOneBy([
 			'name' => $name,
 		]);
@@ -103,10 +106,10 @@ class Config {
 	}
 
 	/**
-	 * @param array $newSettings List of settings (as name => value) to update.
+	 * @param array<string, ?string> $newSettings List of settings (as name => value) to update.
 	 * @throws \RuntimeException If at least one of the settings is not defined.
 	 */
-	public function setMultiple(array $newSettings) {
+	public function setMultiple(array $newSettings) : void {
 		if ($newSettings === []) {
 			return;
 		}
@@ -127,9 +130,9 @@ class Config {
 	}
 
 	/**
-	 * @return array with name => value
+	 * @return array<string, ?string> with name => value
 	 */
-	public function all() {
+	public function all() : array {
 		$settings = $this->getAsNamesAndValues($this->getRepo()->findAll());
 
 		$this->cache->setMultiple($settings);
@@ -139,9 +142,9 @@ class Config {
 
 	/**
 	 * @param string|null $section Name of the section to fetch settings for.
-	 * @return array with name => value
+	 * @return array<string, ?string> with name => value
 	 */
-	public function getBySection($section) {
+	public function getBySection(?string $section) : array {
 		$settings = $this->getAsNamesAndValues($this->getRepo()->findBy(['section' => $section]));
 
 		$this->cache->setMultiple($settings);
@@ -151,9 +154,9 @@ class Config {
 
 	/**
 	 * @param SettingInterface[] $settings
-	 * @return array with name => value
+	 * @return array<string, ?string> with name => value
 	 */
-	protected function getAsNamesAndValues(array $settings) {
+	protected function getAsNamesAndValues(array $settings) : array {
 		$result = [];
 
 		foreach ($settings as $setting) {
@@ -163,10 +166,7 @@ class Config {
 		return $result;
 	}
 
-	/**
-	 * @return SettingRepository
-	 */
-	protected function getRepo() {
+	protected function getRepo() : SettingRepository {
 		if ($this->repo === null) {
 			$repo = $this->em->getRepository($this->entityName);
 
@@ -184,7 +184,7 @@ class Config {
 	 * @param string $name Name of the setting.
 	 * @return \RuntimeException
 	 */
-	protected function createNotFoundException($name) {
+	protected function createNotFoundException(string $name) : \RuntimeException {
 		return new \RuntimeException(sprintf('Setting "%s" couldn\'t be found.', $name));
 	}
 
