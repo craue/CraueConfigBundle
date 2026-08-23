@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigUnitTest extends TestCase {
 
-	public function testGet() {
+	public function testGet() : void {
 		$config = new Config();
 		$setting = Setting::create('name', 'value');
 
@@ -33,7 +33,7 @@ class ConfigUnitTest extends TestCase {
 		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
 	}
 
-	public function testGet_nonexistentSetting() {
+	public function testGet_nonexistentSetting() : void {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
 		$config->setEntityName(Setting::class);
@@ -43,7 +43,7 @@ class ConfigUnitTest extends TestCase {
 		$config->get('oh-no');
 	}
 
-	public function testGet_cacheMiss() {
+	public function testGet_cacheMiss() : void {
 		$config = new Config();
 		$setting = Setting::create('name', 'value');
 
@@ -70,7 +70,7 @@ class ConfigUnitTest extends TestCase {
 		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
 	}
 
-	public function testGet_cacheHit() {
+	public function testGet_cacheHit() : void {
 		$config = new Config();
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -94,7 +94,7 @@ class ConfigUnitTest extends TestCase {
 		$this->assertEquals('value', $config->get('name'));
 	}
 
-	public function testSet() {
+	public function testSet() : void {
 		$config = new Config();
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -118,7 +118,7 @@ class ConfigUnitTest extends TestCase {
 		$config->set($setting->getName(), $newValue);
 	}
 
-	public function testSet_nonexistentSetting() {
+	public function testSet_nonexistentSetting() : void {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock()));
 		$config->setEntityName(Setting::class);
@@ -128,7 +128,7 @@ class ConfigUnitTest extends TestCase {
 		$config->set('oh-no', 'new-value');
 	}
 
-	public function testSetMultiple() {
+	public function testSetMultiple() : void {
 		$config = new Config();
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -157,7 +157,7 @@ class ConfigUnitTest extends TestCase {
 		$config->setMultiple($settingsKeyValuePairs);
 	}
 
-	public function testSetMultiple_noChanges() {
+	public function testSetMultiple_noChanges() : void {
 		$config = new Config();
 		$setting = $this->createMock(Setting::class);
 
@@ -168,7 +168,7 @@ class ConfigUnitTest extends TestCase {
 		$config->setMultiple([]);
 	}
 
-	public function testSetMultiple_nonexistentSetting() {
+	public function testSetMultiple_nonexistentSetting() : void {
 		$config = new Config();
 		$setting = Setting::create('name1');
 
@@ -183,7 +183,7 @@ class ConfigUnitTest extends TestCase {
 		]);
 	}
 
-	public function testAll_noSettings() {
+	public function testAll_noSettings() : void {
 		$config = new Config();
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findAll' => []])));
 		$config->setEntityName(Setting::class);
@@ -194,7 +194,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * Ensure that the cache gets filled while fetching all settings from the DB.
 	 */
-	public function testAll_cacheUpdate() {
+	public function testAll_cacheUpdate() : void {
 		$config = new Config();
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -221,7 +221,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * @dataProvider dataGetBySection
 	 */
-	public function testGetBySection($section, array $foundSettings, $expectedKeyValuePairs) {
+	public function testGetBySection($section, array $foundSettings, $expectedKeyValuePairs) : void {
 		$config = new Config();
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -239,7 +239,7 @@ class ConfigUnitTest extends TestCase {
 		$this->assertEquals($expectedKeyValuePairs, $config->getBySection($section));
 	}
 
-	public function dataGetBySection() {
+	public static function dataGetBySection() : iterable {
 		return [
 			['section',			[Setting::create('name', 'value', 'section')],	['name' => 'value']],
 			[null,				[Setting::create('name', 'value')],				['name' => 'value']],
@@ -250,7 +250,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * Ensure that the configured repository is returned.
 	 */
-	public function testGetRepo_configuredRepository() {
+	public function testGetRepo_configuredRepository() : void {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
 
@@ -270,7 +270,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * Ensure that the repository is fetched only once from the EntityManager, but again if it's changed at runtime.
 	 */
-	public function testGetRepo_changedEntityManager() {
+	public function testGetRepo_changedEntityManager() : void {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
 
@@ -293,7 +293,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * Ensure that the repository is fetched only once with a given entity name, but again if it's changed at runtime.
 	 */
-	public function testGetRepo_changedEntityName() {
+	public function testGetRepo_changedEntityName() : void {
 		$config = new Config();
 		$method = new \ReflectionMethod($config, 'getRepo');
 
@@ -324,7 +324,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * Ensure that the cache is not cleared when setting a new EntityManager or when setting the same EntityManager again.
 	 */
-	public function testSetEntityManager_newOrSame() {
+	public function testSetEntityManager_newOrSame() : void {
 		$config = new Config();
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -345,7 +345,7 @@ class ConfigUnitTest extends TestCase {
 	/**
 	 * Ensure that the cache is cleared when setting a different EntityManager.
 	 */
-	public function testSetEntityManager_different() {
+	public function testSetEntityManager_different() : void {
 		$config = new Config();
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
@@ -366,9 +366,8 @@ class ConfigUnitTest extends TestCase {
 
 	/**
 	 * @param array $methodsWithReturnValues Method call expectations (method name => return value).
-	 * @return MockObject|SettingRepository
 	 */
-	protected function createEntityRepositoryMock(array $methodsWithReturnValues = []) {
+	protected function createEntityRepositoryMock(array $methodsWithReturnValues = []) : MockObject&SettingRepository {
 		$repo = $this->getMockBuilder(SettingRepository::class)
 			->disableOriginalConstructor()
 			->getMock()
@@ -388,11 +387,7 @@ class ConfigUnitTest extends TestCase {
 		return $repo;
 	}
 
-	/**
-	 * @param EntityRepository|null $repo
-	 * @return MockObject|EntityManager
-	 */
-	protected function createEntityManagerMock(?EntityRepository $repo = null) {
+	protected function createEntityManagerMock(?EntityRepository $repo = null) : MockObject&EntityManager {
 		$em = $this->getMockBuilder(EntityManager::class)
 			->disableOriginalConstructor()
 			->getMock()
@@ -408,10 +403,7 @@ class ConfigUnitTest extends TestCase {
 		return $em;
 	}
 
-	/**
-	 * @return MockObject|CacheAdapterInterface
-	 */
-	protected function createCacheMock() {
+	protected function createCacheMock() : MockObject&CacheAdapterInterface {
 		return $this->createMock(CacheAdapterInterface::class);
 	}
 

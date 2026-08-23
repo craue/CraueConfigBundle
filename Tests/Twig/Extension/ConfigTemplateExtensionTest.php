@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTemplateExtensionTest extends TestCase {
 
-	public function testGetSetting() {
+	public function testGetSetting() : void {
 		$ext = new ConfigTemplateExtension();
 		$config = $this->createMock(Config::class);
 
@@ -29,7 +29,7 @@ class ConfigTemplateExtensionTest extends TestCase {
 		$ext->getSetting('name');
 	}
 
-	public function testSortSections() {
+	public function testSortSections() : void {
 		$ext = new ConfigTemplateExtension();
 		$ext->setSectionOrder(['section1', 'section2']);
 
@@ -39,7 +39,7 @@ class ConfigTemplateExtensionTest extends TestCase {
 	/**
 	 * Ensure that setting a section order is optional.
 	 */
-	public function testSortSections_sectionOrderNotSet() {
+	public function testSortSections_sectionOrderNotSet() : void {
 		$ext = new ConfigTemplateExtension();
 
 		$this->assertEquals([null, 'section2', 'section1'], $ext->sortSections(['section2', null, 'section1']));

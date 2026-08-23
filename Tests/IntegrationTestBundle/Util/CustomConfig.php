@@ -17,7 +17,7 @@ class CustomConfig extends Config {
 	 * @return CustomSetting The setting object.
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
-	public function getRawSetting($name) {
+	public function getRawSetting($name) : CustomSetting {
 		$setting = $this->getRepo()->findOneBy([
 			'name' => $name,
 		]);

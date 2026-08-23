@@ -16,23 +16,18 @@ class CustomSetting extends BaseSetting {
 	 */
 	protected $comment;
 
-	public function setComment($comment) {
+	public function setComment(?string $comment) : void {
 		$this->comment = $comment;
 	}
 
-	public function getComment() {
+	public function getComment() : ?string {
 		return $this->comment;
 	}
 
 	/**
 	 * Creates a {@code CustomSetting}.
-	 * @param string $name
-	 * @param string|null $value
-	 * @param string|null $section
-	 * @param string|null $comment
-	 * @return CustomSetting
 	 */
-	public static function create($name, $value = null, $section = null, $comment = null) {
+	public static function create(string $name, ?string $value = null, ?string $section = null, ?string $comment = null) : static {
 		$setting = parent::create($name, $value, $section);
 		$setting->setComment($comment);
 

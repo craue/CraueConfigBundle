@@ -17,7 +17,7 @@ class ConfigTemplateExtensionIntegrationTest extends IntegrationTestCase {
 	/**
 	 * @dataProvider dataSettingFunction
 	 */
-	public function testSettingFunction($platform, $config, $requiredExtension, $name, $value) {
+	public function testSettingFunction($platform, $config, $requiredExtension, $name, $value) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create($name, $value));
 
@@ -26,7 +26,7 @@ class ConfigTemplateExtensionIntegrationTest extends IntegrationTestCase {
 		]));
 	}
 
-	public function dataSettingFunction() {
+	public static function dataSettingFunction() : iterable {
 		return self::duplicateTestDataForEachPlatform([
 			['name', 'value'],
 		]);

@@ -22,7 +22,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	/**
 	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_noSettings($platform, $config, $requiredExtension) {
+	public function testModifyAction_noSettings($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 
 		static::$client->request('GET', $this->url('craue_config_settings_modify'));
@@ -35,7 +35,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	/**
 	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_noChanges($platform, $config, $requiredExtension) {
+	public function testModifyAction_noChanges($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value'));
 
@@ -93,7 +93,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_changeValue($platform, $config, $requiredExtension) {
+	public function testModifyAction_changeValue($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value', 'section'));
 
@@ -120,7 +120,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider dataModifyAction_changeValue_cacheUsage
 	 */
-	public function testModifyAction_changeValue_cacheUsage($platform, $config, $requiredExtension, $environment) {
+	public function testModifyAction_changeValue_cacheUsage($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1'));
 		$this->persistSetting(Setting::create('name2', 'value2'));
@@ -142,7 +142,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertSame('value2', $cache->get('name2'));
 	}
 
-	public function dataModifyAction_changeValue_cacheUsage() {
+	public static function dataModifyAction_changeValue_cacheUsage() : iterable {
 		$testData = self::duplicateTestDataForEachPlatform([
 			['cache_SymfonyCacheComponent_filesystem'],
 		], 'config_cache_SymfonyCacheComponent_filesystem.yml');
@@ -190,7 +190,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_formInvalid($platform, $config, $requiredExtension) {
+	public function testModifyAction_formInvalid($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value'));
 
@@ -208,7 +208,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_properTranslations($platform, $config, $requiredExtension) {
+	public function testModifyAction_properTranslations($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('setting-number-one', 'value', 'section-number-one'));
 
@@ -225,7 +225,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	/**
 	 * @dataProvider getPlatformConfigs
 	 */
-	public function testModifyAction_sectionOrder_defaultOrder($platform, $config, $requiredExtension) {
+	public function testModifyAction_sectionOrder_defaultOrder($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1', 'section1'));
 		$this->persistSetting(Setting::create('name2', 'value2'));
@@ -244,7 +244,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	/**
 	 * @dataProvider dataModifyAction_sectionOrder_customOrder
 	 */
-	public function testModifyAction_sectionOrder_customOrder($platform, $config, $requiredExtension) {
+	public function testModifyAction_sectionOrder_customOrder($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => 'customSectionOrder_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1', 'section1'));
 		$this->persistSetting(Setting::create('name2', 'value2'));
@@ -260,7 +260,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertTrue($strPosField2 < $strPosField3 && $strPosField3 < $strPosField1, 'The sections are rendered in wrong order.');
 	}
 
-	public function dataModifyAction_sectionOrder_customOrder() {
+	public static function dataModifyAction_sectionOrder_customOrder() : iterable {
 		return self::duplicateTestDataForEachPlatform([
 			[],
 		], 'config_customSectionOrder.yml');
@@ -269,7 +269,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	/**
 	 * @dataProvider dataModifyAction_redirectRouteAfterModify
 	 */
-	public function testModifyAction_redirectRouteAfterModify($platform, $config, $requiredExtension) {
+	public function testModifyAction_redirectRouteAfterModify($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => 'redirectRouteAfterModify_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value'));
 
@@ -281,7 +281,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertRedirect($this->url('admin_settings_start'));
 	}
 
-	public function dataModifyAction_redirectRouteAfterModify() {
+	public static function dataModifyAction_redirectRouteAfterModify() : iterable {
 		return self::duplicateTestDataForEachPlatform([
 			[],
 		], 'config_redirectRouteAfterModify.yml');
@@ -292,7 +292,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider dataModifyAction_customEntity
 	 */
-	public function testModifyAction_customEntity($platform, $config, $requiredExtension, $environment) {
+	public function testModifyAction_customEntity($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(CustomSetting::create('name', 'value', 'section', 'comment'));
 		$newValue = str_repeat('X', 200) . "\n" . str_repeat('Y', 99);
@@ -315,7 +315,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertSame('comment', $setting->getComment());
 	}
 
-	public function dataModifyAction_customEntity() {
+	public static function dataModifyAction_customEntity() : iterable {
 		return self::duplicateTestDataForEachPlatform([
 			['customEntity'],
 		], 'config_customEntity.yml');
@@ -326,7 +326,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider dataModifyAction_customEntity_disabled
 	 */
-	public function testModifyAction_customEntity_disabled($platform, $config, $requiredExtension, $environment) {
+	public function testModifyAction_customEntity_disabled($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(CanBeDisabledSetting::create('name', 'old-value', null, true));
 
@@ -344,7 +344,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertSame('old-value', $setting->getValue());
 	}
 
-	public function dataModifyAction_customEntity_disabled() {
+	public static function dataModifyAction_customEntity_disabled() : iterable {
 		return self::duplicateTestDataForEachPlatform([
 			['config_customEntity_canBeDisabled'],
 		], 'config_customEntity_canBeDisabled.yml');

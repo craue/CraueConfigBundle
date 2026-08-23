@@ -20,7 +20,7 @@ class DebugControllerTest extends IntegrationTestCase {
 	 *
 	 * @dataProvider dataGetAction_severalRequests
 	 */
-	public function testGetAction_severalRequests($platform, $config, $requiredExtension, $environment) {
+	public function testGetAction_severalRequests($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1'));
 
@@ -36,7 +36,7 @@ class DebugControllerTest extends IntegrationTestCase {
 		$this->assertSame(0, $dbCollector->getQueryCount(), "No database queries were expected on the 2nd request, but got:\n" . var_export($dbCollector->getQueries(), true));
 	}
 
-	public function dataGetAction_severalRequests() {
+	public static function dataGetAction_severalRequests() : iterable {
 		$testData = self::duplicateTestDataForEachPlatform([
 			['cache_SymfonyCacheComponent_filesystem'],
 		], 'config_cache_SymfonyCacheComponent_filesystem.yml');
@@ -50,10 +50,7 @@ class DebugControllerTest extends IntegrationTestCase {
 		return $testData;
 	}
 
-	/**
-	 * @return DoctrineDataCollector
-	 */
-	private function doRequest() {
+	private function doRequest() : DoctrineDataCollector {
 		static::$client->enableProfiler();
 		static::$client->request('GET', $this->url('debug_get', ['name' => 'name1']));
 		$this->assertSame('{"name1":"value1"}', static::$client->getResponse()->getContent());

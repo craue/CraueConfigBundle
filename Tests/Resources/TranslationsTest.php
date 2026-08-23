@@ -13,7 +13,10 @@ use Craue\TranslationsTests\YamlTranslationsTest;
  */
 class TranslationsTest extends YamlTranslationsTest {
 
-	protected function defineTranslationFiles() {
+	/**
+	 * @return string[]
+	 */
+	protected function defineTranslationFiles() : array {
 		return glob(__DIR__ . '/../../Resources/translations/*.yml');
 	}
 

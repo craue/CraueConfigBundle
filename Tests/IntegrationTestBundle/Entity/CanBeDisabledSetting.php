@@ -26,13 +26,8 @@ class CanBeDisabledSetting extends BaseSetting {
 
 	/**
 	 * Creates a {@code CanBeDisabledSetting}.
-	 * @param string $name
-	 * @param string|null $value
-	 * @param string|null $section
-	 * @param bool $disabled
-	 * @return CanBeDisabledSetting
 	 */
-	public static function create($name, $value = null, $section = null, $disabled = false) {
+	public static function create(string $name, ?string $value = null, ?string $section = null, bool $disabled = false) : static {
 		$setting = parent::create($name, $value, $section);
 		$setting->setDisabled($disabled);
 

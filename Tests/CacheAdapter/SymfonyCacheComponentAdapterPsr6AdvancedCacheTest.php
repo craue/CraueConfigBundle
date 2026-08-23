@@ -15,11 +15,11 @@ use Symfony\Component\Cache\CacheItem;
  */
 class SymfonyCacheComponentAdapterPsr6AdvancedCacheTest extends BaseCacheAdapterTest {
 
-	protected function getAdapter() {
+	protected function getAdapter() : SymfonyCacheComponentAdapter {
 		return new SymfonyCacheComponentAdapter(new ArrayAdapter());
 	}
 
-	public function testSetMultiple_fails() {
+	public function testSetMultiple_fails() : void {
 		$providerMock = $this->createMock(ArrayAdapter::class);
 
 		$providerMock->expects($this->once())
