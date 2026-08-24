@@ -17,12 +17,9 @@ class ConfigTemplateExtension extends AbstractExtension {
 	/**
 	 * @var string[]
 	 */
-	protected $sectionOrder = [];
+	protected array $sectionOrder = [];
 
-	/**
-	 * @var Config
-	 */
-	protected $config;
+	protected Config $config;
 
 	/**
 	 * @param string[] $sectionOrder The order in which sections will be rendered.

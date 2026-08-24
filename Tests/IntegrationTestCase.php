@@ -19,10 +19,7 @@ use Twig\Environment;
  */
 abstract class IntegrationTestCase extends WebTestCase {
 
-	/**
-	 * @var AbstractBrowser|null
-	 */
-	protected static $client;
+	protected static ?AbstractBrowser $client;
 
 	const PLATFORM_MYSQL = 'mysql';
 	const PLATFORM_SQLITE = 'sqlite';

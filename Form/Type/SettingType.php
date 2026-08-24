@@ -23,7 +23,7 @@ class SettingType extends AbstractType {
 	/**
 	 * @var class-string
 	 */
-	protected $entityName;
+	protected string $entityName;
 
 	/**
 	 * @param class-string $entityName

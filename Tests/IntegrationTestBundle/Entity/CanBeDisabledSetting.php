@@ -11,10 +11,7 @@ use Craue\ConfigBundle\Entity\BaseSetting;
  */
 class CanBeDisabledSetting extends BaseSetting {
 
-	/**
-	 * @var bool
-	 */
-	private $disabled = false;
+	private bool $disabled = false;
 
 	public function setDisabled(bool $disabled) : void {
 		$this->disabled = $disabled;

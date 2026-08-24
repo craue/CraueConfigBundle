@@ -12,20 +12,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class BaseSetting implements SettingInterface {
 
 	/**
-	 * @var string
 	 * @Assert\NotBlank
 	 */
-	protected $name;
+	protected string $name;
 
-	/**
-	 * @var string|null
-	 */
-	protected $value;
+	protected ?string $value;
 
-	/**
-	 * @var string|null
-	 */
-	protected $section;
+	protected ?string $section;
 
 	public function setName(string $name) : void {
 		$this->name = $name;

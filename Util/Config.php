@@ -6,7 +6,7 @@ use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\CacheAdapter\NullAdapter;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Repository\SettingRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -15,25 +15,16 @@ use Doctrine\ORM\EntityManager;
  */
 class Config {
 
-	/**
-	 * @var CacheAdapterInterface
-	 */
-	protected $cache;
+	protected CacheAdapterInterface $cache;
 
-	/**
-	 * @var EntityManager
-	 */
-	protected $em;
+	protected EntityManagerInterface $em;
 
-	/**
-	 * @var SettingRepository|null
-	 */
-	protected $repo;
+	protected ?SettingRepository $repo;
 
 	/**
 	 * @var class-string
 	 */
-	protected $entityName;
+	protected string $entityName;
 
 	public function __construct(?CacheAdapterInterface $cache = null) {
 		$this->setCache($cache ?? new NullAdapter());
@@ -43,9 +34,9 @@ class Config {
 		$this->cache = $cache;
 	}
 
-	public function setEntityManager(EntityManager $em) : void {
-		if ($this->em !== $em) {
-			if ($this->em !== null) {
+	public function setEntityManager(EntityManagerInterface $em) : void {
+		if (!isset($this->em) || $this->em !== $em) {
+			if (isset($this->em)) {
 				$this->cache->clear();
 			}
 

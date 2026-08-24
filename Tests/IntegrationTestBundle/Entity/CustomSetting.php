@@ -11,10 +11,7 @@ use Craue\ConfigBundle\Entity\BaseSetting;
  */
 class CustomSetting extends BaseSetting {
 
-	/**
-	 * @var string|null
-	 */
-	protected $comment;
+	protected ?string $comment;
 
 	public function setComment(?string $comment) : void {
 		$this->comment = $comment;

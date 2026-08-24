@@ -13,10 +13,7 @@ use Symfony\Component\Cache\Adapter\Psr16Adapter;
  */
 class SymfonyCacheComponentAdapter implements CacheAdapterInterface {
 
-	/**
-	 * @var CacheItemPoolInterface
-	 */
-	private $cache;
+	private CacheItemPoolInterface $cache;
 
 	public function __construct(CacheInterface|CacheItemPoolInterface $cache) {
 		if ($cache instanceof CacheInterface) {
