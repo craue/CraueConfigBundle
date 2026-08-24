@@ -106,12 +106,24 @@ jobs:
         env:
           REDIS_DSN: redis://localhost:6379
 
-      - name: upload code coverage data
+      - name: upload code coverage data to Coveralls
         if: github.repository == 'craue/CraueConfigBundle'
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_FLAG_NAME: PHP ${{ matrix.php }} - ${{ matrix.dependencies || format('Symfony {0}', matrix.symfony) }}
-        run: |
-          unset SYMFONY_REQUIRE
-          composer global require php-coveralls/php-coveralls
-          php-coveralls --coverage_clover=build/logs/clover.xml -v
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/logs/clover.xml
+          flag-name: PHP ${{ matrix.php }} - ${{ matrix.dependencies || format('Symfony {0}', matrix.symfony) }}
+          parallel: true
+
+  notify-coveralls:
+    name: (notify Coveralls)
+    needs: tests
+    if: ${{ always() && github.repository == 'craue/CraueConfigBundle' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: notify Coveralls to finish the build
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
