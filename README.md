@@ -238,22 +238,20 @@ use Doctrine\ORM\Mapping as ORM;
 class MySetting extends BaseSetting {
 
 	/**
-	 * @var string|null
 	 * @ORM\Column(name="value", type="text", nullable=true)
 	 */
-	protected $value;
+	protected ?string $value;
 
 	/**
-	 * @var string|null
 	 * @ORM\Column(name="comment", type="string", nullable=true)
 	 */
-	protected $comment;
+	protected ?string $comment;
 
-	public function setComment($comment) {
+	public function setComment(?string $comment) : void {
 		$this->comment = $comment;
 	}
 
-	public function getComment() {
+	public function getComment() : ?string {
 		return $this->comment;
 	}
 
