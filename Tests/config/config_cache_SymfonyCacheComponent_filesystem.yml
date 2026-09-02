@@ -1,11 +1,14 @@
 imports:
   - { resource: config.yml }
 
+framework:
+  cache:
+    pools:
+      craue_config_cache:
+        adapter: my_filesystem_cache_adapter
+
 services:
-  craue_config_cache:
-    class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-    public: false
-    arguments:
-      - 'craue_config'
-      - 0
-      - '%kernel.cache_dir%'
+  my_filesystem_cache_adapter:
+    parent: cache.adapter.filesystem
+    tags:
+      - { name: cache.pool, namespace: craue_config }

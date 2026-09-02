@@ -145,25 +145,22 @@ The Twig extension in this bundle supports reading settings directly in your tem
 
 # Enable caching (optional)
 
-To reduce the number of database queries, configure the `craue_config_cache` service with a PSR-6 cache pool.
-For example, using the [Symfony Cache component](https://symfony.com/doc/current/components/cache.html):
+Caching is disabled by default. To reduce the number of database queries, configure the cache pool `craue_config_cache`.
+For example, to enable a filesystem-based cache:
 
 ```yaml
 # in app/config/config.yml
-services:
-  craue_config_cache:
-    class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-    public: false
-    arguments:
-      - 'craue_config'
-      - 0
-      - '%kernel.cache_dir%'
+framework:
+  cache:
+    pools:
+      craue_config_cache:
+        adapter: cache.adapter.filesystem
 ```
 
-Without this service, caching is disabled.
+Check the [Symfony Cache component documentation](https://symfony.com/doc/current/components/cache.html) for details.
 
-If you modify settings outside of your app (e.g. by Doctrine migrations), keep in mind to also clear the cache pool
-with the corresponding Symfony cache command when needed.
+If you modify settings outside of your app (e.g., using Doctrine migrations), make sure to also clear the cache pool
+using the corresponding Symfony cache command.
 
 # Customization
 

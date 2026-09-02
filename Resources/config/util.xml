@@ -16,7 +16,6 @@
 	</parameters>
 
 	<services>
-		<service id="craue_config_cache" class="Symfony\Component\Cache\Adapter\NullAdapter" public="false" />
 		<service id="craue_config_default" class="Craue\ConfigBundle\Util\Config" public="true">
 			<argument type="service" id="craue_config_cache" />
 			<call method="setEntityManager">

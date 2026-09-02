@@ -2,10 +2,6 @@ parameters:
   craue_config.redirectRouteAfterModify: craue_config_settings_modify
 
 services:
-  craue_config_cache:
-    class: Symfony\Component\Cache\Adapter\NullAdapter
-    public: false
-
   craue_config_default:
     class: Craue\ConfigBundle\Util\Config
     public: true
