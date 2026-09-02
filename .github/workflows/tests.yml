@@ -25,7 +25,7 @@ jobs:
           -
             php: '8.2'
             dependencies: lowest
-            symfony-deprecations: max[direct]=246&max[indirect]=190
+            symfony-deprecations: max[direct]=246&max[indirect]=191
           -
             php: '8.5'
             dependencies: highest

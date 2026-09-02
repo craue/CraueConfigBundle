@@ -5,7 +5,7 @@ namespace Craue\ConfigBundle\Controller;
 use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Form\ModifySettingsForm;
-use Craue\ConfigBundle\Util\Config;
+use Craue\ConfigBundle\Util\SettingsUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -43,7 +43,7 @@ class SettingsController extends AbstractController {
 				$em->flush();
 
 				// update the cache
-				$cache->setMultiple(Config::getAsNamesAndValues($allStoredSettings));
+				$cache->setMultiple(SettingsUtil::getAsNamesAndValues($allStoredSettings));
 
 				if ($session instanceof Session) {
 					$session->getFlashBag()->set('notice', $translator->trans('settings_changed', [], 'CraueConfigBundle'));
@@ -55,27 +55,8 @@ class SettingsController extends AbstractController {
 
 		return new Response($twig->render('@CraueConfig/Settings/modify.html.twig', [
 			'form' => $form->createView(),
-			'sections' => $this->getSections($allStoredSettings),
+			'sections' => SettingsUtil::getSections($allStoredSettings),
 		]));
-	}
-
-	/**
-	 * @param SettingInterface[] $settings
-	 * @return array<string|null> (may also contain a null value)
-	 */
-	protected function getSections(array $settings) {
-		$sections = [];
-
-		foreach ($settings as $setting) {
-			$section = $setting->getSection();
-			if (!in_array($section, $sections, true)) {
-				$sections[] = $section;
-			}
-		}
-
-		sort($sections);
-
-		return $sections;
 	}
 
 }

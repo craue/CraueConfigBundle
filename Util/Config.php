@@ -4,7 +4,6 @@ namespace Craue\ConfigBundle\Util;
 
 use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\CacheAdapter\NullAdapter;
-use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -124,7 +123,7 @@ class Config {
 	 * @return array<string, ?string> with name => value
 	 */
 	public function all() : array {
-		$settings = self::getAsNamesAndValues($this->getRepo()->findAll());
+		$settings = SettingsUtil::getAsNamesAndValues($this->getRepo()->findAll());
 
 		$this->cache->setMultiple($settings);
 
@@ -136,25 +135,11 @@ class Config {
 	 * @return array<string, ?string> with name => value
 	 */
 	public function getBySection(?string $section) : array {
-		$settings = self::getAsNamesAndValues($this->getRepo()->findBy(['section' => $section]));
+		$settings = SettingsUtil::getAsNamesAndValues($this->getRepo()->findBy(['section' => $section]));
 
 		$this->cache->setMultiple($settings);
 
 		return $settings;
-	}
-
-	/**
-	 * @param SettingInterface[] $settings
-	 * @return array<string, ?string> with name => value
-	 */
-	public static function getAsNamesAndValues(array $settings) : array {
-		$result = [];
-
-		foreach ($settings as $setting) {
-			$result[$setting->getName()] = $setting->getValue();
-		}
-
-		return $result;
 	}
 
 	protected function getRepo() : SettingRepository {
