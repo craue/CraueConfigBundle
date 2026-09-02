@@ -24,6 +24,7 @@ class CraueConfigExtension extends Extension implements PrependExtensionInterfac
 	public function load(array $configs, ContainerBuilder $container) : void {
 		$loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 		$loader->load('controller.yml');
+		$loader->load('event_listener.yml');
 		$loader->load('form.yml');
 		$loader->load('twig.yml');
 		$loader->load('util.yml');

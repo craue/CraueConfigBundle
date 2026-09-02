@@ -93,7 +93,7 @@ class Config {
 		$setting->setValue($value);
 		$this->em->flush();
 
-		$this->cache->set($name, $value);
+		// cache is updated in SettingUpdateListener
 	}
 
 	/**
@@ -117,14 +117,14 @@ class Config {
 
 		$this->em->flush();
 
-		$this->cache->setMultiple($newSettings);
+		// cache is updated in SettingUpdateListener
 	}
 
 	/**
 	 * @return array<string, ?string> with name => value
 	 */
 	public function all() : array {
-		$settings = $this->getAsNamesAndValues($this->getRepo()->findAll());
+		$settings = self::getAsNamesAndValues($this->getRepo()->findAll());
 
 		$this->cache->setMultiple($settings);
 
@@ -136,7 +136,7 @@ class Config {
 	 * @return array<string, ?string> with name => value
 	 */
 	public function getBySection(?string $section) : array {
-		$settings = $this->getAsNamesAndValues($this->getRepo()->findBy(['section' => $section]));
+		$settings = self::getAsNamesAndValues($this->getRepo()->findBy(['section' => $section]));
 
 		$this->cache->setMultiple($settings);
 
@@ -147,7 +147,7 @@ class Config {
 	 * @param SettingInterface[] $settings
 	 * @return array<string, ?string> with name => value
 	 */
-	protected function getAsNamesAndValues(array $settings) : array {
+	public static function getAsNamesAndValues(array $settings) : array {
 		$result = [];
 
 		foreach ($settings as $setting) {
