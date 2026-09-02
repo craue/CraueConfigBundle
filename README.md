@@ -145,39 +145,25 @@ The Twig extension in this bundle supports reading settings directly in your tem
 
 # Enable caching (optional)
 
-To reduce the number of database queries, you can set up a cache for settings. Currently, there's an adapter
-available for the [Symfony Cache component](https://symfony.com/doc/current/components/cache.html).
-Refer to its documentation for details and read on in the corresponding section below. When
-done, `CraueConfigBundle` will automatically cache settings (using the built-in `craue_config_cache_adapter` service).
+To reduce the number of database queries, configure the `craue_config_cache` service with a PSR-6 cache pool.
+For example, using the [Symfony Cache component](https://symfony.com/doc/current/components/cache.html):
 
-Keep in mind to clear the cache (if needed) after modifying settings outside of your app (e.g. by Doctrine migrations):
-
-```sh
-# in a shell
-php bin/console doctrine:cache:clear craue_config_cache
+```yaml
+# in app/config/config.yml
+services:
+  craue_config_cache:
+    class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+    public: false
+    arguments:
+      - 'craue_config'
+      - 0
+      - '%kernel.cache_dir%'
 ```
 
-<details>
-  <summary>Cache implementation: Symfony Cache component</summary>
+Without this service, caching is disabled.
 
-  Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache pool with the
-  service id `craue_config_cache_provider`:
-
-  ```yaml
-  # in app/config/config.yml
-  parameters:
-    craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter
-
-  services:
-    craue_config_cache_provider:
-      class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-      public: false
-      arguments:
-        - 'craue_config'
-        - 0
-        - '%kernel.cache_dir%'
-  ```
-</details>
+If you modify settings outside of your app (e.g. by Doctrine migrations), keep in mind to also clear the cache pool
+with the corresponding Symfony cache command when needed.
 
 # Customization
 

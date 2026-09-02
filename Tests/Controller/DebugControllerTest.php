@@ -5,6 +5,7 @@ namespace Craue\ConfigBundle\Tests\Controller;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Doctrine\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * @group integration
@@ -24,7 +25,8 @@ class DebugControllerTest extends IntegrationTestCase {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1'));
 
-		$cache = static::$client->getContainer()->get('craue_config_cache_adapter');
+		/** @var CacheItemPoolInterface $cache */
+		$cache = static::$client->getContainer()->get('craue_config_cache');
 		$cache->clear();
 
 		// 1st request

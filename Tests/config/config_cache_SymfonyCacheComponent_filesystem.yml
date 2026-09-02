@@ -1,11 +1,8 @@
 imports:
   - { resource: config.yml }
 
-parameters:
-  craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter
-
 services:
-  craue_config_cache_provider:
+  craue_config_cache:
     class: Symfony\Component\Cache\Adapter\FilesystemAdapter
     public: false
     arguments:

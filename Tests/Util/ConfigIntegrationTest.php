@@ -8,6 +8,7 @@ use Craue\ConfigBundle\Tests\IntegrationTestBundle\Util\CustomConfig;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Tools\SchemaTool;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * @group integration
@@ -51,7 +52,9 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 		$this->getService('craue_config')->all();
 
-		$this->assertTrue($this->getService('craue_config_cache_adapter')->has('name'));
+		/** @var CacheItemPoolInterface $cache */
+		$cache = $this->getService('craue_config_cache');
+		$this->assertTrue($cache->getItem('name')->isHit());
 	}
 
 	public static function dataCacheUsage() : iterable {
@@ -76,20 +79,21 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	public function testCacheUpdateOnEntityUpdate($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
-		$cache = $this->getService('craue_config_cache_adapter');
+		/** @var CacheItemPoolInterface $cache */
+		$cache = $this->getService('craue_config_cache');
 		$cache->clear();
 
 		$setting = Setting::create('name', 'value');
 		$this->persistSetting($setting);
 
-		$this->assertFalse($cache->has($setting->getName()));
+		$this->assertFalse($cache->getItem($setting->getName())->isHit());
 
 		// update the entity directly
 		$setting->setValue('new-value2');
 		$this->getEntityManager()->flush();
 
-		$this->assertTrue($cache->has($setting->getName()));
-		$this->assertSame('new-value2', $cache->get($setting->getName()));
+		$this->assertTrue($cache->getItem($setting->getName())->isHit());
+		$this->assertSame('new-value2', $cache->getItem($setting->getName())->get());
 	}
 
 	/**
