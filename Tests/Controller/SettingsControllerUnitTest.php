@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests\Controller;
 
@@ -18,14 +18,14 @@ class SettingsControllerUnitTest extends TestCase {
 	/**
 	 * @dataProvider dataGetSections
 	 */
-	public function testGetSections(array $settings, array $expectedResult) {
+	public function testGetSections(array $settings, array $expectedResult) : void {
 		$controller = new SettingsController();
 		$method = new \ReflectionMethod($controller, 'getSections');
 
 		$this->assertSame($expectedResult, $method->invoke($controller, $settings));
 	}
 
-	public function dataGetSections() {
+	public static function dataGetSections() : iterable {
 		$setting1 = Setting::create('name1', null, 'section1');
 		$setting2 = Setting::create('name2', null, 'section2');
 		$setting3 = Setting::create('name3', null);
@@ -42,14 +42,14 @@ class SettingsControllerUnitTest extends TestCase {
 	/**
 	 * @dataProvider dataGetSettingByName
 	 */
-	public function testGetSettingByName(array $settings, $name, $expectedResult) {
+	public function testGetSettingByName(array $settings, $name, $expectedResult) : void {
 		$controller = new SettingsController();
 		$method = new \ReflectionMethod($controller, 'getSettingByName');
 
 		$this->assertSame($expectedResult, $method->invoke($controller, $settings, $name));
 	}
 
-	public function dataGetSettingByName() {
+	public static function dataGetSettingByName() : iterable {
 		$setting1 = Setting::create('name1');
 		$setting2 = Setting::create('name2');
 

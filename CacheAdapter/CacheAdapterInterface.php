@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\CacheAdapter;
 
@@ -13,31 +13,21 @@ interface CacheAdapterInterface {
 	 * Deletes all cache entries.
 	 * @return bool Whether the operation was successful.
 	 */
-	function clear();
+	function clear() : bool;
+
+	function has(string $key) : bool;
+
+	function get(string $key) : mixed;
 
 	/**
-	 * @param string $key
-	 * @return bool
-	 */
-	function has($key);
-
-	/**
-	 * @param string $key
-	 * @return mixed
-	 */
-	function get($key);
-
-	/**
-	 * @param string $key
-	 * @param mixed $value
 	 * @return bool Whether the entry was successfully stored in the cache.
 	 */
-	function set($key, $value);
+	function set(string $key, mixed $value) : bool;
 
 	/**
-	 * @param array $keysAndValues
+	 * @param array<string, mixed> $keysAndValues
 	 * @return bool Whether the entries were successfully stored in the cache.
 	 */
-	function setMultiple(array $keysAndValues);
+	function setMultiple(array $keysAndValues) : bool;
 
 }

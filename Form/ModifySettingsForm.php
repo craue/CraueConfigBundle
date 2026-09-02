@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Form;
 
@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
+ * @extends AbstractType<FormType>
+ *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
@@ -22,7 +24,7 @@ class ModifySettingsForm extends AbstractType {
 		$settingsForm = $builder->create('settings', FormType::class);
 
 		foreach ($options['data']['settings'] as $setting) {
-			/* @var $setting SettingInterface */
+			/** @var SettingInterface $setting */
 			$settingsForm->add($setting->getName(), SettingType::class, [
 				'data' => $setting,
 			]);

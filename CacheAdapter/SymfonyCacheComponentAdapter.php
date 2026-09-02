@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\CacheAdapter;
 
@@ -13,17 +13,9 @@ use Symfony\Component\Cache\Adapter\Psr16Adapter;
  */
 class SymfonyCacheComponentAdapter implements CacheAdapterInterface {
 
-	/**
-	 * @var CacheItemPoolInterface
-	 */
-	private $cache;
+	private CacheItemPoolInterface $cache;
 
-	public function __construct($cache) {
-		if ($cache instanceof CacheItemPoolInterface) {
-			$this->cache = $cache;
-			return;
-		}
-
+	public function __construct(CacheInterface|CacheItemPoolInterface $cache) {
 		if ($cache instanceof CacheInterface) {
 			@trigger_error(sprintf('Configuring a cache of type %s is deprecated since CraueConfigBundle 2.2.1. Use %s instead.', CacheInterface::class, CacheItemPoolInterface::class), E_USER_DEPRECATED);
 
@@ -31,32 +23,29 @@ class SymfonyCacheComponentAdapter implements CacheAdapterInterface {
 			return;
 		}
 
-		throw new \InvalidArgumentException(sprintf('Expected argument of type "%s" or "%s", but "%s" given.',
-				CacheItemPoolInterface::class,
-				CacheInterface::class,
-				is_object($cache) ? get_class($cache) : gettype($cache)));
+		$this->cache = $cache;
 	}
 
-	public function clear() {
+	public function clear() : bool {
 		return $this->cache->clear();
 	}
 
-	public function has($key) {
+	public function has(string $key) : bool {
 		return $this->cache->hasItem($key);
 	}
 
-	public function get($key) {
+	public function get(string $key) : mixed {
 		return $this->cache->getItem($key)->get();
 	}
 
-	public function set($key, $value) {
+	public function set(string $key, mixed $value) : bool {
 		$cacheItem = $this->cache->getItem($key);
 		$cacheItem->set($value);
 
 		return $this->cache->save($cacheItem);
 	}
 
-	public function setMultiple(array $keysAndValues) {
+	public function setMultiple(array $keysAndValues) : bool {
 		foreach ($keysAndValues as $key => $value) {
 			$cacheItem = $this->cache->getItem($key);
 			$cacheItem->set($value);

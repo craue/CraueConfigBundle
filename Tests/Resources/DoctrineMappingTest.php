@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests\Resources;
 
@@ -13,11 +13,11 @@ use PHPUnit\Framework\TestCase;
  */
 class DoctrineMappingTest extends TestCase {
 
-	public function testDuplicatedMappingFilesExist() {
+	public function testDuplicatedMappingFilesExist() : void {
 		$this->assertNotEmpty($this->getDuplicatedMappingFiles(), 'No mapping files found. Check the path pointing to them.');
 	}
 
-	public function testDuplicatedMappingFilesAreInSync() {
+	public function testDuplicatedMappingFilesAreInSync() : void {
 		$mappingFiles = $this->getDuplicatedMappingFiles();
 
 		for ($i = count($mappingFiles) - 1; $i > 0; --$i) {
@@ -27,7 +27,10 @@ class DoctrineMappingTest extends TestCase {
 		}
 	}
 
-	protected function getDuplicatedMappingFiles() {
+	/**
+	 * @return string[]
+	 */
+	protected function getDuplicatedMappingFiles() : array {
 		return glob(__DIR__ . '/../../Resources/config/doctrine-mapping*/BaseSetting.orm.xml');
 	}
 

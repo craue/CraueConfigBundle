@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests\CacheAdapter;
 
-use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\CacheAdapter\NullAdapter;
 use PHPUnit\Framework\TestCase;
 
@@ -15,30 +14,27 @@ use PHPUnit\Framework\TestCase;
  */
 class NullAdapterTest extends TestCase {
 
-	/**
-	 * @return CacheAdapterInterface
-	 */
-	protected function getAdapter() {
+	protected function getAdapter() : NullAdapter {
 		return new NullAdapter();
 	}
 
-	public function testClear() {
+	public function testClear() : void {
 		$this->assertTrue($this->getAdapter()->clear());
 	}
 
-	public function testHas() {
+	public function testHas() : void {
 		$this->assertFalse($this->getAdapter()->has('key'));
 	}
 
-	public function testGet() {
+	public function testGet() : void {
 		$this->assertNull($this->getAdapter()->get('key'));
 	}
 
-	public function testSet() {
+	public function testSet() : void {
 		$this->assertFalse($this->getAdapter()->set('key', 'value'));
 	}
 
-	public function testSetMultiple() {
+	public function testSetMultiple() : void {
 		$this->assertFalse($this->getAdapter()->setMultiple([]));
 	}
 

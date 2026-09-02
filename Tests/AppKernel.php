@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests;
 
@@ -8,7 +8,10 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel {
 
-	private $configFiles;
+	/**
+	 * @var string[]
+	 */
+	private array $configFiles;
 
 	public function __construct($environment, $configFiles) {
 		parent::__construct($environment, true);

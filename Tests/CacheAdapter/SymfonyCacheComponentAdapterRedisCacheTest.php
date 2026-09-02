@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests\CacheAdapter;
 
@@ -20,7 +20,7 @@ class SymfonyCacheComponentAdapterRedisCacheTest extends BaseCacheAdapterTest {
 		}
 	}
 
-	protected function getAdapter() {
+	protected function getAdapter() : SymfonyCacheComponentAdapter {
 		return new SymfonyCacheComponentAdapter(new RedisAdapter(RedisAdapter::createConnection($_ENV['REDIS_DSN']), 'craue_config'));
 	}
 

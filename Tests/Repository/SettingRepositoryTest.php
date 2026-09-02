@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests\Repository;
 
@@ -17,7 +17,7 @@ class SettingRepositoryTest extends IntegrationTestCase {
 	/**
 	 * @dataProvider getPlatformConfigs
 	 */
-	public function testFindByNames($platform, $config, $requiredExtension) {
+	public function testFindByNames($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 
 		$setting1 = $this->persistSetting(Setting::create('name1'));

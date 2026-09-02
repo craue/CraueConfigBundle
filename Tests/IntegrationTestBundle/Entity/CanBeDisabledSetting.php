@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity;
 
@@ -11,10 +11,7 @@ use Craue\ConfigBundle\Entity\BaseSetting;
  */
 class CanBeDisabledSetting extends BaseSetting {
 
-	/**
-	 * @var bool
-	 */
-	private $disabled = false;
+	private bool $disabled = false;
 
 	public function setDisabled(bool $disabled) : void {
 		$this->disabled = $disabled;
@@ -26,13 +23,8 @@ class CanBeDisabledSetting extends BaseSetting {
 
 	/**
 	 * Creates a {@code CanBeDisabledSetting}.
-	 * @param string $name
-	 * @param string|null $value
-	 * @param string|null $section
-	 * @param bool $disabled
-	 * @return CanBeDisabledSetting
 	 */
-	public static function create($name, $value = null, $section = null, $disabled = false) {
+	public static function create(string $name, ?string $value = null, ?string $section = null, bool $disabled = false) : static {
 		$setting = parent::create($name, $value, $section);
 		$setting->setDisabled($disabled);
 

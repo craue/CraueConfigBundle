@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests\CacheAdapter;
 
@@ -14,12 +14,9 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class BaseCacheAdapterTest extends TestCase {
 
-	/**
-	 * @return CacheAdapterInterface
-	 */
-	abstract protected function getAdapter();
+	abstract protected function getAdapter() : CacheAdapterInterface;
 
-	public function testOperations() {
+	public function testOperations() : void {
 		$adapter = $this->getAdapter();
 
 		$this->assertFalse($adapter->has('key'));

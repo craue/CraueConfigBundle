@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Entity;
 
@@ -12,53 +12,42 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class BaseSetting implements SettingInterface {
 
 	/**
-	 * @var string
 	 * @Assert\NotBlank
 	 */
-	protected $name;
+	protected string $name;
 
-	/**
-	 * @var string|null
-	 */
-	protected $value;
+	protected ?string $value;
 
-	/**
-	 * @var string|null
-	 */
-	protected $section;
+	protected ?string $section;
 
-	public function setName($name) {
+	public function setName(string $name) : void {
 		$this->name = $name;
 	}
 
-	public function getName() {
+	public function getName() : string {
 		return $this->name;
 	}
 
-	public function setValue($value) {
+	public function setValue(?string $value) : void {
 		$this->value = $value;
 	}
 
-	public function getValue() {
+	public function getValue() : ?string {
 		return $this->value;
 	}
 
-	public function setSection($section) {
+	public function setSection(?string $section) : void {
 		$this->section = $section;
 	}
 
-	public function getSection() {
+	public function getSection() : ?string {
 		return $this->section;
 	}
 
 	/**
 	 * Creates a {@code SettingInterface}.
-	 * @param string $name
-	 * @param string|null $value
-	 * @param string|null $section
-	 * @return SettingInterface
 	 */
-	public static function create($name, $value = null, $section = null) {
+	public static function create(string $name, ?string $value = null, ?string $section = null) : static {
 		$setting = new static();
 		$setting->setName($name);
 		$setting->setValue($value);

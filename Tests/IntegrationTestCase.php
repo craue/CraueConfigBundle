@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Tests;
 
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Util\Config;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
@@ -19,10 +19,7 @@ use Twig\Environment;
  */
 abstract class IntegrationTestCase extends WebTestCase {
 
-	/**
-	 * @var AbstractBrowser|null
-	 */
-	protected static $client;
+	protected static ?AbstractBrowser $client;
 
 	const PLATFORM_MYSQL = 'mysql';
 	const PLATFORM_SQLITE = 'sqlite';
@@ -35,7 +32,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	}
 
 	/**
-	 * @var bool[]
+	 * @var array<string, bool>
 	 */
 	private static $databaseInitialized = [];
 
@@ -85,7 +82,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @param string|null $requiredExtension Required PHP extension.
 	 * @param array $options Options for creating the client.
 	 */
-	protected function initClient($requiredExtension, array $options = []) {
+	protected function initClient(?string $requiredExtension = null, array $options = []) : void {
 		if ($requiredExtension !== null && !extension_loaded($requiredExtension)) {
 			$this->markTestSkipped(sprintf('Extension "%s" is not loaded.', $requiredExtension));
 		}
@@ -102,7 +99,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 		}
 	}
 
-	protected function rebuildDatabase() {
+	protected function rebuildDatabase() : void {
 		$em = $this->getEntityManager();
 		$metadata = $em->getMetadataFactory()->getAllMetadata();
 		$schemaTool = new SchemaTool($em);
@@ -115,7 +112,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @param SettingInterface $setting The setting to persist.
 	 * @return SettingInterface The persisted setting.
 	 */
-	protected function persistSetting(SettingInterface $setting) {
+	protected function persistSetting(SettingInterface $setting) : SettingInterface {
 		$em = $this->getEntityManager();
 		$em->persist($setting);
 		$em->flush();
@@ -126,7 +123,7 @@ abstract class IntegrationTestCase extends WebTestCase {
 	/**
 	 * Removes all {@code Setting}s.
 	 */
-	protected function removeAllSettings() {
+	protected function removeAllSettings() : void {
 		$em = $this->getEntityManager();
 
 		foreach ($this->getSettingsRepo()->findAll() as $entity) {
@@ -136,31 +133,19 @@ abstract class IntegrationTestCase extends WebTestCase {
 		$em->flush();
 	}
 
-	/**
-	 * @return Config
-	 */
-	protected function getConfig() {
+	protected function getConfig() : Config {
 		return $this->getService('craue_config');
 	}
 
-	/**
-	 * @return EntityManager
-	 */
-	protected function getEntityManager() {
+	protected function getEntityManager() : EntityManagerInterface {
 		return $this->getService('doctrine')->getManager();
 	}
 
-	/**
-	 * @return SettingRepository
-	 */
-	protected function getSettingsRepo() {
+	protected function getSettingsRepo() : SettingRepository {
 		return $this->getEntityManager()->getRepository(static::$kernel->getContainer()->getParameter('craue_config.entity_name'));
 	}
 
-	/**
-	 * @return Environment
-	 */
-	protected function getTwig() {
+	protected function getTwig() : Environment {
 		return $this->getService('twig.test');
 	}
 
@@ -168,23 +153,15 @@ abstract class IntegrationTestCase extends WebTestCase {
 	 * @param string $id The service identifier.
 	 * @return object The associated service.
 	 */
-	protected function getService($id) {
+	protected function getService(string $id) : object {
 		return static::getContainer()->get($id);
 	}
 
-	/**
-	 * @param string $route
-	 * @param array $parameters
-	 * @return string URL
-	 */
-	protected function url($route, array $parameters = []) {
+	protected function url(string $route, array $parameters = []) : string {
 		return $this->getService('router')->generate($route, $parameters);
 	}
 
-	/**
-	 * @param string $expectedTargetUrl
-	 */
-	protected function assertRedirect($expectedTargetUrl) {
+	protected function assertRedirect(string $expectedTargetUrl) : void {
 		// don't just check with static::$client->getResponse()->isRedirect() to know the actual URL on failure
 		$this->assertEquals(302, static::$client->getResponse()->getStatusCode());
 		$this->assertStringContainsString($expectedTargetUrl, static::$client->getResponse()->headers->get('Location'));

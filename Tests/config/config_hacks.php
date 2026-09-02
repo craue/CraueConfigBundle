@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Composer\InstalledVersions;
 use Composer\Semver\VersionParser;

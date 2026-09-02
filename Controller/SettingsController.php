@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Craue\ConfigBundle\Controller;
 
@@ -23,8 +23,10 @@ use Twig\Environment;
 class SettingsController extends AbstractController {
 
 	public function modifyAction(CacheAdapterInterface $cache, FormFactoryInterface $formFactory, Request $request,
-			SessionInterface $session, Environment $twig, EntityManagerInterface $em, TranslatorInterface $translator) {
-		$repo = $em->getRepository($this->container->getParameter('craue_config.entity_name'));
+			SessionInterface $session, Environment $twig, EntityManagerInterface $em, TranslatorInterface $translator) : Response {
+		/** @var class-string<SettingInterface> $entityName */
+		$entityName = $this->container->getParameter('craue_config.entity_name');
+		$repo = $em->getRepository($entityName);
 		$allStoredSettings = $repo->findAll();
 
 		$formData = [
@@ -63,7 +65,7 @@ class SettingsController extends AbstractController {
 
 	/**
 	 * @param SettingInterface[] $settings
-	 * @return string[] (may also contain a null value)
+	 * @return array<string|null> (may also contain a null value)
 	 */
 	protected function getSections(array $settings) {
 		$sections = [];
