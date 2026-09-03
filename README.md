@@ -265,3 +265,15 @@ And make the bundle aware of it:
 craue_config:
   entity_name: MyCompany\MyBundle\Entity\MySetting
 ```
+
+## Using a non-default entity manager
+
+By default, the bundle uses Doctrine's `default` entity manager. If you use another entity manager for the settings, configure its name:
+
+```yaml
+# in app/config/config.yml
+craue_config:
+  entity_manager: custom
+```
+
+The bundle's Doctrine mapping is automatically registered with the configured entity manager.

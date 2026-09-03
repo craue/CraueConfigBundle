@@ -198,4 +198,26 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 		$this->assertFalse($schema->hasTable('craue_config_setting'));
 	}
 
+	/**
+	 * Ensure that the code works with a custom entity manager.
+	 *
+	 * @dataProvider dataCustomEntityManager
+	 */
+	public function testCustomEntityManager($platform, $config, $requiredExtension, $environment) : void {
+		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
+
+		$this->persistSetting(Setting::create('name1'));
+
+		$c = $this->getService('craue_config');
+
+		$c->set('name1', 'value1');
+		$this->assertSame('value1', $c->get('name1'));
+	}
+
+	public static function dataCustomEntityManager() : iterable {
+		return self::duplicateTestDataForEachPlatform([
+			['customEntityManager'],
+		], 'config_customEntityManager.yml');
+	}
+
 }
