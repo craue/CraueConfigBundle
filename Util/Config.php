@@ -2,10 +2,10 @@
 
 namespace Craue\ConfigBundle\Util;
 
-use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
-use Craue\ConfigBundle\CacheAdapter\NullAdapter;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class Config {
 
-	protected CacheAdapterInterface $cache;
+	protected CacheItemPoolInterface $cache;
 
 	protected EntityManagerInterface $em;
 
@@ -25,11 +25,11 @@ class Config {
 	 */
 	protected string $entityName;
 
-	public function __construct(?CacheAdapterInterface $cache = null) {
+	public function __construct(?CacheItemPoolInterface $cache = null) {
 		$this->setCache($cache ?? new NullAdapter());
 	}
 
-	public function setCache(CacheAdapterInterface $cache) : void {
+	public function setCache(CacheItemPoolInterface $cache) : void {
 		$this->cache = $cache;
 	}
 
@@ -58,8 +58,9 @@ class Config {
 	 * @throws \RuntimeException If the setting is not defined.
 	 */
 	public function get(string $name) : ?string {
-		if ($this->cache->has($name)) {
-			return $this->cache->get($name);
+		$cacheItem = $this->cache->getItem($name);
+		if ($cacheItem->isHit()) {
+			return $cacheItem->get();
 		}
 
 		$setting = $this->getRepo()->findOneBy([
@@ -70,7 +71,8 @@ class Config {
 			throw $this->createNotFoundException($name);
 		}
 
-		$this->cache->set($name, $setting->getValue());
+		$cacheItem->set($setting->getValue());
+		$this->cache->save($cacheItem);
 
 		return $setting->getValue();
 	}
@@ -125,7 +127,7 @@ class Config {
 	public function all() : array {
 		$settings = SettingsUtil::getAsNamesAndValues($this->getRepo()->findAll());
 
-		$this->cache->setMultiple($settings);
+		$this->updateCacheMultiple($settings);
 
 		return $settings;
 	}
@@ -137,7 +139,7 @@ class Config {
 	public function getBySection(?string $section) : array {
 		$settings = SettingsUtil::getAsNamesAndValues($this->getRepo()->findBy(['section' => $section]));
 
-		$this->cache->setMultiple($settings);
+		$this->updateCacheMultiple($settings);
 
 		return $settings;
 	}
@@ -162,6 +164,18 @@ class Config {
 	 */
 	protected function createNotFoundException(string $name) : \RuntimeException {
 		return new \RuntimeException(sprintf('Setting "%s" couldn\'t be found.', $name));
+	}
+
+	/**
+	 * @param array<string, ?string> $settings
+	 */
+	private function updateCacheMultiple(array $settings) : void {
+		foreach ($settings as $name => $value) {
+			$cacheItem = $this->cache->getItem($name);
+			$cacheItem->set($value);
+			$this->cache->saveDeferred($cacheItem);
+		}
+		$this->cache->commit();
 	}
 
 }

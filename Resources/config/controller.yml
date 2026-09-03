@@ -3,5 +3,7 @@ services:
     class: Craue\ConfigBundle\Controller\SettingsController
     calls:
       - setContainer: ['@service_container']
+    bind:
+      $cache: '@craue_config_cache'
     tags:
       - controller.service_arguments

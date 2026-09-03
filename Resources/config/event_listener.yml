@@ -2,6 +2,8 @@ services:
   Craue\ConfigBundle\EventListener\SettingUpdateListener:
     autowire: true
     public: false
+    bind:
+      $cache: '@craue_config_cache'
     tags:
       - name: doctrine.event_listener
         event: postUpdate

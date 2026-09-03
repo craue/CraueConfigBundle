@@ -16,6 +16,7 @@
 			<call method="setContainer">
 				<argument type="service" id="service_container" />
 			</call>
+			<bind key="$cache" type="service" id="craue_config_cache" />
 			<tag name="controller.service_arguments"/>
 		</service>
 	</services>

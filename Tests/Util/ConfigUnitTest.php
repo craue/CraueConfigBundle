@@ -2,15 +2,17 @@
 
 namespace Craue\ConfigBundle\Tests\Util;
 
-use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Repository\SettingRepository;
 use Craue\ConfigBundle\Util\Config;
+use Craue\ConfigBundle\Util\SettingsUtil;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub\ReturnValueMap;
-use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * @group unit
@@ -52,46 +54,27 @@ class ConfigUnitTest extends TestCase {
 		])])));
 		$config->setEntityName(Setting::class);
 
-		$cache = $this->createCacheMock();
+		$cache = new ArrayAdapter();
 		$config->setCache($cache);
 
-		$cache->expects($this->once())
-			->method('has')
-			->will($this->returnValue(false))
-		;
-		$cache->expects($this->never())
-			->method('get')
-		;
-		$cache->expects($this->once())
-			->method('set')
-			->with('name', $setting->getValue())
-		;
-
 		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
+
+		$this->assertTrue($cache->getItem($setting->getName())->isHit());
+		$this->assertSame($setting->getValue(), $cache->getItem($setting->getName())->get());
 	}
 
 	public function testGet_cacheHit() : void {
 		$config = new Config();
-		$cache = $this->createCacheMock();
+		$setting = Setting::create('name', 'value');
+
+		$cache = new ArrayAdapter();
 		$config->setCache($cache);
 
-		$cache->expects($this->once())
-			->method('has')
-			->will($this->returnValueMap([
-				['name', true],
-			]))
-		;
-		$cache->expects($this->once())
-			->method('get')
-			->will($this->returnValueMap([
-				['name', 'value'],
-			]))
-		;
-		$cache->expects($this->never())
-			->method('set')
-		;
+		$cacheItem = $cache->getItem($setting->getName());
+		$cacheItem->set($setting->getValue());
+		$cache->save($cacheItem);
 
-		$this->assertEquals('value', $config->get('name'));
+		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
 	}
 
 	public function testSet() : void {
@@ -105,10 +88,15 @@ class ConfigUnitTest extends TestCase {
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $setting])));
 		$config->setEntityName(Setting::class);
 
+		// cache is not invoked because SettingUpdateListener is not active in this unit test
 		$cache->expects($this->never())
 			->method($this->anything())
 		;
 
+		$setting->expects($this->once())
+			->method('getName')
+			->will($this->returnValue('name'))
+		;
 		$setting->expects($this->once())
 			->method('setValue')
 			->with($newValue)
@@ -143,6 +131,7 @@ class ConfigUnitTest extends TestCase {
 			$setting->getName() => $newValue,
 		];
 
+		// cache is not invoked because SettingUpdateListener is not active in this unit test
 		$cache->expects($this->never())
 			->method($this->anything())
 		;
@@ -194,26 +183,23 @@ class ConfigUnitTest extends TestCase {
 	 */
 	public function testAll_cacheUpdate() : void {
 		$config = new Config();
-		$cache = $this->createCacheMock();
+		$cache = new ArrayAdapter();
 		$config->setCache($cache);
 
 		$setting1 = Setting::create('name1', 'value1');
 		$setting2 = Setting::create('name2', 'value2');
 
-		$settingsKeyValuePairs = [
-			$setting1->getName() => $setting1->getValue(),
-			$setting2->getName() => $setting2->getValue(),
-		];
+		$settingsKeyValuePairs = SettingsUtil::getAsNamesAndValues([$setting1, $setting2]);
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findAll' => [$setting1, $setting2]])));
 		$config->setEntityName(Setting::class);
 
-		$cache->expects($this->once())
-			->method('setMultiple')
-			->with($settingsKeyValuePairs)
-		;
-
 		$this->assertEquals($settingsKeyValuePairs, $config->all());
+
+		$this->assertTrue($cache->getItem('name1')->isHit());
+		$this->assertSame('value1', $cache->getItem('name1')->get());
+		$this->assertTrue($cache->getItem('name2')->isHit());
+		$this->assertSame('value2', $cache->getItem('name2')->get());
 	}
 
 	/**
@@ -221,7 +207,7 @@ class ConfigUnitTest extends TestCase {
 	 */
 	public function testGetBySection($section, array $foundSettings, $expectedKeyValuePairs) : void {
 		$config = new Config();
-		$cache = $this->createCacheMock();
+		$cache = new ArrayAdapter();
 		$config->setCache($cache);
 
 		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findBy' => $this->returnValueMap([
@@ -229,12 +215,11 @@ class ConfigUnitTest extends TestCase {
 		])])));
 		$config->setEntityName(Setting::class);
 
-		$cache->expects($this->once())
-			->method('setMultiple')
-			->with($expectedKeyValuePairs)
-		;
-
 		$this->assertEquals($expectedKeyValuePairs, $config->getBySection($section));
+
+		foreach ($expectedKeyValuePairs as $name => $value) {
+			$this->assertSame($value, $cache->getItem($name)->get());
+		}
 	}
 
 	public static function dataGetBySection() : iterable {
@@ -401,8 +386,8 @@ class ConfigUnitTest extends TestCase {
 		return $em;
 	}
 
-	protected function createCacheMock() : MockObject&CacheAdapterInterface {
-		return $this->createMock(CacheAdapterInterface::class);
+	protected function createCacheMock() : MockObject&CacheItemPoolInterface {
+		return $this->createMock(CacheItemPoolInterface::class);
 	}
 
 }

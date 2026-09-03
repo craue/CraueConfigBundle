@@ -13,6 +13,7 @@
 		xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
 		<service id="Craue\ConfigBundle\EventListener\SettingUpdateListener" autowire="true" public="false">
+			<bind key="$cache" type="service" id="craue_config_cache" />
 			<tag name="doctrine.event_listener" event="postUpdate" />
 		</service>
 	</services>

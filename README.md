@@ -145,39 +145,22 @@ The Twig extension in this bundle supports reading settings directly in your tem
 
 # Enable caching (optional)
 
-To reduce the number of database queries, you can set up a cache for settings. Currently, there's an adapter
-available for the [Symfony Cache component](https://symfony.com/doc/current/components/cache.html).
-Refer to its documentation for details and read on in the corresponding section below. When
-done, `CraueConfigBundle` will automatically cache settings (using the built-in `craue_config_cache_adapter` service).
+Caching is disabled by default. To reduce the number of database queries, configure the cache pool `craue_config_cache`.
+For example, to enable a filesystem-based cache:
 
-Keep in mind to clear the cache (if needed) after modifying settings outside of your app (e.g. by Doctrine migrations):
-
-```sh
-# in a shell
-php bin/console doctrine:cache:clear craue_config_cache
+```yaml
+# in app/config/config.yml
+framework:
+  cache:
+    pools:
+      craue_config_cache:
+        adapter: cache.adapter.filesystem
 ```
 
-<details>
-  <summary>Cache implementation: Symfony Cache component</summary>
+Check the [Symfony Cache component documentation](https://symfony.com/doc/current/components/cache.html) for details.
 
-  Set the parameter `craue_config.cache_adapter.class` appropriately and configure a so-called cache pool with the
-  service id `craue_config_cache_provider`:
-
-  ```yaml
-  # in app/config/config.yml
-  parameters:
-    craue_config.cache_adapter.class: Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter
-
-  services:
-    craue_config_cache_provider:
-      class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-      public: false
-      arguments:
-        - 'craue_config'
-        - 0
-        - '%kernel.cache_dir%'
-  ```
-</details>
+If you modify settings outside of your app (e.g., using Doctrine migrations), make sure to also clear the cache pool
+using the corresponding Symfony cache command.
 
 # Customization
 
