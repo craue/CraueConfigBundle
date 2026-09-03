@@ -1,0 +1,12 @@
+imports:
+  - { resource: config.yml }
+
+doctrine:
+  orm:
+    default_entity_manager: custom
+    entity_managers:
+      custom:
+        connection: default
+
+craue_config:
+  entity_manager: custom

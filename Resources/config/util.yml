@@ -19,7 +19,6 @@ services:
     arguments:
       - '@craue_config_cache_adapter'
     calls:
-      - setEntityManager: ['@doctrine.orm.default_entity_manager']
       - setEntityName: ['%craue_config.entity_name%']
 
   craue_config:
