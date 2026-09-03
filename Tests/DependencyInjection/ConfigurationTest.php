@@ -34,11 +34,13 @@ class ConfigurationTest extends TestCase {
 		$config = $this->processor->processConfiguration($this->configuration, []);
 
 		$this->assertSame('doctrine_orm', $config['db_driver']);
+		$this->assertSame('default', $config['entity_manager']);
 		$this->assertSame(Setting::class, $config['entity_name']);
 	}
 
 	public static function dataValidValue() : iterable {
 		yield ['db_driver',		'doctrine_orm'];
+		yield ['entity_manager',	'custom'];
 		yield ['entity_name',	CustomSetting::class];
 	}
 
@@ -63,6 +65,9 @@ class ConfigurationTest extends TestCase {
 		// TODO add trailing dot to the error messages as soon as Symfony >= 7.3 is required
 		yield ['db_driver',		'',			'The value "" is not allowed for path "craue_config.db_driver". Permissible values: "doctrine_orm"'];
 		yield ['db_driver',		'other',		'The value "other" is not allowed for path "craue_config.db_driver". Permissible values: "doctrine_orm"'];
+
+		yield ['entity_manager',	null,		'The path "craue_config.entity_manager" cannot contain an empty value, but got null.'];
+		yield ['entity_manager',	'',			'The path "craue_config.entity_manager" cannot contain an empty value, but got "".'];
 
 		yield ['entity_name',	null,							'The path "craue_config.entity_name" cannot contain an empty value, but got null.'];
 		yield ['entity_name',	'',								'The path "craue_config.entity_name" cannot contain an empty value, but got "".'];
