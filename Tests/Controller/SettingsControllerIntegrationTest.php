@@ -9,6 +9,8 @@ use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Composer\InstalledVersions;
 use Composer\Semver\VersionParser;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * @group integration
@@ -125,10 +127,11 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->persistSetting(Setting::create('name1', 'value1'));
 		$this->persistSetting(Setting::create('name2', 'value2'));
 
-		$cache = $this->getService('craue_config_cache_adapter');
+		/** @var CacheItemPoolInterface $cache */
+		$cache = $this->getService('craue_config_cache');
 		$cache->clear();
-		$this->assertFalse($cache->has('name1'));
-		$this->assertFalse($cache->has('name2'));
+		$this->assertFalse($cache->hasItem('name1'));
+		$this->assertFalse($cache->hasItem('name2'));
 
 		$crawler = static::$client->request('GET', $this->url('craue_config_settings_modify'));
 		$form = $crawler->selectButton('apply')->form();
@@ -136,10 +139,12 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 			'craue_config_modifySettings[settings][name1][value]' => 'new-value1',
 		]);
 
-		$this->assertTrue($cache->has('name1'));
-		$this->assertTrue($cache->has('name2'));
-		$this->assertSame('new-value1', $cache->get('name1'));
-		$this->assertSame('value2', $cache->get('name2'));
+		$this->assertTrue($cache->hasItem('name1'));
+		$this->assertTrue($cache->getItem('name1')->isHit());
+		$this->assertTrue($cache->hasItem('name2'));
+		$this->assertTrue($cache->getItem('name2')->isHit());
+		$this->assertSame('new-value1', $cache->getItem('name1')->get());
+		$this->assertSame('value2', $cache->getItem('name2')->get());
 	}
 
 	public static function dataModifyAction_changeValue_cacheUsage() : iterable {

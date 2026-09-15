@@ -2,10 +2,10 @@
 
 namespace Craue\ConfigBundle\EventListener;
 
-use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
-use Craue\ConfigBundle\CacheAdapter\NullAdapter;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @author Christian Raue <christian.raue@gmail.com>
@@ -14,9 +14,9 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
  */
 class SettingUpdateListener {
 
-	private CacheAdapterInterface $cache;
+	private CacheItemPoolInterface $cache;
 
-	public function __construct(?CacheAdapterInterface $cache = null) {
+	public function __construct(?CacheItemPoolInterface $cache = null) {
 		$this->cache = $cache ?? new NullAdapter();
 	}
 
@@ -35,7 +35,9 @@ class SettingUpdateListener {
 	}
 
 	private function updateCache(SettingInterface $setting) : void {
-		$this->cache->set($setting->getName(), $setting->getValue());
+		$cacheItem = $this->cache->getItem($setting->getName());
+		$cacheItem->set($setting->getValue());
+		$this->cache->save($cacheItem);
 	}
 
 }

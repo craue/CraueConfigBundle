@@ -2,11 +2,11 @@
 
 namespace Craue\ConfigBundle\Controller;
 
-use Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Form\ModifySettingsForm;
 use Craue\ConfigBundle\Util\SettingsUtil;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ use Twig\Environment;
  */
 class SettingsController extends AbstractController {
 
-	public function modifyAction(CacheAdapterInterface $cache, FormFactoryInterface $formFactory, Request $request,
+	public function modifyAction(CacheItemPoolInterface $cache, FormFactoryInterface $formFactory, Request $request,
 			SessionInterface $session, Environment $twig, EntityManagerInterface $em, TranslatorInterface $translator) : Response {
 		/** @var class-string<SettingInterface> $entityName */
 		$entityName = $this->container->getParameter('craue_config.entity_name');
@@ -43,7 +43,12 @@ class SettingsController extends AbstractController {
 				$em->flush();
 
 				// update the cache
-				$cache->setMultiple(SettingsUtil::getAsNamesAndValues($allStoredSettings));
+				foreach (SettingsUtil::getAsNamesAndValues($allStoredSettings) as $name => $value) {
+					$cacheItem = $cache->getItem($name);
+					$cacheItem->set($value);
+					$cache->saveDeferred($cacheItem);
+				}
+				$cache->commit();
 
 				if ($session instanceof Session) {
 					$session->getFlashBag()->set('notice', $translator->trans('settings_changed', [], 'CraueConfigBundle'));

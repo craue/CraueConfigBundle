@@ -3,6 +3,7 @@
 namespace Craue\ConfigBundle\DependencyInjection;
 
 use Craue\ConfigBundle\Entity\Setting;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -35,6 +36,21 @@ class CraueConfigExtension extends Extension implements PrependExtensionInterfac
 	 */
 	public function prepend(ContainerBuilder $container) : void {
 		$config = $this->processConfiguration(new Configuration(), $container->getExtensionConfig($this->getAlias()));
+
+		$container
+			->register('craue_config.null_cache_adapter', NullAdapter::class)
+			->setPublic(false)
+		;
+
+		$container->prependExtensionConfig('framework', [
+			'cache' => [
+				'pools' => [
+					'craue_config_cache' => [
+						'adapter' => 'craue_config.null_cache_adapter',
+					],
+				],
+			],
+		]);
 
 		$container->setParameter('craue_config.db_driver.' . $config['db_driver'], true);
 		$container->setParameter('craue_config.entity_name', $config['entity_name']);

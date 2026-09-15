@@ -21,7 +21,7 @@
 	"require": {
 		"php": "^8.2",
 		"doctrine/doctrine-bundle": "^2 || ^3",
-		"psr/simple-cache": "^1 || ^2 || ^3",
+		"psr/cache": "^1 || ^2 || ^3",
 		"symfony/cache": "^5.4 || ^6.4 || ^7.4 || ^8.1",
 		"symfony/config": "^5.4 || ^6.4 || ^7.4 || ^8.1",
 		"symfony/dependency-injection": "^5.4 || ^6.4 || ^7.4 || ^8.1",
