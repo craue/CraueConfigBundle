@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.0] – 2026-09-15
+
+- [#60]: fixed issues with unintentional value changes when using the built-in form
+- [#62]: also update the cache when updating a setting entity directly
+- [#68]: added type declarations throughout the codebase
+- [#69]: improved validation of bundle configuration
+- [#71]: simplified cache configuration
+- [#72]: made the entity manager configurable
+- added support for Symfony 7.4, 8.1
+- added support for DoctrineBundle 3
+- dropped support for PHP < 8.2
+- dropped support for Symfony 4.4, 6.3
+
+[#60]: https://github.com/craue/CraueConfigBundle/issues/60
+[#62]: https://github.com/craue/CraueConfigBundle/issues/62
+[#68]: https://github.com/craue/CraueConfigBundle/issues/68
+[#69]: https://github.com/craue/CraueConfigBundle/issues/69
+[#71]: https://github.com/craue/CraueConfigBundle/issues/71
+[#72]: https://github.com/craue/CraueConfigBundle/issues/72
+[3.0.0]: https://github.com/craue/CraueConfigBundle/compare/2.7.0...3.0.0
+
 ## [2.7.0] – 2023-08-07
 
 - dropped support for Symfony 5.3, 6.0, 6.1, 6.2
