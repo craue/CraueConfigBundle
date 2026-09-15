@@ -192,7 +192,7 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 	 * @dataProvider dataCustomEntity
 	 */
 	public function testCustomEntityTableCreation($platform, $config, $requiredExtension, $environment) : void {
-		$this->initClient($requiredExtension, array('environment' => $environment . '_' . $platform, 'config' => $config));
+		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
 		$em = $this->getEntityManager();
 		$schemaTool = new SchemaTool($em);
