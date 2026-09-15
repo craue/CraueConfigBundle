@@ -30,6 +30,10 @@ class Configuration implements ConfigurationInterface {
 					->values($supportedDrivers)
 					->defaultValue($supportedDrivers[0])
 				->end()
+				->scalarNode('entity_manager')
+					->defaultValue('default')
+					->cannotBeEmpty()
+				->end()
 				// TODO change `scalarNode` to `stringNode` (and remove the custom string validation) as soon as Symfony >= 7.2 is required
 				->scalarNode('entity_name')
 					->defaultValue(Setting::class)
