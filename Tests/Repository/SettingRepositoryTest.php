@@ -4,19 +4,18 @@ namespace Craue\ConfigBundle\Tests\Repository;
 
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @group integration
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('integration')]
 class SettingRepositoryTest extends IntegrationTestCase {
 
-	/**
-	 * @dataProvider getPlatformConfigs
-	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testFindByNames($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 

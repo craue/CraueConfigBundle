@@ -8,22 +8,22 @@ use Craue\ConfigBundle\Tests\IntegrationTestBundle\Util\CustomConfig;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Tools\SchemaTool;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
- * @group integration
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('integration')]
 class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the code works with a real (i.e. not mocked) entity manager.
-	 *
-	 * @dataProvider getPlatformConfigs
 	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testWithRealEntityManager($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 
@@ -42,9 +42,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the configured cache is actually used.
-	 *
-	 * @dataProvider dataCacheUsage
 	 */
+	#[DataProvider('dataCacheUsage')]
 	public function testCacheUsage($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
@@ -73,9 +72,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the cache is updated when updating a setting entity directly.
-	 *
-	 * @dataProvider dataCacheUsage
 	 */
+	#[DataProvider('dataCacheUsage')]
 	public function testCacheUpdateOnEntityUpdate($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
@@ -98,9 +96,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that a custom config class can actually be used with a custom model class.
-	 *
-	 * @dataProvider dataCustomEntity
 	 */
+	#[DataProvider('dataCustomEntity')]
 	public function testCustomEntity($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$customSetting = $this->persistSetting(CustomSetting::create('name1', 'value1', 'section1', 'comment1'));
@@ -121,9 +118,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the database enforces a unique name for settings.
-	 *
-	 * @dataProvider getPlatformConfigs
 	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testDefaultEntityNameUnique($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 
@@ -137,9 +133,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the database enforces a unique name for settings with a custom entity.
-	 *
-	 * @dataProvider dataCustomEntity
 	 */
+	#[DataProvider('dataCustomEntity')]
 	public function testCustomEntityNameUnique($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
@@ -188,9 +183,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the database table is only created for the custom entity, but not for the bundle's original one.
-	 *
-	 * @dataProvider dataCustomEntity
 	 */
+	#[DataProvider('dataCustomEntity')]
 	public function testCustomEntityTableCreation($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 
@@ -204,9 +198,8 @@ class ConfigIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the code works with a custom entity manager.
-	 *
-	 * @dataProvider dataCustomEntityManager
 	 */
+	#[DataProvider('dataCustomEntityManager')]
 	public function testCustomEntityManager($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 

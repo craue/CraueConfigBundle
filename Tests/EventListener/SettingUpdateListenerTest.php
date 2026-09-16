@@ -7,6 +7,7 @@ use Craue\ConfigBundle\EventListener\SettingUpdateListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -16,13 +17,14 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('unit')]
 class SettingUpdateListenerTest extends TestCase {
 
 	public function testPostUpdate() : void {
 		$cache = new ArrayAdapter();
 		$listener = new SettingUpdateListener($cache);
 
-		$setting = $this->getMockBuilder(SettingInterface::class)->onlyMethods(['getName', 'getValue'])->getMockForAbstractClass();
+		$setting = $this->createMock(SettingInterface::class);
 		$name = 'name';
 		$newValue = 'new-value';
 

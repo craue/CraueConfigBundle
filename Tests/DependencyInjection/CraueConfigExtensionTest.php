@@ -3,17 +3,18 @@
 namespace Craue\ConfigBundle\Tests\DependencyInjection;
 
 use Craue\ConfigBundle\DependencyInjection\CraueConfigExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @group unit
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('unit')]
 class CraueConfigExtensionTest extends TestCase {
 
 	public static function dataEntityManager() : iterable {
@@ -31,9 +32,7 @@ class CraueConfigExtensionTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider dataEntityManager
-	 */
+	#[DataProvider('dataEntityManager')]
 	public function testEntityManager(array $configs, string $expectedEntityManager) : void {
 		$container = new ContainerBuilder();
 		$extension = new CraueConfigExtension();

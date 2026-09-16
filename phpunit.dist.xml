@@ -5,14 +5,20 @@
 		backupGlobals="false"
 		cacheResult="false"
 		colors="true"
-		failOnRisky="true"
-		failOnWarning="true">
+		displayDetailsOnAllIssues="true"
+		failOnAllIssues="true"
+>
 	<testsuites>
 		<testsuite name="CraueConfigBundle">
 			<directory suffix="Test.php">Tests</directory>
 		</testsuite>
 	</testsuites>
-	<coverage>
+	<source
+		ignoreIndirectDeprecations="true"
+		ignoreSuppressionOfDeprecations="true"
+		restrictNotices="true"
+		restrictWarnings="true"
+	>
 		<include>
 			<directory suffix=".php">.</directory>
 		</include>
@@ -20,7 +26,8 @@
 			<directory suffix=".php">Tests</directory>
 			<directory suffix=".php">vendor</directory>
 		</exclude>
-	</coverage>
+	</source>
+	<coverage />
 	<php>
 		<env name="REDIS_DSN" value="redis://localhost:6379" />
 		<env name="SHELL_VERBOSITY" value="-1" />
@@ -29,7 +36,4 @@
 		<env name="LOG_DIR" value="/path/to/your/log/" />
 		-->
 	</php>
-	<listeners>
-		<listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-	</listeners>
 </phpunit>
