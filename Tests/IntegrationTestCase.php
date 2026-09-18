@@ -37,11 +37,17 @@ abstract class IntegrationTestCase extends WebTestCase {
 	private static $databaseInitialized = [];
 
 	/**
-	 * @param string $testName The name of the test, set by PHPUnit when called directly as a {@code dataProvider}.
+	 * @return string[]
+	 */
+	public static function getPlatformConfigs() : array {
+		return self::getPlatformConfigsWithBaseConfig('config.yml');
+	}
+
+	/**
 	 * @param string $baseConfig The base config filename.
 	 * @return string[]
 	 */
-	public static function getPlatformConfigs($testName, $baseConfig = 'config.yml') {
+	private static function getPlatformConfigsWithBaseConfig(string $baseConfig = 'config.yml') : array {
 		$testData = [];
 
 		foreach (self::getValidPlatformsWithRequiredExtensions() as $platform => $extension) {
@@ -51,15 +57,11 @@ abstract class IntegrationTestCase extends WebTestCase {
 		return $testData;
 	}
 
-	/**
-	 * @param array $allTestData
-	 * @return array
-	 */
-	public static function duplicateTestDataForEachPlatform(array $allTestData, $baseConfig = 'config.yml') {
+	public static function duplicateTestDataForEachPlatform(array $allTestData, string $baseConfig = 'config.yml') : array {
 		$testData = [];
 
 		foreach ($allTestData as $oneTestData) {
-			foreach (self::getPlatformConfigs('', $baseConfig) as $envConf) {
+			foreach (self::getPlatformConfigsWithBaseConfig($baseConfig) as $envConf) {
 				$testData[] = array_merge($envConf, $oneTestData);
 			}
 		}

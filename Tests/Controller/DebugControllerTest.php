@@ -5,22 +5,22 @@ namespace Craue\ConfigBundle\Tests\Controller;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Doctrine\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
- * @group integration
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('integration')]
 class DebugControllerTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that cache values are persisted between requests.
-	 *
-	 * @dataProvider dataGetAction_severalRequests
 	 */
+	#[DataProvider('dataGetAction_severalRequests')]
 	public function testGetAction_severalRequests($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1'));

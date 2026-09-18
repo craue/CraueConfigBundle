@@ -8,28 +8,34 @@ use Craue\ConfigBundle\Util\Config;
 use Craue\ConfigBundle\Util\SettingsUtil;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub\ReturnValueMap;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
- * @group unit
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('unit')]
 class ConfigUnitTest extends TestCase {
 
 	public function testGet() : void {
 		$config = new Config();
 		$setting = Setting::create('name', 'value');
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $this->returnValueMap([
-			[['name' => $setting->getName()], null, $setting],
-		])])));
+		$repository = $this->createEntityRepositoryMock();
+		$repository->expects($this->once())
+			->method('findOneBy')
+			->willReturnMap([
+				[['name' => $setting->getName()], null, $setting],
+			])
+		;
+		$config->setEntityManager($this->createEntityManagerMock($repository));
+
 		$config->setEntityName(Setting::class);
 
 		$this->assertEquals($setting->getValue(), $config->get($setting->getName()));
@@ -49,9 +55,15 @@ class ConfigUnitTest extends TestCase {
 		$config = new Config();
 		$setting = Setting::create('name', 'value');
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findOneBy' => $this->returnValueMap([
-			[['name' => $setting->getName()], null, $setting],
-		])])));
+		$repository = $this->createEntityRepositoryMock();
+		$repository->expects($this->once())
+			->method('findOneBy')
+			->willReturnMap([
+				[['name' => $setting->getName()], null, $setting],
+			])
+		;
+		$config->setEntityManager($this->createEntityManagerMock($repository));
+
 		$config->setEntityName(Setting::class);
 
 		$cache = new ArrayAdapter();
@@ -95,7 +107,7 @@ class ConfigUnitTest extends TestCase {
 
 		$setting->expects($this->once())
 			->method('getName')
-			->will($this->returnValue('name'))
+			->willReturn('name')
 		;
 		$setting->expects($this->once())
 			->method('setValue')
@@ -120,7 +132,7 @@ class ConfigUnitTest extends TestCase {
 		$cache = $this->createCacheMock();
 		$config->setCache($cache);
 
-		$setting = $this->getMockBuilder(Setting::class)->setMethods(['setValue'])->getMock();
+		$setting = $this->createMock(Setting::class);
 		$setting->setName('name');
 		$newValue = 'new-value';
 
@@ -202,17 +214,21 @@ class ConfigUnitTest extends TestCase {
 		$this->assertSame('value2', $cache->getItem('name2')->get());
 	}
 
-	/**
-	 * @dataProvider dataGetBySection
-	 */
+	#[DataProvider('dataGetBySection')]
 	public function testGetBySection($section, array $foundSettings, $expectedKeyValuePairs) : void {
 		$config = new Config();
 		$cache = new ArrayAdapter();
 		$config->setCache($cache);
 
-		$config->setEntityManager($this->createEntityManagerMock($this->createEntityRepositoryMock(['findBy' => $this->returnValueMap([
-			[['section' => $section], null, null, null, $foundSettings],
-		])])));
+		$repository = $this->createEntityRepositoryMock();
+		$repository->expects($this->once())
+			->method('findBy')
+			->willReturnMap([
+				[['section' => $section], null, null, null, $foundSettings],
+			])
+		;
+		$config->setEntityManager($this->createEntityManagerMock($repository));
+
 		$config->setEntityName(Setting::class);
 
 		$this->assertEquals($expectedKeyValuePairs, $config->getBySection($section));
@@ -284,7 +300,7 @@ class ConfigUnitTest extends TestCase {
 
 		$em->expects($this->exactly(2))
 			->method('getRepository')
-			->will($this->returnValue($this->createEntityRepositoryMock()))
+			->willReturn($this->createEntityRepositoryMock())
 		;
 
 		$config->setEntityManager($em);
@@ -357,13 +373,9 @@ class ConfigUnitTest extends TestCase {
 		;
 
 		foreach ($methodsWithReturnValues as $method => $returnValue) {
-			if (!$returnValue instanceof ReturnValueMap) {
-				$returnValue = $this->returnValue($returnValue);
-			}
-
 			$repo->expects($this->once())
 				->method($method)
-				->will($returnValue)
+				->willReturn($returnValue)
 			;
 		}
 
@@ -379,7 +391,7 @@ class ConfigUnitTest extends TestCase {
 		if ($repo !== null) {
 			$em->expects($this->once())
 				->method('getRepository')
-				->will($this->returnValue($repo))
+				->willReturn($repo)
 			;
 		}
 

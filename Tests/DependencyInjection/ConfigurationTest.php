@@ -9,17 +9,18 @@ use Craue\ConfigBundle\Entity\BaseSetting;
 use Craue\ConfigBundle\Entity\Setting;
 use Craue\ConfigBundle\Entity\SettingInterface;
 use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
- * @group unit
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('unit')]
 class ConfigurationTest extends TestCase {
 
 	private Configuration $configuration;
@@ -44,9 +45,7 @@ class ConfigurationTest extends TestCase {
 		yield ['entity_name',	CustomSetting::class];
 	}
 
-	/**
-	 * @dataProvider dataValidValue
-	 */
+	#[DataProvider('dataValidValue')]
 	public function testValidValue(string $key, mixed $value) : void {
 		$config = $this->processor->processConfiguration($this->configuration, [
 			'craue_config' => [
@@ -77,9 +76,7 @@ class ConfigurationTest extends TestCase {
 		yield ['entity_name',	BaseSetting::class,				'Invalid configuration for path "craue_config.entity_name": The class "' . str_replace('\\', '\\\\', BaseSetting::class) . '" must be a non-abstract implementation of Craue\ConfigBundle\Entity\SettingInterface.'];
 	}
 
-	/**
-	 * @dataProvider dataInvalidValue
-	 */
+	#[DataProvider('dataInvalidValue')]
 	public function testInvalidValue(string $key, mixed $value, string $expectedMessage) : void {
 		$this->expectException(InvalidConfigurationException::class);
 		$this->expectExceptionMessage($expectedMessage);

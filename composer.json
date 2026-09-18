@@ -18,6 +18,11 @@
 		}
 	],
 	"homepage": "https://github.com/craue/CraueConfigBundle",
+	"_comment": [
+		"symfony/framework-bundle: TODO remove require-dev entry when no longer needed for running tests with Symfony 5.4, see https://github.com/symfony/symfony/issues/53812",
+		"symfony/runtime: TODO remove require-dev entry and allow-plugins entry when no longer needed for running tests with Symfony 5.4, see https://github.com/symfony/symfony/issues/53812",
+		"twig/twig: TODO remove require-dev entry when no longer needed for running tests with Symfony 5.4, see https://github.com/symfony/symfony/commit/7ec3eb09ec5e433e5f0e2803a6f797b46550b237"
+	],
 	"require": {
 		"php": "^8.2",
 		"doctrine/doctrine-bundle": "^2 || ^3",
@@ -34,20 +39,22 @@
 	},
 	"require-dev": {
 		"composer/semver": "^3",
-		"craue/translations-tests": "^1",
+		"craue/translations-tests": "^2",
 		"doctrine/orm": "^2.12 || ^3",
 		"phpstan/extension-installer": "^1.1",
 		"phpstan/phpstan": "^2.2",
 		"phpstan/phpstan-deprecation-rules": "^2",
 		"phpstan/phpstan-strict-rules": "^2",
 		"phpstan/phpstan-symfony": "^2",
-		"phpunit/phpunit": "^9.6",
+		"phpunit/phpunit": "^11.5.50",
 		"symfony/asset": "^5.4 || ^6.4 || ^7.4 || ^8.1",
 		"symfony/browser-kit": "^5.4 || ^6.4 || ^7.4 || ^8.1",
-		"symfony/phpunit-bridge": "^8.1",
+		"symfony/framework-bundle": "^5.4.45 || ^6.4.13 || ^7.4 || ^8.1",
 		"symfony/property-info": "^5.4 || ^6.4 || ^7.4 || ^8.1",
+		"symfony/runtime": "^5.4.45 || ^6.4.13 || ^7.4 || ^8.1",
 		"symfony/twig-bundle": "^5.4 || ^6.4 || ^7.4 || ^8.1",
-		"symfony/web-profiler-bundle": "^5.4 || ^6.4 || ^7.4 || ^8.1"
+		"symfony/web-profiler-bundle": "^5.4 || ^6.4 || ^7.4 || ^8.1",
+		"twig/twig": "<3.29"
 	},
 	"minimum-stability": "stable",
 	"autoload": {
@@ -61,7 +68,8 @@
 	"config": {
 		"allow-plugins": {
 			"phpstan/extension-installer": true,
-			"symfony/flex": true
+			"symfony/flex": true,
+			"symfony/runtime": false
 		},
 		"sort-packages": true
 	},

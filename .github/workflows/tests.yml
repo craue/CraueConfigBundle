@@ -16,7 +16,6 @@ jobs:
     env:
       COMPOSER_NO_BLOCKING: 1
       SYMFONY_REQUIRE: ${{ matrix.symfony }}
-      SYMFONY_DEPRECATIONS_HELPER: ${{ matrix.symfony-deprecations }}
 
     strategy:
       fail-fast: false
@@ -25,7 +24,6 @@ jobs:
           -
             php: '8.2'
             dependencies: lowest
-            symfony-deprecations: max[direct]=258&max[indirect]=188
           -
             php: '8.5'
             dependencies: highest
@@ -102,7 +100,7 @@ jobs:
           composer-options: --prefer-dist
 
       - name: run PHPUnit
-        run: vendor/bin/phpunit -v --coverage-clover build/logs/clover.xml
+        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
         env:
           REDIS_DSN: redis://localhost:6379
 

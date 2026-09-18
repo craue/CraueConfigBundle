@@ -2,15 +2,15 @@
 
 namespace Craue\ConfigBundle\Tests\Resources;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @group unit
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('unit')]
 class DoctrineMappingTest extends TestCase {
 
 	public function testDuplicatedMappingFilesExist() : void {

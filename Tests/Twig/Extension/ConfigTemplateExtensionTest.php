@@ -4,15 +4,15 @@ namespace Craue\ConfigBundle\Tests\Twig\Extension;
 
 use Craue\ConfigBundle\Twig\Extension\ConfigTemplateExtension;
 use Craue\ConfigBundle\Util\Config;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @group unit
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('unit')]
 class ConfigTemplateExtensionTest extends TestCase {
 
 	public function testGetSetting() : void {

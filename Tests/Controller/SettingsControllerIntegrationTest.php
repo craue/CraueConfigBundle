@@ -9,21 +9,19 @@ use Craue\ConfigBundle\Tests\IntegrationTestBundle\Entity\CustomSetting;
 use Craue\ConfigBundle\Tests\IntegrationTestCase;
 use Composer\InstalledVersions;
 use Composer\Semver\VersionParser;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
- * @group integration
- *
  * @author Christian Raue <christian.raue@gmail.com>
  * @copyright 2011-2026 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
+#[Group('integration')]
 class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
-	/**
-	 * @dataProvider getPlatformConfigs
-	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_noSettings($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 
@@ -34,9 +32,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertStringContainsString('There are no settings defined yet.', $content);
 	}
 
-	/**
-	 * @dataProvider getPlatformConfigs
-	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_noChanges($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value'));
@@ -67,9 +63,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the value of a setting added between rendering and submitting the form won't get lost.
-	 *
-	 * @dataProvider getPlatformConfigs
 	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_noChanges_concurrentlyAddedSetting($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1'));
@@ -92,9 +87,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that only the value can be changed, but neither name nor section.
-	 *
-	 * @dataProvider getPlatformConfigs
 	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_changeValue($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value', 'section'));
@@ -119,9 +113,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that the configured cache is actually used and that changing settings loads all settings (with updated values) into the cache.
-	 *
-	 * @dataProvider dataModifyAction_changeValue_cacheUsage
 	 */
+	#[DataProvider('dataModifyAction_changeValue_cacheUsage')]
 	public function testModifyAction_changeValue_cacheUsage($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1'));
@@ -163,9 +156,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that values are assigned to their originating setting when adding a setting between rendering and submitting the form.
-	 *
-	 * @dataProvider getPlatformConfigs
 	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_changeValue_concurrentlyAddedSetting($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'old-value1'));
@@ -192,9 +184,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that an invalid form submission is handled properly.
-	 *
-	 * @dataProvider getPlatformConfigs
 	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_formInvalid($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value'));
@@ -210,9 +201,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that dynamic values (sections, names) are properly translated (exactly once).
-	 *
-	 * @dataProvider getPlatformConfigs
 	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_properTranslations($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('setting-number-one', 'value', 'section-number-one'));
@@ -227,9 +217,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertSame(0, $profile->getCollector('translation')->getCountMissings());
 	}
 
-	/**
-	 * @dataProvider getPlatformConfigs
-	 */
+	#[DataProvider('getPlatformConfigs')]
 	public function testModifyAction_sectionOrder_defaultOrder($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1', 'section1'));
@@ -246,9 +234,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		$this->assertTrue($strPosField2 < $strPosField1 && $strPosField1 < $strPosField3, 'The sections are rendered in wrong order.');
 	}
 
-	/**
-	 * @dataProvider dataModifyAction_sectionOrder_customOrder
-	 */
+	#[DataProvider('dataModifyAction_sectionOrder_customOrder')]
 	public function testModifyAction_sectionOrder_customOrder($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => 'customSectionOrder_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name1', 'value1', 'section1'));
@@ -271,9 +257,7 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 		], 'config_customSectionOrder.yml');
 	}
 
-	/**
-	 * @dataProvider dataModifyAction_redirectRouteAfterModify
-	 */
+	#[DataProvider('dataModifyAction_redirectRouteAfterModify')]
 	public function testModifyAction_redirectRouteAfterModify($platform, $config, $requiredExtension) : void {
 		$this->initClient($requiredExtension, ['environment' => 'redirectRouteAfterModify_' . $platform, 'config' => $config]);
 		$this->persistSetting(Setting::create('name', 'value'));
@@ -294,9 +278,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that a custom model class can actually be used.
-	 *
-	 * @dataProvider dataModifyAction_customEntity
 	 */
+	#[DataProvider('dataModifyAction_customEntity')]
 	public function testModifyAction_customEntity($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(CustomSetting::create('name', 'value', 'section', 'comment'));
@@ -328,9 +311,8 @@ class SettingsControllerIntegrationTest extends IntegrationTestCase {
 
 	/**
 	 * Ensure that submitting a disabled form field will keep the setting's old value.
-	 *
-	 * @dataProvider dataModifyAction_customEntity_disabled
 	 */
+	#[DataProvider('dataModifyAction_customEntity_disabled')]
 	public function testModifyAction_customEntity_disabled($platform, $config, $requiredExtension, $environment) : void {
 		$this->initClient($requiredExtension, ['environment' => $environment . '_' . $platform, 'config' => $config]);
 		$this->persistSetting(CanBeDisabledSetting::create('name', 'old-value', null, true));
